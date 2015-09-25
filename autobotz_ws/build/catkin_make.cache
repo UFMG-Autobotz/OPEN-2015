@@ -1,0 +1,2 @@
+blob_detect
+-DCATKIN_DEVEL_PREFIX=/home/husky/autobotz_ws/devel -DCMAKE_INSTALL_PREFIX=/home/husky/autobotz_ws/install -G Unix Makefiles

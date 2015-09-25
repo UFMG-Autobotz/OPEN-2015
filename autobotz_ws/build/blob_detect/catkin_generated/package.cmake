@@ -1,0 +1,7 @@
+set(_CATKIN_CURRENT_PACKAGE "blob_detect")
+set(blob_detect_MAINTAINER "Autobotz <autobotz.ufmg@gmail.com>")
+set(blob_detect_DEPRECATED "")
+set(blob_detect_VERSION "0.1.0")
+set(blob_detect_BUILD_DEPENDS "OpenCV" "cv_bridge" "image_transport" "roscpp" "std_msgs" "sensor_msgs" "message_generation")
+set(blob_detect_RUN_DEPENDS "cv_bridge" "image_transport" "roscpp" "std_msgs" "sensor_msgs" "message_runtime")
+set(blob_detect_BUILDTOOL_DEPENDS "catkin")

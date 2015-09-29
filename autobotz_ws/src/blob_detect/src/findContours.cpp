@@ -27,7 +27,8 @@ using namespace cv;
 using namespace std;
 
 // Método que auxilia na disposição do texto no centro do contorno
-void setLabel(cv::Mat& im, const std::string label, std::vector<cv::Point>& contour){  // Parâmetros: Imagem, Texto, Contorno
+void setLabel(cv::Mat& im, const std::string label, std::vector<cv::Point>& contour)
+{  // Parâmetros: Imagem, Texto, Contorno
 	int fontface = cv::FONT_HERSHEY_SIMPLEX;  // Definição na fonte utilizada
 	double scale = 0.4; // Tamanho da letra
 	int thickness = 1;  // Espessura da letra

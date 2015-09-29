@@ -202,12 +202,14 @@ void findShapes(Mat image_rgb)
 
 /////////////////////////////   findYellowBlocks   ////////////////////////////////
 
-void findYellowBlocks(const Mat& image, vector< vector<Point> >& squares, 
-	                  cv::Point& RefPointYellow, cv::Point& RefPointYellowDepth)
+void findYellowBlocks(const Mat& image, vector< vector<Point> >& squares)
 {
 	squares.clear();  // Limpa o vetor de pontos
 
 	Mat gray, image_hsv;
+
+	cv::Point RefPointYellow;
+	cv::Point RefPointYellowDepth;
 
 	image_rgb.copyTo(image_yellow);
 

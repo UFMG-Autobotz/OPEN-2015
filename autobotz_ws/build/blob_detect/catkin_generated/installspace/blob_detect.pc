@@ -1,8 +1,0 @@
-prefix=/home/husky/autobotz_ws/install
-
-Name: blob_detect
-Description: Description of blob_detect
-Version: 0.1.0
-Cflags: 
-Libs: -L/home/husky/autobotz_ws/install/lib 
-Requires: 

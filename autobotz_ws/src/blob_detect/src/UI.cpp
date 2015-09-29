@@ -60,11 +60,20 @@ void setLabel(cv::Mat& im, const std::string label, std::vector<cv::Point>& cont
 
 void drawSquares(Mat& image, const vector<vector<Point> >& squares)
 {
-    	for(size_t i = 0; i < squares.size(); i++){
-        	const Point* p = &squares[i][0];
-        	int n = (int)squares[i].size();
-        	polylines(image, &p, &n, 1, true, Scalar(0,255,0), 3, CV_AA);
+	for(size_t i = 0; i < squares.size(); i++)
+	{
+    	const Point* p = &squares[i][0];
+    	int n = (int)squares[i].size();
+
+    	polylines(image, &p, &n, 1, true, Scalar(0,255,0), 3, CV_AA);
+
+    	//draw points at the rectangle edges
+    	for(int j = 0; j < squares[i].size(); j++)  
+    	{
+    		cv::circle(image, squares[i][j], 5, Scalar(0,0,255), 5);
     	}
+	}
+
 }
 
 //////////////////////

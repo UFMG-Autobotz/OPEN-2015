@@ -22,8 +22,7 @@ void contorno(Mat in_rgb);
 //
 // takes a rgb image as input
 
-void findYellowBlocks(const Mat& image, vector< vector<Point> >& squares,
-	                  cv::Point& RefPointYellow, cv::Point& RefPointYellowDepth );
+void findYellowBlocks(const Mat& image, vector< vector<Point> >& squares);
 //find yellow blocks in the image
 
 void findShapes(Mat image_rgb);

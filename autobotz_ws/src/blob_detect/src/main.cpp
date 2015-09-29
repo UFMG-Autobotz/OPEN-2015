@@ -134,15 +134,35 @@ void imageCallback(const sensor_msgs::ImageConstPtr& image)
 	//creatTrackbarRed();
 	filter(image_rgb, image_filtered);
     contorno(image_rgb);
-	findYellowBlocks(image_rgb, squaresYellow, RefPointYellow, RefPointYellowDepth);
+	findYellowBlocks(image_rgb, squaresYellow);
 	drawSquares(image_yellow, squaresYellow);
-	//draw();
+	
+	//get square centers to be sent on ROS
+	for(int i = 0; i < squaresYellow.size(); i++)
+	{
+		cv::Point center(0,0);
 
-	//update yellow block position message to be published to ROS
-	msgYellowBlockPosition.x = RefPointYellow.x;
-	msgYellowBlockPosition.y = RefPointYellow.y;
+		if(squaresYellow[i].size() != 4)
+			ROS_INFO("Got a square from findYellowBlocks that is not 4-sided...");
+		else
+		{
+			for(int j = 0; j < 4; j++)
+				center += squaresYellow[i][j];  //add the coordinates of an vertex
 
-	ROS_INFO("RefPointYellow: %i, %i", RefPointYellow.x, RefPointYellow.y);
+			center.x = center.x/4;  //take the arithmetic mean
+			center.y = center.y/4;
+
+			//update ROS message
+			msgYellowBlockPosition.x = squaresYellow[i][1].x;
+			msgYellowBlockPosition.y = squaresYellow[i][1].y;
+
+			//draw a circle on the center of the block
+			cv::circle(image_yellow, center, 5, Scalar(255,0,0), 5);
+		}
+	}
+
+	namedWindow("Image Yellow"); 
+	imshow("Image Yellow", image_yellow); 
 
 	//depth stuff
 		//int depth = ReadDepthData(RefPointYellowDepth.y, RefPointYellowDepth.x, image); // Width = 640, Height = 480		
@@ -158,8 +178,6 @@ void imageCallback(const sensor_msgs::ImageConstPtr& image)
 
 	//findRedBlocks(image_rgb, squaresRed);
 	//drawSquares(image_red, squaresRed);
-	namedWindow("Image Yellow"); 
-	imshow("Image Yellow", image_yellow); 
 	//namedWindow("Image Red"); 
 	//imshow("Image Red", image_red); 
 	// findShapes(image_rgb);

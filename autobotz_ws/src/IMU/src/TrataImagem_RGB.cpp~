@@ -1,0 +1,56 @@
+#include "funcao.h"
+
+//----------------------------DECLARAÇÃO DE VARIÁVEIS---------------------------------------
+
+Mat image_rgb;//Imagem obtida através do kinect na escala RGB("Red", "Green" e "Blue").
+Mat image_HSV;//Imagem convertida para a escala HSV("Hue", "Saturation" e "Value").
+
+Mat H, S, V; //Três canais da imagem HSV.
+
+//Valores máximos e mínimos de cada parte da imagem HSV. Os valores colocados permitem detectar a cor LARANJA. Caso seja do interesse identificar outra cor, basta passar os valores H, S, V mínimos e máximos da cor desejada. Esses valores podem ser facilmente encontrados na "web".
+int H_min = 7;
+int H_max = 11;
+int V_min = 180;
+int V_max = 255;
+int S_min = 180; 
+int S_max = 255;
+
+//-------------------------------------------------------------------------------------------
+
+void morphOps(Mat &thresh){// Essa função passa os filtros "erode" e "dilate" na imagem para retirar os possíveis ruídos que nela estiverem. 
+ 	Mat erodeElement = getStructuringElement( MORPH_RECT,Size(3,3));	
+ 	Mat dilateElement = getStructuringElement( MORPH_RECT,Size(8,8));
+        erode(thresh,thresh,erodeElement);
+        erode(thresh,thresh,erodeElement);
+        dilate(thresh,thresh,dilateElement);
+        dilate(thresh,thresh,dilateElement);
+}
+
+//-------------------------------------------------------------------------------------------
+
+void RGBtoHSV(){//Essa função recebe uma imagem RGB, transforma em HSV através da função "cvtColor()", divide-a em três canais H, S, V e chama a função "morphOps()" para retirar os ruídos dessa imagem.
+	cvtColor(image_rgb, image_HSV, CV_BGR2HSV,3); 
+	std::vector<cv::Mat> three_channels; //Cria um vetor e divide a imagem em 3 canais
+	split(image_HSV, three_channels);
+ 	H = three_channels[0];
+	S = three_channels[1];
+	V = three_channels[2];
+	morphOps(H);
+	morphOps(S);
+	morphOps(V);	
+	//namedWindow("HSV Image");//Define a janela
+	imshow("HSV Image", image_HSV);//Mostra a imagem	
+}
+
+//-------------------------------------------------------------------------------------------
+
+void CriaTrackbar(){//Cria barras que permitem o ajuste manual(em tempo real) dos valores mínimos e máximos dos parâmetros H, S e V.
+	namedWindow("Thresholded", CV_WINDOW_AUTOSIZE); //Cria uma nova janela
+	cvCreateTrackbar("H_min", "Thresholded", &H_min, 255); //Hue (0 - 255)
+  	cvCreateTrackbar("H_max", "Thresholded", &H_max, 255); //Hue (0 - 255)
+  	cvCreateTrackbar("S_min", "Thresholded", &S_min, 255); //Saturation (0 - 255
+  	cvCreateTrackbar("S_max", "Thresholded", &S_max, 255); //Saturation (0 - 255)
+  	cvCreateTrackbar("V_min", "Thresholded", &V_min, 255); //Value (0 - 255)
+  	cvCreateTrackbar("V_max", "Thresholded", &V_max, 255); //Value (0 - 255)
+}
+

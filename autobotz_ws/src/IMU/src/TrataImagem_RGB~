@@ -1,0 +1,134 @@
+#include "funcao.hpp"
+
+//-------------------------------------------------------------------------------------------
+
+//Mat image_rgb; //Imagem inicial
+Mat image_HSV;
+//Mat img, H, S, V; //imagem convertida para HSV
+//Mat HThresholded, SThresholded, VThresholded;
+int H_min = 0;
+int H_max = 10;
+int V_min = 153;
+int V_max = 200;
+int S_min = 0; 
+int S_max = 21;
+
+Mat H, S, V;
+
+//-------------------------------------------------------------------------------------------
+
+void morphOps(Mat &thresh){
+ 	Mat erodeElement = getStructuringElement( MORPH_RECT,Size(3,3));	
+ 	Mat dilateElement = getStructuringElement( MORPH_RECT,Size(8,8));//dilate with larger element so make sure object is nicely visible
+        erode(thresh,thresh,erodeElement);
+        erode(thresh,thresh,erodeElement);
+        dilate(thresh,thresh,dilateElement);
+        dilate(thresh,thresh,dilateElement);
+}
+
+void RGBtoHSV(){
+	cvtColor(image_rgb, image_HSV, CV_BGR2HSV,3); 
+	std::vector<cv::Mat> three_channels; //cria vetor e Divide imagem em 3 canais
+	split(image_HSV, three_channels);
+ 	H = three_channels[0];
+	S = three_channels[1];
+	V = three_channels[2];
+	morphOps(H);
+	morphOps(S);
+	morphOps(V);	
+	//namedWindow("HSV Image"); // define the window
+	imshow("HSV Image", image_HSV); // show the image	
+}
+
+void CriaTrackbar(){
+	//namedWindow("Thresholded", CV_WINDOW_AUTOSIZE); //cria uma nova janela
+	cvCreateTrackbar("H_min", "Thresholded", &H_min, 255); //Hue (0 - 255)
+  	cvCreateTrackbar("H_max", "Thresholded", &H_max, 255); //Hue (0 - 255)
+  	cvCreateTrackbar("S_min", "Thresholded", &S_min, 255); //Saturation (0 - 255
+  	cvCreateTrackbar("S_max", "Thresholded", &S_max, 255); //Saturation (0 - 255)
+  	cvCreateTrackbar("V_min", "Thresholded", &V_min, 255); //Value (0 - 255)
+  	cvCreateTrackbar("V_max", "Thresholded", &V_max, 255); //Value (0 - 255)
+}
+
+char* itoa(int value, char* result, int base){	// check that the base if valid
+	if(base < 2 || base > 36){ 
+		*result = '\0'; 
+		return result; 
+	} 
+	char* ptr = result, *ptr1 = result, tmp_char;
+	int tmp_value;
+	do{
+		tmp_value = value;
+		value /= base;
+		*ptr++ = "zyxwvutsrqponmlkjihgfedcba9876543210123456789abcdefghijklmnopqrstuvwxyz" [35 + (tmp_value - value * base)];
+	}while (value);
+	if (tmp_value < 0) *ptr++ = '-'; // Apply negative sign
+		*ptr-- = '\0';
+	while(ptr1 < ptr){
+		tmp_char = *ptr;
+		*ptr--= *ptr1;
+		*ptr1++ = tmp_char;
+	}
+	return result;
+}
+
+void Laranja(){
+	Mat binary;
+	inRange(image_HSV, Scalar(0, 135, 165), Scalar(174, 255, 255), binary); //get binary image
+	imshow("Binary",binary);
+	int i;
+	vector< vector<Point> > contours;
+	findContours(binary, contours, CV_RETR_TREE, CV_CHAIN_APPROX_SIMPLE); //find contours
+	vector<double> areas(contours.size());
+	for(i = 0; i < contours.size(); i++){ //find largest contour area
+	areas[i] = contourArea(Mat(contours[i]));
+	}
+	double max;
+	Point maxPosition;
+	minMaxLoc(Mat(areas),0,&max,0,&maxPosition);
+	drawContours(binary, contours, maxPosition.y, Scalar(255), CV_FILLED); //draw largest contour.
+	imshow("LargestContour",binary);
+	Rect r;
+	if(contours.size() >= 1){
+	r = boundingRect(contours[maxPosition.y]);
+	rectangle(image_rgb, r.tl(),r.br(), CV_RGB(255, 0, 0), 3, 8, 0); //draw rectangle
+	}
+	center.x = r.x + (r.width/2); //get centroid
+	center.y= r.y + (r.height/2);
+	char x[15],y[6];
+	itoa(center.x,x,10);
+	itoa(center.y,y,10);
+	strcat(x," , ");
+	putText(image_rgb, strcat(x,y), center, FONT_HERSHEY_COMPLEX_SMALL, 0.8, cvScalar(255,0,0), 1, CV_AA);
+char w[15],h[6];
+	itoa(r.width,w,10);
+	itoa(r.width,h,10);
+	strcat(w," , ");
+	cv::Point textOrgW(100, 200);
+putText(image_rgb, strcat(w,h), textOrgW, FONT_HERSHEY_COMPLEX_SMALL, 0.8, cvScalar(255,0,0), 1, CV_AA);
+	string textDireita = "Bolinha na direita !";
+	string textEsquerda = "Bolinha na esquerda !";
+	string textCentro = "Bolinha no centro !";
+	int fontFace = FONT_HERSHEY_SCRIPT_SIMPLEX;
+	double fontScale = 1;
+	int thickness = 3;
+	cv::Point textOrg(10, 130);
+	if(center.x < 295)
+	cv::putText(image_rgb, textEsquerda, textOrg, fontFace, fontScale, Scalar::all(255), thickness,8);
+	else if(center.x > 345)
+	cv::putText(image_rgb, textDireita, textOrg, fontFace, fontScale, Scalar::all(255), thickness,8);
+	else if(center.x >= 295 && center.x <= 345)
+	cv::putText(image_rgb, textCentro, textOrg, fontFace, fontScale, Scalar::all(255), thickness,8);
+
+	if(r.width > 80 && r.width < 120){
+	distancia = 1;
+	}
+	if(r.width <= 80){
+	distancia = 3;
+	}
+	if(r.width >= 120){
+	distancia = 2;
+	}
+
+	imshow("Final",image_rgb);
+}

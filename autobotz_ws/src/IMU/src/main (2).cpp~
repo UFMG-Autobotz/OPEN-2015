@@ -1,0 +1,259 @@
+#include <ros/ros.h>	
+#include <image_transport/image_transport.h>
+#include <cv_bridge/cv_bridge.h>	
+#include <sensor_msgs/image_encodings.h>	
+#include <opencv2/imgproc/imgproc.hpp>	
+#include <opencv2/highgui/highgui.hpp>	
+#include <opencv2/opencv.hpp>
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdint.h>  
+#include <string.h> 
+#include <iostream> 
+#include <sensor_msgs/Image.h>
+#include <opencv/cv.h>
+#include <opencv/highgui.h>
+#include <X11/keysym.h>
+#include "histogram1D.h"
+#include <cv.h> 
+#include <highgui.h>
+#include <cxcore.h>
+#include "opencv/cvaux.h"
+#include "opencv/highgui.h"
+#include "opencv/cxcore.h"
+#include <stdio.h>
+
+#include "opencv2/core/core.hpp"
+
+
+using namespace cv;
+using namespace std;
+
+static const char WINDOW[] = "Image Processed";	//Declare a string with the name of the window that we will create using OpenCV where processed images will be displayed.
+
+Mat image_rgb, H, S, V , image_HSV; /* Image_rgb é a imagem obtida pelo kinect. H, S, V são as três componentes da image_HSV
+que serão usadas no método morphOps para retirar o ruído da imagem. Image_HSV é a image_rgb convertida pelo método RGBtoHSV */
+
+Mat HThresholded, SThresholded, VThresholded;
+
+int H_min = 0;
+int H_max = 10;
+int V_min = 153;
+int V_max = 200;
+int S_min = 0; 
+int S_max = 21;
+
+image_transport::Publisher pub; 
+
+void morphOps(Mat &thresh){
+ 	Mat erodeElement = getStructuringElement( MORPH_RECT,Size(3,3));	
+ 	Mat dilateElement = getStructuringElement( MORPH_RECT,Size(8,8));//dilate with larger element so make sure object is nicely visible
+        erode(thresh,thresh,erodeElement);
+        erode(thresh,thresh,erodeElement);
+        dilate(thresh,thresh,dilateElement);
+        dilate(thresh,thresh,dilateElement);
+}
+
+void RGBtoHSV(){
+	cvtColor(image_rgb, image_HSV, CV_BGR2HSV,3); 
+	std::vector<cv::Mat> three_channels; //cria vetor e Divide imagem em 3 canais
+	split(image_HSV, three_channels);
+ 	H = three_channels[0];
+	S = three_channels[1];
+	V = three_channels[2];
+	morphOps(H);
+	morphOps(S);
+	morphOps(V);	
+	//namedWindow("HSV Image"); // define the window
+	//imshow("HSV Image", image_HSV); // show the image	
+}
+
+void CriaTrackbar(){
+	namedWindow("Thresholded", CV_WINDOW_AUTOSIZE); //cria uma nova janela
+	cvCreateTrackbar("H_min", "Thresholded", &H_min, 255); //Hue (0 - 255)
+  	cvCreateTrackbar("H_max", "Thresholded", &H_max, 255); //Hue (0 - 255)
+  	cvCreateTrackbar("S_min", "Thresholded", &S_min, 255); //Saturation (0 - 255
+  	cvCreateTrackbar("S_max", "Thresholded", &S_max, 255); //Saturation (0 - 255)
+  	cvCreateTrackbar("V_min", "Thresholded", &V_min, 255); //Value (0 - 255)
+  	cvCreateTrackbar("V_max", "Thresholded", &V_max, 255); //Value (0 - 255
+}
+
+void Histograma(){
+	Histogram1D h;
+	cv::namedWindow("Histogram");
+	cv::imshow("Histogram", h.getHistogramImage(image_rgb));
+}
+
+/*
+void circles(){
+//Mat src = image_rgb;
+Mat src = image_HSV;
+
+Mat src_gray2;
+//cvtColor(image_rgb, src_gray2, CV_BGR2HSV,3); 
+    cvtColor(src, src_gray2, CV_BGR2GRAY);
+
+  GaussianBlur(src_gray2, src_gray2, cv::Size(9, 9), 2, 2 );
+
+    vector<Vec3f> circles;
+
+    HoughCircles(src_gray2, circles, CV_HOUGH_GRADIENT,
+          2,   // accumulator resolution (size of the image / 2)
+          5,  // minimum distance between two circles
+          100, // Canny high threshold
+          100, // minimum number of votes
+          0, 1000); // min and max radius
+
+       std::vector<cv::Vec3f>::
+              const_iterator itc= circles.begin();
+
+       while (itc!=circles.end()) {
+
+         cv::circle(src_gray2,
+            cv::Point((*itc)[0], (*itc)[1]), // circle centre
+            (*itc)[2],       // circle radius
+            cv::Scalar(255), // color
+            2);              // thickness
+
+         ++itc;
+       }
+        cv::namedWindow("imagecircles",CV_WINDOW_AUTOSIZE);
+        cv::imshow("imagecircles",src_gray2);
+  
+}
+
+void circles2(){
+Mat src = image_HSV;
+Mat gray;
+cvtColor( src, gray, CV_BGR2GRAY );
+ 
+  // Reduce the noise so we avoid false circle detection
+  GaussianBlur( gray, gray, Size(9, 9), 2, 2 );
+ 
+
+  vector<Vec3f> circles;
+ 
+  // Apply the Hough Transform to find the circles
+  HoughCircles( gray, circles, CV_HOUGH_GRADIENT, 1, 10, 200, 50, 0, 0 );
+ 
+
+  // Draw the circles detected
+  for( size_t i = 0; i < circles.size(); i++ )
+  {
+      Point center(cvRound(circles[i][0]), cvRound(circles[i][1]));
+      int radius = cvRound(circles[i][2]);     
+      circle( src, center, 3, Scalar(0,255,0), -1, 8, 0 );// circle center     
+      circle( src, center, radius, Scalar(0,0,255), 3, 8, 0 );// circle outline
+      cout << "center : " << center << "\nradius : " << radius << endl;
+   }
+ 
+  // Show your results
+  namedWindow( "Hough Circle Transform Demo", CV_WINDOW_AUTOSIZE );
+  imshow( "Hough Circle Transform Demo", src );
+namedWindow( "Gray", CV_WINDOW_AUTOSIZE );
+  imshow( "Gray", gray );
+ 
+}
+*/ 
+
+char* itoa(int value, char* result, int base){	// check that the base if valid
+	if(base < 2 || base > 36){ 
+		*result = '\0'; 
+		return result; 
+	} 
+	char* ptr = result, *ptr1 = result, tmp_char;
+	int tmp_value;
+	do{
+		tmp_value = value;
+		value /= base;
+		*ptr++ = "zyxwvutsrqponmlkjihgfedcba9876543210123456789abcdefghijklmnopqrstuvwxyz" [35 + (tmp_value - value * base)];
+	}while (value);
+	if (tmp_value < 0) *ptr++ = '-'; // Apply negative sign
+		*ptr-- = '\0';
+	while(ptr1 < ptr){
+		tmp_char = *ptr;
+		*ptr--= *ptr1;
+		*ptr1++ = tmp_char;
+	}
+	return result;
+}
+
+void Laranja(){
+	Mat binary;  	    
+	inRange(image_HSV, Scalar(7, 180, 180), Scalar(11, 255, 255), binary);  //get binary image  
+	imshow("Binary",binary);    
+	int i;  
+	vector< vector<Point> > contours;  
+	findContours(binary, contours, CV_RETR_TREE, CV_CHAIN_APPROX_SIMPLE); //find contours  
+	vector<double> areas(contours.size());    
+	for(i = 0; i < contours.size(); i++){  //find largest contour area  
+		areas[i] = contourArea(Mat(contours[i])); 
+	}   
+	double max;  
+	Point maxPosition;  
+	minMaxLoc(Mat(areas),0,&max,0,&maxPosition);  	 
+	drawContours(binary, contours, maxPosition.y, Scalar(255), CV_FILLED);  //draw largest contour.
+	imshow("LargestContour",binary);  
+	Point center;  
+	Rect r;  
+	if(contours.size() >= 1){  
+		r = boundingRect(contours[maxPosition.y]);  
+		rectangle(image_rgb, r.tl(),r.br(), CV_RGB(255, 0, 0), 3, 8, 0); //draw rectangle  
+	}  
+	center.x = r.x + (r.width/2);  //get centroid
+	center.y= r.y + (r.height/2);  
+	char x[15],y[6];  
+	itoa(center.x,x,10);  
+	itoa(center.y,y,10);  
+	strcat(x,",");  
+	putText(image_rgb, strcat(x,y), center, FONT_HERSHEY_COMPLEX_SMALL, 0.8, cvScalar(255,0,0), 1, CV_AA); 
+	string textDireita = "Bolinha na direita !";
+	string textEsquerda = "Bolinha na esquerda !";
+	int fontFace = FONT_HERSHEY_SCRIPT_SIMPLEX;
+	double fontScale = 1;
+	int thickness = 3;  
+	cv::Point textOrg(10, 130);
+	if(center.x < 290)
+		cv::putText(image_rgb, textEsquerda, textOrg, fontFace, fontScale, Scalar::all(255), thickness,8); 
+	else
+		cv::putText(image_rgb, textDireita, textOrg, fontFace, fontScale, Scalar::all(255), thickness,8); 
+    	imshow("Final",image_rgb);  
+}
+
+
+void imageCallback(const sensor_msgs::ImageConstPtr& image){  //This function is called everytime a new image is published
+	cv_bridge::CvImageConstPtr cv_ptr;
+	try{
+		cv_ptr = cv_bridge::toCvShare(image, "bgr8");
+	} 
+	catch(cv_bridge::Exception& e){
+		ROS_ERROR("cv_bridge exception: %s", e.what());
+		return;
+	} 	
+	image_rgb = cv_ptr->image;
+	//Histograma();
+	//namedWindow("Original Image"); // define the window
+	//imshow("Original Image", image_rgb); // show the image
+	cv::waitKey(3);
+	RGBtoHSV();
+	Laranja();
+	cv::waitKey(3);
+	//circles2();
+	cv::waitKey(3);
+}
+
+
+int main(int argc, char **argv){
+
+        ros::init(argc, argv, "image_processor");
+        ros::NodeHandle nh;
+	CriaTrackbar(); // Esta função deve ficar fora do loop sempre!
+	image_transport::ImageTransport it(nh); 
+   	cv::namedWindow(WINDOW, CV_WINDOW_AUTOSIZE);
+     	image_transport::Subscriber sub = it.subscribe("rgb/image_raw", 1, imageCallback); //********
+
+  	cv::destroyWindow(WINDOW);
+        pub = it.advertise("rgb/image_processed", 1);
+        ros::spin();
+   	ROS_INFO("tutorialROSOpenCV::main.cpp::No error.");  
+}

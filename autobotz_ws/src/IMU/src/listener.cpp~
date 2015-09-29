@@ -1,0 +1,82 @@
+//----------------------------INCLUSÃO DE BIBLIOTECAS---------------------------------------
+
+
+
+#include "ros/ros.h"
+#include "std_msgs/String.h"
+#include <sstream>
+/*Para passar mais de um tipo de dado em uma mensagem, a escolha foi usar um arquivo texto "Num.msg" que contivesse os dados(distância, coordenada, etc) e o tipo destes dados(int16, float, etc).*/
+#include "beginner_tutorials/Num.h"
+
+//----------------------------DECLARAÇÃO DE VARIÁVEIS---------------------------------------
+
+int centro = 320;
+int total = 640;
+int distancia_pela_esquerda, distancia_pela_direita;
+int motorDireita, motorEsquerda;
+int coordenada;
+int pwm, codigo;
+int distancia;//Recebe o valor da distância guardado na mensagem que está sendo subscrita no tópico.
+
+//------------------------------------------------------------------------------------------
+
+void chatterCallback(const beginner_tutorials::Num& msg){//Essa função é chamada toda vez que um novo valor for publicado
+	coordenada = msg.data;
+	distancia = msg.dist;
+	if(coordenada < (centro - 25)){//Caso o centro da bolinha esteja nessa faixa, então o código=1 indicará que ela está à esquerda da tela, e o valor do pwm será proporcional a distância que está do centro, ou seja, quanto mais próxima do centro menor será a correção nos motores, e quanto mais afastada, maior será a correção.
+		codigo = 1;
+		pwm = 45 + (0.3 * (centro -coordenada));
+	}
+	if(coordenada > (centro + 25)){//Caso o centro da bolinha esteja nessa faixa, então o código=2 indicará que ela está à direita da tela, e o valor do pwm será proporcional a distância que está do centro, que pode ser calculado por "coordenada - centro", já que nesse caso o valor do centro da tela será SEMPRE menor que o valor da coordenada da bolinha.
+		codigo = 2;
+		pwm = 45 + (0.3 * (coordenada - centro));
+	}
+	if(coordenada >= (centro - 25) && (coordenada <= (centro + 25))){//Caso o centro da bolinha esteja nessa faixa, então o código=0 indicará que ela está no meio da tela.O valor do pwm será um valor fixo e pequeno, para o caso da bolinha sair da faixa do meio, caso isso ocorra a saída não será tão brusca. Logo, pretende-se que com esses valores o robô siga a bolinha com movimentos suaves e precisos.
+		codigo = 0;
+		pwm = 70;
+	}
+	if(coordenada == 0){//Caso o robô pare de detectar a bolinha laranja ele deve girar em torno do próprio eixo para tentar encontrá-la
+		codigo = 5;
+		pwm = 80;
+	}
+
+	if(distancia == 1){//Nesse caso, a bolinha está próxima da tela, e o código=3 indicará que o robô deve parar de se movimentar.
+		codigo = 3;
+	}
+	if(distancia == 2){//Nesse caso, a bolinha está muito próxima da tela, e o código=4 indicará que o robô deve se movimentar pra trás rapidamente(pwm=120), ou seja, o robô irá dar "ré" até voltar a ver a bolinha.
+		codigo = 4;
+		pwm = 120;
+	}
+	ROS_INFO("PWM: %d     Codigo: %d", pwm,codigo);
+}
+
+//------------------------------------------------------------------------------------------
+
+int main(int argc, char **argv){
+	ros::init(argc, argv, "pwm");//A função ros::init() recebe os argumentos argc (argument count) e argv(argument values), usados para passar argumento via linha de comando, e o terceiro argumento é o nome do nó.
+	/*A função ros::NodeHandle inicializa o nó. 
+	Quando o primeiro ros :: NodeHandle é criado, este irá chamar a função ros :: start (), e quando o último ros :: NodeHandle é destruído, este irá chamar ros :: shutdown (), ou seja, gerencia automaticamente o tempo que o nó ficará ativo.*/
+	ros::NodeHandle n;
+	ros::Subscriber sub = n.subscribe("topico", 1000, chatterCallback);//Subscreve a mensagem que está sendo publicada no tópico chamado "topico"
+	/*A função advertise() irá publicar uma mensagem do tipo String nos tópicos "pwm" e uma no tópico "codigo", sendo 1000 é o tamanho da fila de mensagens, usada para a publicação das mensagens.*/
+	ros::Publisher chatter_pubPwm = n.advertise<std_msgs::String>("pwm", 1000);
+	ros::Publisher chatter_pubCodigo = n.advertise<std_msgs::String>("codigo", 1000);
+	ros::Rate loop_rate(10);//Esta função é um timer, e nesse caso mantém o loop em uma frequência de 10Hz para contar o tempo gasto dentro deste.
+	while (ros::ok()){// Essa função retorná "false" apenas quando o nó for encerrado.
+		/*Declaração do tipo de mensagem que será publicada. Nesse caso as mensagens serão do tipo "String".*/
+		std_msgs::String msg_stringPWM;
+		std_msgs::String msg_stringCODIGO;
+		/* "std::stringstream" é um manipulador de fluxos de dados de cadeias de caracteres especializado para o tipo de dado "char". Ele permite ler e escrever em modo de texto ou binário. A partir deste comando o número que será inserido, "coordenada", é convertido para uma string e armazenado dentro da stream.*/
+		std::stringstream ssPWM;
+		std::stringstream ssCODIGO;
+		ssPWM << pwm;
+		ssCODIGO << codigo;
+		msg_stringPWM.data = ssPWM.str();//"ss::str()" é usado para obter o conteúdo do que está armazenado na stream.
+		msg_stringCODIGO.data = ssCODIGO.str();
+		chatter_pubPwm.publish(msg_stringPWM);//Publica uma mensagem no tópico "pwm", contendo o pwm que será repassado aos motores.
+		chatter_pubCodigo.publish(msg_stringCODIGO);//Publica uma mensagem no tópico "codigo", contendo o valor de um código que especifica em qual faixa da tela a bolinha laranja está.
+		ros::spinOnce();//Essa função não retornará enquanto a função ros::shutdown() não for chamada ou apertar Ctrl-C no terminal.
+		loop_rate.sleep();
+	}
+	return 0;
+}

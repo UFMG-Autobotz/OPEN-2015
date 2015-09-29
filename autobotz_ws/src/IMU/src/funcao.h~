@@ -1,0 +1,59 @@
+//----------------------------INCLUSÃO DE BIBLIOTECAS---------------------------------------
+//Bibliotecas do ROS:
+
+#include <ros/ros.h>	
+#include <image_transport/image_transport.h> 
+#include <cv_bridge/cv_bridge.h>	
+#include <sensor_msgs/image_encodings.h>
+#include <sensor_msgs/Image.h>
+#include <std_msgs/UInt16.h>
+#include "std_msgs/String.h"
+
+//Bibliotecas do OpenCV:	
+
+#include <opencv2/imgproc/imgproc.hpp>	
+#include <opencv2/highgui/highgui.hpp>
+#include "opencv2/core/core.hpp"	
+#include <opencv2/opencv.hpp>
+#include "opencv/cvaux.h"
+#include "opencv/highgui.h"
+#include "opencv/cxcore.h"
+#include <opencv/cv.h>
+#include <highgui.h>
+#include <cxcore.h>
+#include <cv.h> 
+
+//Bibliotecas do C++ :
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdint.h>  
+#include <string.h> 
+#include <iostream> 
+#include <sstream>
+
+// Define os símbolos de pré-processamento XK_MISCELLANY, XK_LATIN1, XK_LATIN2, XK_LATIN3, XK_LATIN4 e XK_GREEK e, em seguida, inclui <X11 / keysymdef.h>
+#include <X11/keysym.h> 
+
+//Diretório que contém o arquivo "Num.msg" que especifica o tipo de uma mensagem
+#include "beginner_tutorials/Num.h"
+
+/* Quando chamamos "using namespace<alguma_namespace>" então todos os símbolos dessa namespace se tornarão visíveis, ou seja, não será necessário colocar o prefixo da namespace utilizada. Se usarmos, por exemplo, "using namespace std" poderemos escrever apenas "cout" em vez de std::cout, pois "cout" é um operador definido pela "namespace std". */
+
+using namespace cv;
+using namespace std;
+
+//-----------------------------Variáveis externas:------------------------------------------
+
+extern Mat image_rgb;
+extern Mat image_HSV;
+extern Point center;
+extern int distancia;
+
+//------------------------------------------------------------------------------------------
+
+void imageCallback(const sensor_msgs::ImageConstPtr& image);
+void RGBtoHSV();
+void morphOps(Mat &thresh);
+void CriaTrackbar();
+char* itoa(int value, char* result, int base);
+void Laranja();

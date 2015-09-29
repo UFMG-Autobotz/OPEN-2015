@@ -241,121 +241,17 @@ gtest_main/fast:
 .PHONY : gtest_main/fast
 
 #=============================================================================
-# Target rules for targets named _blob_detect_generate_messages_check_deps_squareCenters
+# Target rules for targets named _square_detect_generate_messages_check_deps_squareCenters
 
 # Build rule for target.
-_blob_detect_generate_messages_check_deps_squareCenters: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 _blob_detect_generate_messages_check_deps_squareCenters
-.PHONY : _blob_detect_generate_messages_check_deps_squareCenters
+_square_detect_generate_messages_check_deps_squareCenters: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 _square_detect_generate_messages_check_deps_squareCenters
+.PHONY : _square_detect_generate_messages_check_deps_squareCenters
 
 # fast build rule for target.
-_blob_detect_generate_messages_check_deps_squareCenters/fast:
-	$(MAKE) -f blob_detect/CMakeFiles/_blob_detect_generate_messages_check_deps_squareCenters.dir/build.make blob_detect/CMakeFiles/_blob_detect_generate_messages_check_deps_squareCenters.dir/build
-.PHONY : _blob_detect_generate_messages_check_deps_squareCenters/fast
-
-#=============================================================================
-# Target rules for targets named blob_detect
-
-# Build rule for target.
-blob_detect: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 blob_detect
-.PHONY : blob_detect
-
-# fast build rule for target.
-blob_detect/fast:
-	$(MAKE) -f blob_detect/CMakeFiles/blob_detect.dir/build.make blob_detect/CMakeFiles/blob_detect.dir/build
-.PHONY : blob_detect/fast
-
-#=============================================================================
-# Target rules for targets named blob_detect_gencpp
-
-# Build rule for target.
-blob_detect_gencpp: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 blob_detect_gencpp
-.PHONY : blob_detect_gencpp
-
-# fast build rule for target.
-blob_detect_gencpp/fast:
-	$(MAKE) -f blob_detect/CMakeFiles/blob_detect_gencpp.dir/build.make blob_detect/CMakeFiles/blob_detect_gencpp.dir/build
-.PHONY : blob_detect_gencpp/fast
-
-#=============================================================================
-# Target rules for targets named blob_detect_generate_messages
-
-# Build rule for target.
-blob_detect_generate_messages: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 blob_detect_generate_messages
-.PHONY : blob_detect_generate_messages
-
-# fast build rule for target.
-blob_detect_generate_messages/fast:
-	$(MAKE) -f blob_detect/CMakeFiles/blob_detect_generate_messages.dir/build.make blob_detect/CMakeFiles/blob_detect_generate_messages.dir/build
-.PHONY : blob_detect_generate_messages/fast
-
-#=============================================================================
-# Target rules for targets named blob_detect_generate_messages_cpp
-
-# Build rule for target.
-blob_detect_generate_messages_cpp: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 blob_detect_generate_messages_cpp
-.PHONY : blob_detect_generate_messages_cpp
-
-# fast build rule for target.
-blob_detect_generate_messages_cpp/fast:
-	$(MAKE) -f blob_detect/CMakeFiles/blob_detect_generate_messages_cpp.dir/build.make blob_detect/CMakeFiles/blob_detect_generate_messages_cpp.dir/build
-.PHONY : blob_detect_generate_messages_cpp/fast
-
-#=============================================================================
-# Target rules for targets named blob_detect_generate_messages_lisp
-
-# Build rule for target.
-blob_detect_generate_messages_lisp: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 blob_detect_generate_messages_lisp
-.PHONY : blob_detect_generate_messages_lisp
-
-# fast build rule for target.
-blob_detect_generate_messages_lisp/fast:
-	$(MAKE) -f blob_detect/CMakeFiles/blob_detect_generate_messages_lisp.dir/build.make blob_detect/CMakeFiles/blob_detect_generate_messages_lisp.dir/build
-.PHONY : blob_detect_generate_messages_lisp/fast
-
-#=============================================================================
-# Target rules for targets named blob_detect_generate_messages_py
-
-# Build rule for target.
-blob_detect_generate_messages_py: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 blob_detect_generate_messages_py
-.PHONY : blob_detect_generate_messages_py
-
-# fast build rule for target.
-blob_detect_generate_messages_py/fast:
-	$(MAKE) -f blob_detect/CMakeFiles/blob_detect_generate_messages_py.dir/build.make blob_detect/CMakeFiles/blob_detect_generate_messages_py.dir/build
-.PHONY : blob_detect_generate_messages_py/fast
-
-#=============================================================================
-# Target rules for targets named blob_detect_genlisp
-
-# Build rule for target.
-blob_detect_genlisp: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 blob_detect_genlisp
-.PHONY : blob_detect_genlisp
-
-# fast build rule for target.
-blob_detect_genlisp/fast:
-	$(MAKE) -f blob_detect/CMakeFiles/blob_detect_genlisp.dir/build.make blob_detect/CMakeFiles/blob_detect_genlisp.dir/build
-.PHONY : blob_detect_genlisp/fast
-
-#=============================================================================
-# Target rules for targets named blob_detect_genpy
-
-# Build rule for target.
-blob_detect_genpy: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 blob_detect_genpy
-.PHONY : blob_detect_genpy
-
-# fast build rule for target.
-blob_detect_genpy/fast:
-	$(MAKE) -f blob_detect/CMakeFiles/blob_detect_genpy.dir/build.make blob_detect/CMakeFiles/blob_detect_genpy.dir/build
-.PHONY : blob_detect_genpy/fast
+_square_detect_generate_messages_check_deps_squareCenters/fast:
+	$(MAKE) -f square_detect/CMakeFiles/_square_detect_generate_messages_check_deps_squareCenters.dir/build.make square_detect/CMakeFiles/_square_detect_generate_messages_check_deps_squareCenters.dir/build
+.PHONY : _square_detect_generate_messages_check_deps_squareCenters/fast
 
 #=============================================================================
 # Target rules for targets named geometry_msgs_generate_messages_cpp
@@ -367,7 +263,7 @@ geometry_msgs_generate_messages_cpp: cmake_check_build_system
 
 # fast build rule for target.
 geometry_msgs_generate_messages_cpp/fast:
-	$(MAKE) -f blob_detect/CMakeFiles/geometry_msgs_generate_messages_cpp.dir/build.make blob_detect/CMakeFiles/geometry_msgs_generate_messages_cpp.dir/build
+	$(MAKE) -f square_detect/CMakeFiles/geometry_msgs_generate_messages_cpp.dir/build.make square_detect/CMakeFiles/geometry_msgs_generate_messages_cpp.dir/build
 .PHONY : geometry_msgs_generate_messages_cpp/fast
 
 #=============================================================================
@@ -380,7 +276,7 @@ geometry_msgs_generate_messages_lisp: cmake_check_build_system
 
 # fast build rule for target.
 geometry_msgs_generate_messages_lisp/fast:
-	$(MAKE) -f blob_detect/CMakeFiles/geometry_msgs_generate_messages_lisp.dir/build.make blob_detect/CMakeFiles/geometry_msgs_generate_messages_lisp.dir/build
+	$(MAKE) -f square_detect/CMakeFiles/geometry_msgs_generate_messages_lisp.dir/build.make square_detect/CMakeFiles/geometry_msgs_generate_messages_lisp.dir/build
 .PHONY : geometry_msgs_generate_messages_lisp/fast
 
 #=============================================================================
@@ -393,7 +289,7 @@ geometry_msgs_generate_messages_py: cmake_check_build_system
 
 # fast build rule for target.
 geometry_msgs_generate_messages_py/fast:
-	$(MAKE) -f blob_detect/CMakeFiles/geometry_msgs_generate_messages_py.dir/build.make blob_detect/CMakeFiles/geometry_msgs_generate_messages_py.dir/build
+	$(MAKE) -f square_detect/CMakeFiles/geometry_msgs_generate_messages_py.dir/build.make square_detect/CMakeFiles/geometry_msgs_generate_messages_py.dir/build
 .PHONY : geometry_msgs_generate_messages_py/fast
 
 #=============================================================================
@@ -406,7 +302,7 @@ roscpp_generate_messages_cpp: cmake_check_build_system
 
 # fast build rule for target.
 roscpp_generate_messages_cpp/fast:
-	$(MAKE) -f blob_detect/CMakeFiles/roscpp_generate_messages_cpp.dir/build.make blob_detect/CMakeFiles/roscpp_generate_messages_cpp.dir/build
+	$(MAKE) -f square_detect/CMakeFiles/roscpp_generate_messages_cpp.dir/build.make square_detect/CMakeFiles/roscpp_generate_messages_cpp.dir/build
 .PHONY : roscpp_generate_messages_cpp/fast
 
 #=============================================================================
@@ -419,7 +315,7 @@ roscpp_generate_messages_lisp: cmake_check_build_system
 
 # fast build rule for target.
 roscpp_generate_messages_lisp/fast:
-	$(MAKE) -f blob_detect/CMakeFiles/roscpp_generate_messages_lisp.dir/build.make blob_detect/CMakeFiles/roscpp_generate_messages_lisp.dir/build
+	$(MAKE) -f square_detect/CMakeFiles/roscpp_generate_messages_lisp.dir/build.make square_detect/CMakeFiles/roscpp_generate_messages_lisp.dir/build
 .PHONY : roscpp_generate_messages_lisp/fast
 
 #=============================================================================
@@ -432,7 +328,7 @@ roscpp_generate_messages_py: cmake_check_build_system
 
 # fast build rule for target.
 roscpp_generate_messages_py/fast:
-	$(MAKE) -f blob_detect/CMakeFiles/roscpp_generate_messages_py.dir/build.make blob_detect/CMakeFiles/roscpp_generate_messages_py.dir/build
+	$(MAKE) -f square_detect/CMakeFiles/roscpp_generate_messages_py.dir/build.make square_detect/CMakeFiles/roscpp_generate_messages_py.dir/build
 .PHONY : roscpp_generate_messages_py/fast
 
 #=============================================================================
@@ -445,7 +341,7 @@ rosgraph_msgs_generate_messages_cpp: cmake_check_build_system
 
 # fast build rule for target.
 rosgraph_msgs_generate_messages_cpp/fast:
-	$(MAKE) -f blob_detect/CMakeFiles/rosgraph_msgs_generate_messages_cpp.dir/build.make blob_detect/CMakeFiles/rosgraph_msgs_generate_messages_cpp.dir/build
+	$(MAKE) -f square_detect/CMakeFiles/rosgraph_msgs_generate_messages_cpp.dir/build.make square_detect/CMakeFiles/rosgraph_msgs_generate_messages_cpp.dir/build
 .PHONY : rosgraph_msgs_generate_messages_cpp/fast
 
 #=============================================================================
@@ -458,7 +354,7 @@ rosgraph_msgs_generate_messages_lisp: cmake_check_build_system
 
 # fast build rule for target.
 rosgraph_msgs_generate_messages_lisp/fast:
-	$(MAKE) -f blob_detect/CMakeFiles/rosgraph_msgs_generate_messages_lisp.dir/build.make blob_detect/CMakeFiles/rosgraph_msgs_generate_messages_lisp.dir/build
+	$(MAKE) -f square_detect/CMakeFiles/rosgraph_msgs_generate_messages_lisp.dir/build.make square_detect/CMakeFiles/rosgraph_msgs_generate_messages_lisp.dir/build
 .PHONY : rosgraph_msgs_generate_messages_lisp/fast
 
 #=============================================================================
@@ -471,7 +367,7 @@ rosgraph_msgs_generate_messages_py: cmake_check_build_system
 
 # fast build rule for target.
 rosgraph_msgs_generate_messages_py/fast:
-	$(MAKE) -f blob_detect/CMakeFiles/rosgraph_msgs_generate_messages_py.dir/build.make blob_detect/CMakeFiles/rosgraph_msgs_generate_messages_py.dir/build
+	$(MAKE) -f square_detect/CMakeFiles/rosgraph_msgs_generate_messages_py.dir/build.make square_detect/CMakeFiles/rosgraph_msgs_generate_messages_py.dir/build
 .PHONY : rosgraph_msgs_generate_messages_py/fast
 
 #=============================================================================
@@ -484,7 +380,7 @@ sensor_msgs_generate_messages_cpp: cmake_check_build_system
 
 # fast build rule for target.
 sensor_msgs_generate_messages_cpp/fast:
-	$(MAKE) -f blob_detect/CMakeFiles/sensor_msgs_generate_messages_cpp.dir/build.make blob_detect/CMakeFiles/sensor_msgs_generate_messages_cpp.dir/build
+	$(MAKE) -f square_detect/CMakeFiles/sensor_msgs_generate_messages_cpp.dir/build.make square_detect/CMakeFiles/sensor_msgs_generate_messages_cpp.dir/build
 .PHONY : sensor_msgs_generate_messages_cpp/fast
 
 #=============================================================================
@@ -497,7 +393,7 @@ sensor_msgs_generate_messages_lisp: cmake_check_build_system
 
 # fast build rule for target.
 sensor_msgs_generate_messages_lisp/fast:
-	$(MAKE) -f blob_detect/CMakeFiles/sensor_msgs_generate_messages_lisp.dir/build.make blob_detect/CMakeFiles/sensor_msgs_generate_messages_lisp.dir/build
+	$(MAKE) -f square_detect/CMakeFiles/sensor_msgs_generate_messages_lisp.dir/build.make square_detect/CMakeFiles/sensor_msgs_generate_messages_lisp.dir/build
 .PHONY : sensor_msgs_generate_messages_lisp/fast
 
 #=============================================================================
@@ -510,8 +406,112 @@ sensor_msgs_generate_messages_py: cmake_check_build_system
 
 # fast build rule for target.
 sensor_msgs_generate_messages_py/fast:
-	$(MAKE) -f blob_detect/CMakeFiles/sensor_msgs_generate_messages_py.dir/build.make blob_detect/CMakeFiles/sensor_msgs_generate_messages_py.dir/build
+	$(MAKE) -f square_detect/CMakeFiles/sensor_msgs_generate_messages_py.dir/build.make square_detect/CMakeFiles/sensor_msgs_generate_messages_py.dir/build
 .PHONY : sensor_msgs_generate_messages_py/fast
+
+#=============================================================================
+# Target rules for targets named square_detect
+
+# Build rule for target.
+square_detect: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 square_detect
+.PHONY : square_detect
+
+# fast build rule for target.
+square_detect/fast:
+	$(MAKE) -f square_detect/CMakeFiles/square_detect.dir/build.make square_detect/CMakeFiles/square_detect.dir/build
+.PHONY : square_detect/fast
+
+#=============================================================================
+# Target rules for targets named square_detect_gencpp
+
+# Build rule for target.
+square_detect_gencpp: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 square_detect_gencpp
+.PHONY : square_detect_gencpp
+
+# fast build rule for target.
+square_detect_gencpp/fast:
+	$(MAKE) -f square_detect/CMakeFiles/square_detect_gencpp.dir/build.make square_detect/CMakeFiles/square_detect_gencpp.dir/build
+.PHONY : square_detect_gencpp/fast
+
+#=============================================================================
+# Target rules for targets named square_detect_generate_messages
+
+# Build rule for target.
+square_detect_generate_messages: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 square_detect_generate_messages
+.PHONY : square_detect_generate_messages
+
+# fast build rule for target.
+square_detect_generate_messages/fast:
+	$(MAKE) -f square_detect/CMakeFiles/square_detect_generate_messages.dir/build.make square_detect/CMakeFiles/square_detect_generate_messages.dir/build
+.PHONY : square_detect_generate_messages/fast
+
+#=============================================================================
+# Target rules for targets named square_detect_generate_messages_cpp
+
+# Build rule for target.
+square_detect_generate_messages_cpp: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 square_detect_generate_messages_cpp
+.PHONY : square_detect_generate_messages_cpp
+
+# fast build rule for target.
+square_detect_generate_messages_cpp/fast:
+	$(MAKE) -f square_detect/CMakeFiles/square_detect_generate_messages_cpp.dir/build.make square_detect/CMakeFiles/square_detect_generate_messages_cpp.dir/build
+.PHONY : square_detect_generate_messages_cpp/fast
+
+#=============================================================================
+# Target rules for targets named square_detect_generate_messages_lisp
+
+# Build rule for target.
+square_detect_generate_messages_lisp: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 square_detect_generate_messages_lisp
+.PHONY : square_detect_generate_messages_lisp
+
+# fast build rule for target.
+square_detect_generate_messages_lisp/fast:
+	$(MAKE) -f square_detect/CMakeFiles/square_detect_generate_messages_lisp.dir/build.make square_detect/CMakeFiles/square_detect_generate_messages_lisp.dir/build
+.PHONY : square_detect_generate_messages_lisp/fast
+
+#=============================================================================
+# Target rules for targets named square_detect_generate_messages_py
+
+# Build rule for target.
+square_detect_generate_messages_py: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 square_detect_generate_messages_py
+.PHONY : square_detect_generate_messages_py
+
+# fast build rule for target.
+square_detect_generate_messages_py/fast:
+	$(MAKE) -f square_detect/CMakeFiles/square_detect_generate_messages_py.dir/build.make square_detect/CMakeFiles/square_detect_generate_messages_py.dir/build
+.PHONY : square_detect_generate_messages_py/fast
+
+#=============================================================================
+# Target rules for targets named square_detect_genlisp
+
+# Build rule for target.
+square_detect_genlisp: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 square_detect_genlisp
+.PHONY : square_detect_genlisp
+
+# fast build rule for target.
+square_detect_genlisp/fast:
+	$(MAKE) -f square_detect/CMakeFiles/square_detect_genlisp.dir/build.make square_detect/CMakeFiles/square_detect_genlisp.dir/build
+.PHONY : square_detect_genlisp/fast
+
+#=============================================================================
+# Target rules for targets named square_detect_genpy
+
+# Build rule for target.
+square_detect_genpy: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 square_detect_genpy
+.PHONY : square_detect_genpy
+
+# fast build rule for target.
+square_detect_genpy/fast:
+	$(MAKE) -f square_detect/CMakeFiles/square_detect_genpy.dir/build.make square_detect/CMakeFiles/square_detect_genpy.dir/build
+.PHONY : square_detect_genpy/fast
 
 #=============================================================================
 # Target rules for targets named std_msgs_generate_messages_cpp
@@ -523,7 +523,7 @@ std_msgs_generate_messages_cpp: cmake_check_build_system
 
 # fast build rule for target.
 std_msgs_generate_messages_cpp/fast:
-	$(MAKE) -f blob_detect/CMakeFiles/std_msgs_generate_messages_cpp.dir/build.make blob_detect/CMakeFiles/std_msgs_generate_messages_cpp.dir/build
+	$(MAKE) -f square_detect/CMakeFiles/std_msgs_generate_messages_cpp.dir/build.make square_detect/CMakeFiles/std_msgs_generate_messages_cpp.dir/build
 .PHONY : std_msgs_generate_messages_cpp/fast
 
 #=============================================================================
@@ -536,7 +536,7 @@ std_msgs_generate_messages_lisp: cmake_check_build_system
 
 # fast build rule for target.
 std_msgs_generate_messages_lisp/fast:
-	$(MAKE) -f blob_detect/CMakeFiles/std_msgs_generate_messages_lisp.dir/build.make blob_detect/CMakeFiles/std_msgs_generate_messages_lisp.dir/build
+	$(MAKE) -f square_detect/CMakeFiles/std_msgs_generate_messages_lisp.dir/build.make square_detect/CMakeFiles/std_msgs_generate_messages_lisp.dir/build
 .PHONY : std_msgs_generate_messages_lisp/fast
 
 #=============================================================================
@@ -549,7 +549,7 @@ std_msgs_generate_messages_py: cmake_check_build_system
 
 # fast build rule for target.
 std_msgs_generate_messages_py/fast:
-	$(MAKE) -f blob_detect/CMakeFiles/std_msgs_generate_messages_py.dir/build.make blob_detect/CMakeFiles/std_msgs_generate_messages_py.dir/build
+	$(MAKE) -f square_detect/CMakeFiles/std_msgs_generate_messages_py.dir/build.make square_detect/CMakeFiles/std_msgs_generate_messages_py.dir/build
 .PHONY : std_msgs_generate_messages_py/fast
 
 # Help Target
@@ -572,15 +572,7 @@ help:
 	@echo "... tests"
 	@echo "... gtest"
 	@echo "... gtest_main"
-	@echo "... _blob_detect_generate_messages_check_deps_squareCenters"
-	@echo "... blob_detect"
-	@echo "... blob_detect_gencpp"
-	@echo "... blob_detect_generate_messages"
-	@echo "... blob_detect_generate_messages_cpp"
-	@echo "... blob_detect_generate_messages_lisp"
-	@echo "... blob_detect_generate_messages_py"
-	@echo "... blob_detect_genlisp"
-	@echo "... blob_detect_genpy"
+	@echo "... _square_detect_generate_messages_check_deps_squareCenters"
 	@echo "... geometry_msgs_generate_messages_cpp"
 	@echo "... geometry_msgs_generate_messages_lisp"
 	@echo "... geometry_msgs_generate_messages_py"
@@ -593,6 +585,14 @@ help:
 	@echo "... sensor_msgs_generate_messages_cpp"
 	@echo "... sensor_msgs_generate_messages_lisp"
 	@echo "... sensor_msgs_generate_messages_py"
+	@echo "... square_detect"
+	@echo "... square_detect_gencpp"
+	@echo "... square_detect_generate_messages"
+	@echo "... square_detect_generate_messages_cpp"
+	@echo "... square_detect_generate_messages_lisp"
+	@echo "... square_detect_generate_messages_py"
+	@echo "... square_detect_genlisp"
+	@echo "... square_detect_genpy"
 	@echo "... std_msgs_generate_messages_cpp"
 	@echo "... std_msgs_generate_messages_lisp"
 	@echo "... std_msgs_generate_messages_py"

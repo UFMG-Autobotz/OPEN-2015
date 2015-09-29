@@ -371,6 +371,12 @@ rostime_DIR:PATH=/opt/ros/indigo/share/rostime/cmake
 //The directory containing a CMake configuration file for sensor_msgs.
 sensor_msgs_DIR:PATH=/opt/ros/indigo/share/sensor_msgs/cmake
 
+//Value Computed by CMake
+square_detect_BINARY_DIR:STATIC=/home/husky/open-2015/autobotz_ws/build/square_detect
+
+//Value Computed by CMake
+square_detect_SOURCE_DIR:STATIC=/home/husky/open-2015/autobotz_ws/src/square_detect
+
 //The directory containing a CMake configuration file for std_msgs.
 std_msgs_DIR:PATH=/opt/ros/indigo/share/std_msgs/cmake
 

@@ -1,4 +1,12 @@
+/home/husky/open-2015/autobotz_ws/build/blob_detect/CMakeFiles/_blob_detect_generate_messages_check_deps_squareCenters.dir
 /home/husky/open-2015/autobotz_ws/build/blob_detect/CMakeFiles/blob_detect.dir
+/home/husky/open-2015/autobotz_ws/build/blob_detect/CMakeFiles/blob_detect_gencpp.dir
+/home/husky/open-2015/autobotz_ws/build/blob_detect/CMakeFiles/blob_detect_generate_messages.dir
+/home/husky/open-2015/autobotz_ws/build/blob_detect/CMakeFiles/blob_detect_generate_messages_cpp.dir
+/home/husky/open-2015/autobotz_ws/build/blob_detect/CMakeFiles/blob_detect_generate_messages_lisp.dir
+/home/husky/open-2015/autobotz_ws/build/blob_detect/CMakeFiles/blob_detect_generate_messages_py.dir
+/home/husky/open-2015/autobotz_ws/build/blob_detect/CMakeFiles/blob_detect_genlisp.dir
+/home/husky/open-2015/autobotz_ws/build/blob_detect/CMakeFiles/blob_detect_genpy.dir
 /home/husky/open-2015/autobotz_ws/build/CMakeFiles/clean_test_results.dir
 /home/husky/open-2015/autobotz_ws/build/CMakeFiles/download_extra_data.dir
 /home/husky/open-2015/autobotz_ws/build/CMakeFiles/doxygen.dir

@@ -21,10 +21,6 @@
 #include <opencv2/highgui/highgui.hpp>	
 #include <opencv2/imgproc/imgproc.hpp>	
 #include <opencv2/opencv.hpp>
-#include <ros/ros.h>	
-#include <sensor_msgs/Image.h>
-#include <sensor_msgs/image_encodings.h>
-#include <geometry_msgs/Point.h>
 #include <sstream>
 #include <stdio.h>
 #include <stdint.h> 
@@ -33,8 +29,15 @@
 #include <vector>
 #include <X11/keysym.h>
 
+#include <ros/ros.h>	
+#include <sensor_msgs/Image.h>
+#include <sensor_msgs/image_encodings.h>
+#include <geometry_msgs/Point.h>
+
 #include "UI.hpp"
 #include "CV_pipeline.hpp"
+
+#include "blob_detect/squareCenters.h"  //custom message
 
 using namespace cv;
 using namespace std;
@@ -55,13 +58,14 @@ const char* ROS_topic_rect_pos = "/teste";
 
 Mat binary, image_rgb, image_rgb_previous, image_merge, image_yellow, image_red; 
 
+vector <cv::Point> blockCenters;  //stores the center of all those rectangles
+
 //////////////////////  function declarations  /////////////////////
 
 void imageCallback(const sensor_msgs::ImageConstPtr& image);
 
 /////////////////////////////////////////////// main ////////////////////////////////////////////////////////
 
-geometry_msgs::Point msgYellowBlockPosition;  //TODO: mover essa variável para dentro do main
 
 int main(int argc, char **argv){
 
@@ -69,28 +73,42 @@ int main(int argc, char **argv){
 	ros::init(argc, argv, "image_processor");
     ros::NodeHandle nh;
 
-	image_transport::Publisher pub;
-	ros::Publisher blockPub = nh.advertise<geometry_msgs::Point>(ROS_topic_rect_pos, 10);
+	ros::Publisher centersPub = nh.advertise<blob_detect::squareCenters>(ROS_topic_rect_pos, 10);
+	blob_detect::squareCenters centers_msg;
 
 	image_transport::ImageTransport img_trans(nh); 
     image_transport::Subscriber sub = img_trans.subscribe(ROS_topic_image_rgb, 1, imageCallback); //********
 
-	ros::Rate loop_rate(30);
+	image_transport::Publisher pub;
+    pub = img_trans.advertise("rgb/image_processed", 1);
 
-	//TODO: codigo mais versatil para configurar o callback
+
+	//TODO: funcao para configurar os callbacks
+
+	int loopcount = 0;
+	ros::Rate loop_rate(10);
 
 	// main loop
-
 	while (ros::ok())
 	{
 		//publish the yellow block position
-		blockPub.publish(msgYellowBlockPosition);
+		centers_msg.centers.clear();
+		for(int i=0; i < blockCenters.size(); i++)
+		{
+			geometry_msgs::Point P;
+			P.x = blockCenters[i].x;
+			P.y = blockCenters[i].y;
+
+			centers_msg.centers.push_back(P);    //set the array field of the publish message to be
+			                                                    //equal to the global center positions array
+		}
+		
+		if(loopcount % 2 == 0)
+			centersPub.publish(centers_msg);
 
 		ros::spinOnce();
 		loop_rate.sleep();
 	}
-
-    pub = img_trans.advertise("rgb/image_processed", 1);
 
    	ROS_INFO("tutorialROSOpenCV::main.cpp::No error.");
 
@@ -133,31 +151,31 @@ void imageCallback(const sensor_msgs::ImageConstPtr& image)
 	createTrackbarYellow(); 
 	//creatTrackbarRed();
 	filter(image_rgb, image_filtered);
-    contorno(image_rgb);
+	contorno(image_rgb);
 	findYellowBlocks(image_rgb, squaresYellow);
 	drawSquares(image_yellow, squaresYellow);
 	
+	blockCenters.clear();   //blockCenters is a global variable
+
 	//get square centers to be sent on ROS
 	for(int i = 0; i < squaresYellow.size(); i++)
 	{
-		cv::Point center(0,0);
+		blockCenters.push_back(cv::Point(0,0));
 
 		if(squaresYellow[i].size() != 4)
 			ROS_INFO("Got a square from findYellowBlocks that is not 4-sided...");
 		else
 		{
 			for(int j = 0; j < 4; j++)
-				center += squaresYellow[i][j];  //add the coordinates of an vertex
+				blockCenters[i] += squaresYellow[i][j];  //add the coordinates of an vertex
 
-			center.x = center.x/4;  //take the arithmetic mean
-			center.y = center.y/4;
+			blockCenters[i].x = blockCenters[i].x/4;  //take the arithmetic mean
+			blockCenters[i].y = blockCenters[i].y/4;
 
 			//update ROS message
-			msgYellowBlockPosition.x = squaresYellow[i][1].x;
-			msgYellowBlockPosition.y = squaresYellow[i][1].y;
 
 			//draw a circle on the center of the block
-			cv::circle(image_yellow, center, 5, Scalar(255,0,0), 5);
+			cv::circle(image_yellow, blockCenters[i], 5, Scalar(255,0,0), 5);
 		}
 	}
 

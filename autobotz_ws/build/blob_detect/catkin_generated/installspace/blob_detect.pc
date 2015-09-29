@@ -3,6 +3,6 @@ prefix=/home/husky/open-2015/autobotz_ws/install
 Name: blob_detect
 Description: Description of blob_detect
 Version: 0.1.0
-Cflags: 
+Cflags: -I/home/husky/open-2015/autobotz_ws/install/include
 Libs: -L/home/husky/open-2015/autobotz_ws/install/lib 
 Requires: 

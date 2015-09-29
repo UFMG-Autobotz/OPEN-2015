@@ -157,6 +157,7 @@ blob_detect/CMakeFiles/blob_detect.dir/src/UI.cpp.o
  /usr/include/opencv/cxcore.h
  /usr/include/opencv/highgui.h
 blob_detect/CMakeFiles/blob_detect.dir/src/main.cpp.o
+ /home/husky/open-2015/autobotz_ws/devel/include/blob_detect/squareCenters.h
  /home/husky/open-2015/autobotz_ws/src/blob_detect/src/CV_pipeline.hpp
  /home/husky/open-2015/autobotz_ws/src/blob_detect/src/UI.hpp
  /home/husky/open-2015/autobotz_ws/src/blob_detect/src/main.cpp

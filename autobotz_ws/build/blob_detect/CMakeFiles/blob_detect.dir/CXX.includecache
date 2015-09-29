@@ -6,6 +6,24 @@
 
 #IncludeRegexTransform: 
 
+/home/husky/open-2015/autobotz_ws/devel/include/blob_detect/squareCenters.h
+string
+-
+vector
+-
+map
+-
+ros/types.h
+-
+ros/serialization.h
+-
+ros/builtin_message_traits.h
+-
+ros/message_operations.h
+-
+geometry_msgs/Point.h
+-
+
 /home/husky/open-2015/autobotz_ws/src/blob_detect/src/CV_pipeline.hpp
 vector
 -
@@ -51,14 +69,6 @@ opencv2/imgproc/imgproc.hpp
 -
 opencv2/opencv.hpp
 -
-ros/ros.h
--
-sensor_msgs/Image.h
--
-sensor_msgs/image_encodings.h
--
-geometry_msgs/Point.h
--
 sstream
 -
 stdio.h
@@ -73,10 +83,20 @@ vector
 -
 X11/keysym.h
 -
+ros/ros.h
+-
+sensor_msgs/Image.h
+-
+sensor_msgs/image_encodings.h
+-
+geometry_msgs/Point.h
+-
 UI.hpp
 /home/husky/open-2015/autobotz_ws/src/blob_detect/src/UI.hpp
 CV_pipeline.hpp
 /home/husky/open-2015/autobotz_ws/src/blob_detect/src/CV_pipeline.hpp
+blob_detect/squareCenters.h
+/home/husky/open-2015/autobotz_ws/src/blob_detect/src/blob_detect/squareCenters.h
 
 /opt/ros/indigo/include/XmlRpcDecl.h
 ros/macros.h

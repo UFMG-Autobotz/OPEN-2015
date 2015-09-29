@@ -7,12 +7,4 @@
 # new environment variables
 
 # modified environment variables
-export CMAKE_PREFIX_PATH="/home/husky/open-2015/autobotz_ws/devel:$CMAKE_PREFIX_PATH"
-export CPATH="/home/husky/open-2015/autobotz_ws/devel/include:$CPATH"
-export LD_LIBRARY_PATH="/home/husky/open-2015/autobotz_ws/devel/lib:/home/husky/open-2015/autobotz_ws/devel/lib/x86_64-linux-gnu:$LD_LIBRARY_PATH"
-export PATH="/home/husky/open-2015/autobotz_ws/devel/bin:$PATH"
-export PKG_CONFIG_PATH="/home/husky/open-2015/autobotz_ws/devel/lib/pkgconfig:/home/husky/open-2015/autobotz_ws/devel/lib/x86_64-linux-gnu/pkgconfig:$PKG_CONFIG_PATH"
 export PWD="/home/husky/open-2015/autobotz_ws/build"
-export PYTHONPATH="/home/husky/open-2015/autobotz_ws/devel/lib/python2.7/dist-packages:$PYTHONPATH"
-export ROSLISP_PACKAGE_DIRECTORIES="/home/husky/open-2015/autobotz_ws/devel/share/common-lisp"
-export ROS_PACKAGE_PATH="/home/husky/open-2015/autobotz_ws/src:$ROS_PACKAGE_PATH"

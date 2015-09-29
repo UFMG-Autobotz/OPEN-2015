@@ -150,6 +150,20 @@ depend:
 .PHONY : depend
 
 # Convenience name for target.
+blob_detect/CMakeFiles/_blob_detect_generate_messages_check_deps_squareCenters.dir/rule:
+	cd /home/husky/open-2015/autobotz_ws/build && $(MAKE) -f CMakeFiles/Makefile2 blob_detect/CMakeFiles/_blob_detect_generate_messages_check_deps_squareCenters.dir/rule
+.PHONY : blob_detect/CMakeFiles/_blob_detect_generate_messages_check_deps_squareCenters.dir/rule
+
+# Convenience name for target.
+_blob_detect_generate_messages_check_deps_squareCenters: blob_detect/CMakeFiles/_blob_detect_generate_messages_check_deps_squareCenters.dir/rule
+.PHONY : _blob_detect_generate_messages_check_deps_squareCenters
+
+# fast build rule for target.
+_blob_detect_generate_messages_check_deps_squareCenters/fast:
+	cd /home/husky/open-2015/autobotz_ws/build && $(MAKE) -f blob_detect/CMakeFiles/_blob_detect_generate_messages_check_deps_squareCenters.dir/build.make blob_detect/CMakeFiles/_blob_detect_generate_messages_check_deps_squareCenters.dir/build
+.PHONY : _blob_detect_generate_messages_check_deps_squareCenters/fast
+
+# Convenience name for target.
 blob_detect/CMakeFiles/blob_detect.dir/rule:
 	cd /home/husky/open-2015/autobotz_ws/build && $(MAKE) -f CMakeFiles/Makefile2 blob_detect/CMakeFiles/blob_detect.dir/rule
 .PHONY : blob_detect/CMakeFiles/blob_detect.dir/rule
@@ -162,6 +176,104 @@ blob_detect: blob_detect/CMakeFiles/blob_detect.dir/rule
 blob_detect/fast:
 	cd /home/husky/open-2015/autobotz_ws/build && $(MAKE) -f blob_detect/CMakeFiles/blob_detect.dir/build.make blob_detect/CMakeFiles/blob_detect.dir/build
 .PHONY : blob_detect/fast
+
+# Convenience name for target.
+blob_detect/CMakeFiles/blob_detect_gencpp.dir/rule:
+	cd /home/husky/open-2015/autobotz_ws/build && $(MAKE) -f CMakeFiles/Makefile2 blob_detect/CMakeFiles/blob_detect_gencpp.dir/rule
+.PHONY : blob_detect/CMakeFiles/blob_detect_gencpp.dir/rule
+
+# Convenience name for target.
+blob_detect_gencpp: blob_detect/CMakeFiles/blob_detect_gencpp.dir/rule
+.PHONY : blob_detect_gencpp
+
+# fast build rule for target.
+blob_detect_gencpp/fast:
+	cd /home/husky/open-2015/autobotz_ws/build && $(MAKE) -f blob_detect/CMakeFiles/blob_detect_gencpp.dir/build.make blob_detect/CMakeFiles/blob_detect_gencpp.dir/build
+.PHONY : blob_detect_gencpp/fast
+
+# Convenience name for target.
+blob_detect/CMakeFiles/blob_detect_generate_messages.dir/rule:
+	cd /home/husky/open-2015/autobotz_ws/build && $(MAKE) -f CMakeFiles/Makefile2 blob_detect/CMakeFiles/blob_detect_generate_messages.dir/rule
+.PHONY : blob_detect/CMakeFiles/blob_detect_generate_messages.dir/rule
+
+# Convenience name for target.
+blob_detect_generate_messages: blob_detect/CMakeFiles/blob_detect_generate_messages.dir/rule
+.PHONY : blob_detect_generate_messages
+
+# fast build rule for target.
+blob_detect_generate_messages/fast:
+	cd /home/husky/open-2015/autobotz_ws/build && $(MAKE) -f blob_detect/CMakeFiles/blob_detect_generate_messages.dir/build.make blob_detect/CMakeFiles/blob_detect_generate_messages.dir/build
+.PHONY : blob_detect_generate_messages/fast
+
+# Convenience name for target.
+blob_detect/CMakeFiles/blob_detect_generate_messages_cpp.dir/rule:
+	cd /home/husky/open-2015/autobotz_ws/build && $(MAKE) -f CMakeFiles/Makefile2 blob_detect/CMakeFiles/blob_detect_generate_messages_cpp.dir/rule
+.PHONY : blob_detect/CMakeFiles/blob_detect_generate_messages_cpp.dir/rule
+
+# Convenience name for target.
+blob_detect_generate_messages_cpp: blob_detect/CMakeFiles/blob_detect_generate_messages_cpp.dir/rule
+.PHONY : blob_detect_generate_messages_cpp
+
+# fast build rule for target.
+blob_detect_generate_messages_cpp/fast:
+	cd /home/husky/open-2015/autobotz_ws/build && $(MAKE) -f blob_detect/CMakeFiles/blob_detect_generate_messages_cpp.dir/build.make blob_detect/CMakeFiles/blob_detect_generate_messages_cpp.dir/build
+.PHONY : blob_detect_generate_messages_cpp/fast
+
+# Convenience name for target.
+blob_detect/CMakeFiles/blob_detect_generate_messages_lisp.dir/rule:
+	cd /home/husky/open-2015/autobotz_ws/build && $(MAKE) -f CMakeFiles/Makefile2 blob_detect/CMakeFiles/blob_detect_generate_messages_lisp.dir/rule
+.PHONY : blob_detect/CMakeFiles/blob_detect_generate_messages_lisp.dir/rule
+
+# Convenience name for target.
+blob_detect_generate_messages_lisp: blob_detect/CMakeFiles/blob_detect_generate_messages_lisp.dir/rule
+.PHONY : blob_detect_generate_messages_lisp
+
+# fast build rule for target.
+blob_detect_generate_messages_lisp/fast:
+	cd /home/husky/open-2015/autobotz_ws/build && $(MAKE) -f blob_detect/CMakeFiles/blob_detect_generate_messages_lisp.dir/build.make blob_detect/CMakeFiles/blob_detect_generate_messages_lisp.dir/build
+.PHONY : blob_detect_generate_messages_lisp/fast
+
+# Convenience name for target.
+blob_detect/CMakeFiles/blob_detect_generate_messages_py.dir/rule:
+	cd /home/husky/open-2015/autobotz_ws/build && $(MAKE) -f CMakeFiles/Makefile2 blob_detect/CMakeFiles/blob_detect_generate_messages_py.dir/rule
+.PHONY : blob_detect/CMakeFiles/blob_detect_generate_messages_py.dir/rule
+
+# Convenience name for target.
+blob_detect_generate_messages_py: blob_detect/CMakeFiles/blob_detect_generate_messages_py.dir/rule
+.PHONY : blob_detect_generate_messages_py
+
+# fast build rule for target.
+blob_detect_generate_messages_py/fast:
+	cd /home/husky/open-2015/autobotz_ws/build && $(MAKE) -f blob_detect/CMakeFiles/blob_detect_generate_messages_py.dir/build.make blob_detect/CMakeFiles/blob_detect_generate_messages_py.dir/build
+.PHONY : blob_detect_generate_messages_py/fast
+
+# Convenience name for target.
+blob_detect/CMakeFiles/blob_detect_genlisp.dir/rule:
+	cd /home/husky/open-2015/autobotz_ws/build && $(MAKE) -f CMakeFiles/Makefile2 blob_detect/CMakeFiles/blob_detect_genlisp.dir/rule
+.PHONY : blob_detect/CMakeFiles/blob_detect_genlisp.dir/rule
+
+# Convenience name for target.
+blob_detect_genlisp: blob_detect/CMakeFiles/blob_detect_genlisp.dir/rule
+.PHONY : blob_detect_genlisp
+
+# fast build rule for target.
+blob_detect_genlisp/fast:
+	cd /home/husky/open-2015/autobotz_ws/build && $(MAKE) -f blob_detect/CMakeFiles/blob_detect_genlisp.dir/build.make blob_detect/CMakeFiles/blob_detect_genlisp.dir/build
+.PHONY : blob_detect_genlisp/fast
+
+# Convenience name for target.
+blob_detect/CMakeFiles/blob_detect_genpy.dir/rule:
+	cd /home/husky/open-2015/autobotz_ws/build && $(MAKE) -f CMakeFiles/Makefile2 blob_detect/CMakeFiles/blob_detect_genpy.dir/rule
+.PHONY : blob_detect/CMakeFiles/blob_detect_genpy.dir/rule
+
+# Convenience name for target.
+blob_detect_genpy: blob_detect/CMakeFiles/blob_detect_genpy.dir/rule
+.PHONY : blob_detect_genpy
+
+# fast build rule for target.
+blob_detect_genpy/fast:
+	cd /home/husky/open-2015/autobotz_ws/build && $(MAKE) -f blob_detect/CMakeFiles/blob_detect_genpy.dir/build.make blob_detect/CMakeFiles/blob_detect_genpy.dir/build
+.PHONY : blob_detect_genpy/fast
 
 # Convenience name for target.
 blob_detect/CMakeFiles/geometry_msgs_generate_messages_cpp.dir/rule:
@@ -451,7 +563,15 @@ help:
 	@echo "... all (the default if no target is provided)"
 	@echo "... clean"
 	@echo "... depend"
+	@echo "... _blob_detect_generate_messages_check_deps_squareCenters"
 	@echo "... blob_detect"
+	@echo "... blob_detect_gencpp"
+	@echo "... blob_detect_generate_messages"
+	@echo "... blob_detect_generate_messages_cpp"
+	@echo "... blob_detect_generate_messages_lisp"
+	@echo "... blob_detect_generate_messages_py"
+	@echo "... blob_detect_genlisp"
+	@echo "... blob_detect_genpy"
 	@echo "... edit_cache"
 	@echo "... geometry_msgs_generate_messages_cpp"
 	@echo "... geometry_msgs_generate_messages_lisp"

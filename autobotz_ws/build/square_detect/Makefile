@@ -164,174 +164,6 @@ _square_detect_generate_messages_check_deps_squareCenters/fast:
 .PHONY : _square_detect_generate_messages_check_deps_squareCenters/fast
 
 # Convenience name for target.
-square_detect/CMakeFiles/geometry_msgs_generate_messages_cpp.dir/rule:
-	cd /home/husky/open-2015/autobotz_ws/build && $(MAKE) -f CMakeFiles/Makefile2 square_detect/CMakeFiles/geometry_msgs_generate_messages_cpp.dir/rule
-.PHONY : square_detect/CMakeFiles/geometry_msgs_generate_messages_cpp.dir/rule
-
-# Convenience name for target.
-geometry_msgs_generate_messages_cpp: square_detect/CMakeFiles/geometry_msgs_generate_messages_cpp.dir/rule
-.PHONY : geometry_msgs_generate_messages_cpp
-
-# fast build rule for target.
-geometry_msgs_generate_messages_cpp/fast:
-	cd /home/husky/open-2015/autobotz_ws/build && $(MAKE) -f square_detect/CMakeFiles/geometry_msgs_generate_messages_cpp.dir/build.make square_detect/CMakeFiles/geometry_msgs_generate_messages_cpp.dir/build
-.PHONY : geometry_msgs_generate_messages_cpp/fast
-
-# Convenience name for target.
-square_detect/CMakeFiles/geometry_msgs_generate_messages_lisp.dir/rule:
-	cd /home/husky/open-2015/autobotz_ws/build && $(MAKE) -f CMakeFiles/Makefile2 square_detect/CMakeFiles/geometry_msgs_generate_messages_lisp.dir/rule
-.PHONY : square_detect/CMakeFiles/geometry_msgs_generate_messages_lisp.dir/rule
-
-# Convenience name for target.
-geometry_msgs_generate_messages_lisp: square_detect/CMakeFiles/geometry_msgs_generate_messages_lisp.dir/rule
-.PHONY : geometry_msgs_generate_messages_lisp
-
-# fast build rule for target.
-geometry_msgs_generate_messages_lisp/fast:
-	cd /home/husky/open-2015/autobotz_ws/build && $(MAKE) -f square_detect/CMakeFiles/geometry_msgs_generate_messages_lisp.dir/build.make square_detect/CMakeFiles/geometry_msgs_generate_messages_lisp.dir/build
-.PHONY : geometry_msgs_generate_messages_lisp/fast
-
-# Convenience name for target.
-square_detect/CMakeFiles/geometry_msgs_generate_messages_py.dir/rule:
-	cd /home/husky/open-2015/autobotz_ws/build && $(MAKE) -f CMakeFiles/Makefile2 square_detect/CMakeFiles/geometry_msgs_generate_messages_py.dir/rule
-.PHONY : square_detect/CMakeFiles/geometry_msgs_generate_messages_py.dir/rule
-
-# Convenience name for target.
-geometry_msgs_generate_messages_py: square_detect/CMakeFiles/geometry_msgs_generate_messages_py.dir/rule
-.PHONY : geometry_msgs_generate_messages_py
-
-# fast build rule for target.
-geometry_msgs_generate_messages_py/fast:
-	cd /home/husky/open-2015/autobotz_ws/build && $(MAKE) -f square_detect/CMakeFiles/geometry_msgs_generate_messages_py.dir/build.make square_detect/CMakeFiles/geometry_msgs_generate_messages_py.dir/build
-.PHONY : geometry_msgs_generate_messages_py/fast
-
-# Convenience name for target.
-square_detect/CMakeFiles/roscpp_generate_messages_cpp.dir/rule:
-	cd /home/husky/open-2015/autobotz_ws/build && $(MAKE) -f CMakeFiles/Makefile2 square_detect/CMakeFiles/roscpp_generate_messages_cpp.dir/rule
-.PHONY : square_detect/CMakeFiles/roscpp_generate_messages_cpp.dir/rule
-
-# Convenience name for target.
-roscpp_generate_messages_cpp: square_detect/CMakeFiles/roscpp_generate_messages_cpp.dir/rule
-.PHONY : roscpp_generate_messages_cpp
-
-# fast build rule for target.
-roscpp_generate_messages_cpp/fast:
-	cd /home/husky/open-2015/autobotz_ws/build && $(MAKE) -f square_detect/CMakeFiles/roscpp_generate_messages_cpp.dir/build.make square_detect/CMakeFiles/roscpp_generate_messages_cpp.dir/build
-.PHONY : roscpp_generate_messages_cpp/fast
-
-# Convenience name for target.
-square_detect/CMakeFiles/roscpp_generate_messages_lisp.dir/rule:
-	cd /home/husky/open-2015/autobotz_ws/build && $(MAKE) -f CMakeFiles/Makefile2 square_detect/CMakeFiles/roscpp_generate_messages_lisp.dir/rule
-.PHONY : square_detect/CMakeFiles/roscpp_generate_messages_lisp.dir/rule
-
-# Convenience name for target.
-roscpp_generate_messages_lisp: square_detect/CMakeFiles/roscpp_generate_messages_lisp.dir/rule
-.PHONY : roscpp_generate_messages_lisp
-
-# fast build rule for target.
-roscpp_generate_messages_lisp/fast:
-	cd /home/husky/open-2015/autobotz_ws/build && $(MAKE) -f square_detect/CMakeFiles/roscpp_generate_messages_lisp.dir/build.make square_detect/CMakeFiles/roscpp_generate_messages_lisp.dir/build
-.PHONY : roscpp_generate_messages_lisp/fast
-
-# Convenience name for target.
-square_detect/CMakeFiles/roscpp_generate_messages_py.dir/rule:
-	cd /home/husky/open-2015/autobotz_ws/build && $(MAKE) -f CMakeFiles/Makefile2 square_detect/CMakeFiles/roscpp_generate_messages_py.dir/rule
-.PHONY : square_detect/CMakeFiles/roscpp_generate_messages_py.dir/rule
-
-# Convenience name for target.
-roscpp_generate_messages_py: square_detect/CMakeFiles/roscpp_generate_messages_py.dir/rule
-.PHONY : roscpp_generate_messages_py
-
-# fast build rule for target.
-roscpp_generate_messages_py/fast:
-	cd /home/husky/open-2015/autobotz_ws/build && $(MAKE) -f square_detect/CMakeFiles/roscpp_generate_messages_py.dir/build.make square_detect/CMakeFiles/roscpp_generate_messages_py.dir/build
-.PHONY : roscpp_generate_messages_py/fast
-
-# Convenience name for target.
-square_detect/CMakeFiles/rosgraph_msgs_generate_messages_cpp.dir/rule:
-	cd /home/husky/open-2015/autobotz_ws/build && $(MAKE) -f CMakeFiles/Makefile2 square_detect/CMakeFiles/rosgraph_msgs_generate_messages_cpp.dir/rule
-.PHONY : square_detect/CMakeFiles/rosgraph_msgs_generate_messages_cpp.dir/rule
-
-# Convenience name for target.
-rosgraph_msgs_generate_messages_cpp: square_detect/CMakeFiles/rosgraph_msgs_generate_messages_cpp.dir/rule
-.PHONY : rosgraph_msgs_generate_messages_cpp
-
-# fast build rule for target.
-rosgraph_msgs_generate_messages_cpp/fast:
-	cd /home/husky/open-2015/autobotz_ws/build && $(MAKE) -f square_detect/CMakeFiles/rosgraph_msgs_generate_messages_cpp.dir/build.make square_detect/CMakeFiles/rosgraph_msgs_generate_messages_cpp.dir/build
-.PHONY : rosgraph_msgs_generate_messages_cpp/fast
-
-# Convenience name for target.
-square_detect/CMakeFiles/rosgraph_msgs_generate_messages_lisp.dir/rule:
-	cd /home/husky/open-2015/autobotz_ws/build && $(MAKE) -f CMakeFiles/Makefile2 square_detect/CMakeFiles/rosgraph_msgs_generate_messages_lisp.dir/rule
-.PHONY : square_detect/CMakeFiles/rosgraph_msgs_generate_messages_lisp.dir/rule
-
-# Convenience name for target.
-rosgraph_msgs_generate_messages_lisp: square_detect/CMakeFiles/rosgraph_msgs_generate_messages_lisp.dir/rule
-.PHONY : rosgraph_msgs_generate_messages_lisp
-
-# fast build rule for target.
-rosgraph_msgs_generate_messages_lisp/fast:
-	cd /home/husky/open-2015/autobotz_ws/build && $(MAKE) -f square_detect/CMakeFiles/rosgraph_msgs_generate_messages_lisp.dir/build.make square_detect/CMakeFiles/rosgraph_msgs_generate_messages_lisp.dir/build
-.PHONY : rosgraph_msgs_generate_messages_lisp/fast
-
-# Convenience name for target.
-square_detect/CMakeFiles/rosgraph_msgs_generate_messages_py.dir/rule:
-	cd /home/husky/open-2015/autobotz_ws/build && $(MAKE) -f CMakeFiles/Makefile2 square_detect/CMakeFiles/rosgraph_msgs_generate_messages_py.dir/rule
-.PHONY : square_detect/CMakeFiles/rosgraph_msgs_generate_messages_py.dir/rule
-
-# Convenience name for target.
-rosgraph_msgs_generate_messages_py: square_detect/CMakeFiles/rosgraph_msgs_generate_messages_py.dir/rule
-.PHONY : rosgraph_msgs_generate_messages_py
-
-# fast build rule for target.
-rosgraph_msgs_generate_messages_py/fast:
-	cd /home/husky/open-2015/autobotz_ws/build && $(MAKE) -f square_detect/CMakeFiles/rosgraph_msgs_generate_messages_py.dir/build.make square_detect/CMakeFiles/rosgraph_msgs_generate_messages_py.dir/build
-.PHONY : rosgraph_msgs_generate_messages_py/fast
-
-# Convenience name for target.
-square_detect/CMakeFiles/sensor_msgs_generate_messages_cpp.dir/rule:
-	cd /home/husky/open-2015/autobotz_ws/build && $(MAKE) -f CMakeFiles/Makefile2 square_detect/CMakeFiles/sensor_msgs_generate_messages_cpp.dir/rule
-.PHONY : square_detect/CMakeFiles/sensor_msgs_generate_messages_cpp.dir/rule
-
-# Convenience name for target.
-sensor_msgs_generate_messages_cpp: square_detect/CMakeFiles/sensor_msgs_generate_messages_cpp.dir/rule
-.PHONY : sensor_msgs_generate_messages_cpp
-
-# fast build rule for target.
-sensor_msgs_generate_messages_cpp/fast:
-	cd /home/husky/open-2015/autobotz_ws/build && $(MAKE) -f square_detect/CMakeFiles/sensor_msgs_generate_messages_cpp.dir/build.make square_detect/CMakeFiles/sensor_msgs_generate_messages_cpp.dir/build
-.PHONY : sensor_msgs_generate_messages_cpp/fast
-
-# Convenience name for target.
-square_detect/CMakeFiles/sensor_msgs_generate_messages_lisp.dir/rule:
-	cd /home/husky/open-2015/autobotz_ws/build && $(MAKE) -f CMakeFiles/Makefile2 square_detect/CMakeFiles/sensor_msgs_generate_messages_lisp.dir/rule
-.PHONY : square_detect/CMakeFiles/sensor_msgs_generate_messages_lisp.dir/rule
-
-# Convenience name for target.
-sensor_msgs_generate_messages_lisp: square_detect/CMakeFiles/sensor_msgs_generate_messages_lisp.dir/rule
-.PHONY : sensor_msgs_generate_messages_lisp
-
-# fast build rule for target.
-sensor_msgs_generate_messages_lisp/fast:
-	cd /home/husky/open-2015/autobotz_ws/build && $(MAKE) -f square_detect/CMakeFiles/sensor_msgs_generate_messages_lisp.dir/build.make square_detect/CMakeFiles/sensor_msgs_generate_messages_lisp.dir/build
-.PHONY : sensor_msgs_generate_messages_lisp/fast
-
-# Convenience name for target.
-square_detect/CMakeFiles/sensor_msgs_generate_messages_py.dir/rule:
-	cd /home/husky/open-2015/autobotz_ws/build && $(MAKE) -f CMakeFiles/Makefile2 square_detect/CMakeFiles/sensor_msgs_generate_messages_py.dir/rule
-.PHONY : square_detect/CMakeFiles/sensor_msgs_generate_messages_py.dir/rule
-
-# Convenience name for target.
-sensor_msgs_generate_messages_py: square_detect/CMakeFiles/sensor_msgs_generate_messages_py.dir/rule
-.PHONY : sensor_msgs_generate_messages_py
-
-# fast build rule for target.
-sensor_msgs_generate_messages_py/fast:
-	cd /home/husky/open-2015/autobotz_ws/build && $(MAKE) -f square_detect/CMakeFiles/sensor_msgs_generate_messages_py.dir/build.make square_detect/CMakeFiles/sensor_msgs_generate_messages_py.dir/build
-.PHONY : sensor_msgs_generate_messages_py/fast
-
-# Convenience name for target.
 square_detect/CMakeFiles/square_detect.dir/rule:
 	cd /home/husky/open-2015/autobotz_ws/build && $(MAKE) -f CMakeFiles/Makefile2 square_detect/CMakeFiles/square_detect.dir/rule
 .PHONY : square_detect/CMakeFiles/square_detect.dir/rule
@@ -443,48 +275,6 @@ square_detect_genpy/fast:
 	cd /home/husky/open-2015/autobotz_ws/build && $(MAKE) -f square_detect/CMakeFiles/square_detect_genpy.dir/build.make square_detect/CMakeFiles/square_detect_genpy.dir/build
 .PHONY : square_detect_genpy/fast
 
-# Convenience name for target.
-square_detect/CMakeFiles/std_msgs_generate_messages_cpp.dir/rule:
-	cd /home/husky/open-2015/autobotz_ws/build && $(MAKE) -f CMakeFiles/Makefile2 square_detect/CMakeFiles/std_msgs_generate_messages_cpp.dir/rule
-.PHONY : square_detect/CMakeFiles/std_msgs_generate_messages_cpp.dir/rule
-
-# Convenience name for target.
-std_msgs_generate_messages_cpp: square_detect/CMakeFiles/std_msgs_generate_messages_cpp.dir/rule
-.PHONY : std_msgs_generate_messages_cpp
-
-# fast build rule for target.
-std_msgs_generate_messages_cpp/fast:
-	cd /home/husky/open-2015/autobotz_ws/build && $(MAKE) -f square_detect/CMakeFiles/std_msgs_generate_messages_cpp.dir/build.make square_detect/CMakeFiles/std_msgs_generate_messages_cpp.dir/build
-.PHONY : std_msgs_generate_messages_cpp/fast
-
-# Convenience name for target.
-square_detect/CMakeFiles/std_msgs_generate_messages_lisp.dir/rule:
-	cd /home/husky/open-2015/autobotz_ws/build && $(MAKE) -f CMakeFiles/Makefile2 square_detect/CMakeFiles/std_msgs_generate_messages_lisp.dir/rule
-.PHONY : square_detect/CMakeFiles/std_msgs_generate_messages_lisp.dir/rule
-
-# Convenience name for target.
-std_msgs_generate_messages_lisp: square_detect/CMakeFiles/std_msgs_generate_messages_lisp.dir/rule
-.PHONY : std_msgs_generate_messages_lisp
-
-# fast build rule for target.
-std_msgs_generate_messages_lisp/fast:
-	cd /home/husky/open-2015/autobotz_ws/build && $(MAKE) -f square_detect/CMakeFiles/std_msgs_generate_messages_lisp.dir/build.make square_detect/CMakeFiles/std_msgs_generate_messages_lisp.dir/build
-.PHONY : std_msgs_generate_messages_lisp/fast
-
-# Convenience name for target.
-square_detect/CMakeFiles/std_msgs_generate_messages_py.dir/rule:
-	cd /home/husky/open-2015/autobotz_ws/build && $(MAKE) -f CMakeFiles/Makefile2 square_detect/CMakeFiles/std_msgs_generate_messages_py.dir/rule
-.PHONY : square_detect/CMakeFiles/std_msgs_generate_messages_py.dir/rule
-
-# Convenience name for target.
-std_msgs_generate_messages_py: square_detect/CMakeFiles/std_msgs_generate_messages_py.dir/rule
-.PHONY : std_msgs_generate_messages_py
-
-# fast build rule for target.
-std_msgs_generate_messages_py/fast:
-	cd /home/husky/open-2015/autobotz_ws/build && $(MAKE) -f square_detect/CMakeFiles/std_msgs_generate_messages_py.dir/build.make square_detect/CMakeFiles/std_msgs_generate_messages_py.dir/build
-.PHONY : std_msgs_generate_messages_py/fast
-
 src/CV_pipeline.o: src/CV_pipeline.cpp.o
 .PHONY : src/CV_pipeline.o
 
@@ -565,23 +355,11 @@ help:
 	@echo "... depend"
 	@echo "... _square_detect_generate_messages_check_deps_squareCenters"
 	@echo "... edit_cache"
-	@echo "... geometry_msgs_generate_messages_cpp"
-	@echo "... geometry_msgs_generate_messages_lisp"
-	@echo "... geometry_msgs_generate_messages_py"
 	@echo "... install"
 	@echo "... install/local"
 	@echo "... install/strip"
 	@echo "... list_install_components"
 	@echo "... rebuild_cache"
-	@echo "... roscpp_generate_messages_cpp"
-	@echo "... roscpp_generate_messages_lisp"
-	@echo "... roscpp_generate_messages_py"
-	@echo "... rosgraph_msgs_generate_messages_cpp"
-	@echo "... rosgraph_msgs_generate_messages_lisp"
-	@echo "... rosgraph_msgs_generate_messages_py"
-	@echo "... sensor_msgs_generate_messages_cpp"
-	@echo "... sensor_msgs_generate_messages_lisp"
-	@echo "... sensor_msgs_generate_messages_py"
 	@echo "... square_detect"
 	@echo "... square_detect_gencpp"
 	@echo "... square_detect_generate_messages"
@@ -590,9 +368,6 @@ help:
 	@echo "... square_detect_generate_messages_py"
 	@echo "... square_detect_genlisp"
 	@echo "... square_detect_genpy"
-	@echo "... std_msgs_generate_messages_cpp"
-	@echo "... std_msgs_generate_messages_lisp"
-	@echo "... std_msgs_generate_messages_py"
 	@echo "... test"
 	@echo "... src/CV_pipeline.o"
 	@echo "... src/CV_pipeline.i"

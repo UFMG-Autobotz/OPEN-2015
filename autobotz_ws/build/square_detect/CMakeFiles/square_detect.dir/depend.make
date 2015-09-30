@@ -156,7 +156,6 @@ square_detect/CMakeFiles/square_detect.dir/src/UI.cpp.o: /usr/include/opencv/cv.
 square_detect/CMakeFiles/square_detect.dir/src/UI.cpp.o: /usr/include/opencv/cxcore.h
 square_detect/CMakeFiles/square_detect.dir/src/UI.cpp.o: /usr/include/opencv/highgui.h
 
-square_detect/CMakeFiles/square_detect.dir/src/main.cpp.o: /home/husky/open-2015/autobotz_ws/devel/include/blob_detect/squareCenters.h
 square_detect/CMakeFiles/square_detect.dir/src/main.cpp.o: /home/husky/open-2015/autobotz_ws/src/square_detect/src/CV_pipeline.hpp
 square_detect/CMakeFiles/square_detect.dir/src/main.cpp.o: /home/husky/open-2015/autobotz_ws/src/square_detect/src/UI.hpp
 square_detect/CMakeFiles/square_detect.dir/src/main.cpp.o: /home/husky/open-2015/autobotz_ws/src/square_detect/src/main.cpp

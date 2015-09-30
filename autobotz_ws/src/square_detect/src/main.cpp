@@ -1,8 +1,8 @@
 //////////////////////////////////////////////////////
 //
-// main file, part of the blobDetect node
+// main file, part of the suqare_detect node
 // This ROS node is intended to aquire an image from a MS kinect and
-// publish the position of blobs of a specified color range on a topic
+// publish the position of yellow rectangles on a topic
 //
 //////////////////////////////////////////////////////
 
@@ -37,7 +37,7 @@
 #include "UI.hpp"
 #include "CV_pipeline.hpp"
 
-#include "blob_detect/squareCenters.h"  //custom message
+#include "square_detect/squareCenters.h"  //custom message
 
 using namespace cv;
 using namespace std;
@@ -73,8 +73,8 @@ int main(int argc, char **argv){
 	ros::init(argc, argv, "image_processor");
     ros::NodeHandle nh;
 
-	ros::Publisher centersPub = nh.advertise<blob_detect::squareCenters>(ROS_topic_rect_pos, 10);
-	blob_detect::squareCenters centers_msg;
+	ros::Publisher centersPub = nh.advertise<square_detect::squareCenters>(ROS_topic_rect_pos, 10);
+	square_detect::squareCenters centers_msg;
 
 	image_transport::ImageTransport img_trans(nh); 
     image_transport::Subscriber sub = img_trans.subscribe(ROS_topic_image_rgb, 1, imageCallback); //********

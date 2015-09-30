@@ -1,0 +1,8 @@
+prefix=/home/husky/open-2015/autobotz_ws/devel
+
+Name: imu
+Description: Description of imu
+Version: 0.0.0
+Cflags: 
+Libs: -L/home/husky/open-2015/autobotz_ws/devel/lib 
+Requires: message_runtime

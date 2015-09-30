@@ -117,6 +117,8 @@ ENDIF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unsp
 IF(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
   INCLUDE("/home/husky/open-2015/autobotz_ws/build/gtest/cmake_install.cmake")
+  INCLUDE("/home/husky/open-2015/autobotz_ws/build/imu/cmake_install.cmake")
+  INCLUDE("/home/husky/open-2015/autobotz_ws/build/radio_controle/cmake_install.cmake")
   INCLUDE("/home/husky/open-2015/autobotz_ws/build/square_detect/cmake_install.cmake")
 
 ENDIF(NOT CMAKE_INSTALL_LOCAL_ONLY)

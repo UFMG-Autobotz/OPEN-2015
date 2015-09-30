@@ -241,17 +241,30 @@ gtest_main/fast:
 .PHONY : gtest_main/fast
 
 #=============================================================================
-# Target rules for targets named _square_detect_generate_messages_check_deps_squareCenters
+# Target rules for targets named _catkin_empty_exported_target
 
 # Build rule for target.
-_square_detect_generate_messages_check_deps_squareCenters: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 _square_detect_generate_messages_check_deps_squareCenters
-.PHONY : _square_detect_generate_messages_check_deps_squareCenters
+_catkin_empty_exported_target: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 _catkin_empty_exported_target
+.PHONY : _catkin_empty_exported_target
 
 # fast build rule for target.
-_square_detect_generate_messages_check_deps_squareCenters/fast:
-	$(MAKE) -f square_detect/CMakeFiles/_square_detect_generate_messages_check_deps_squareCenters.dir/build.make square_detect/CMakeFiles/_square_detect_generate_messages_check_deps_squareCenters.dir/build
-.PHONY : _square_detect_generate_messages_check_deps_squareCenters/fast
+_catkin_empty_exported_target/fast:
+	$(MAKE) -f imu/CMakeFiles/_catkin_empty_exported_target.dir/build.make imu/CMakeFiles/_catkin_empty_exported_target.dir/build
+.PHONY : _catkin_empty_exported_target/fast
+
+#=============================================================================
+# Target rules for targets named arducom
+
+# Build rule for target.
+arducom: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 arducom
+.PHONY : arducom
+
+# fast build rule for target.
+arducom/fast:
+	$(MAKE) -f imu/CMakeFiles/arducom.dir/build.make imu/CMakeFiles/arducom.dir/build
+.PHONY : arducom/fast
 
 #=============================================================================
 # Target rules for targets named geometry_msgs_generate_messages_cpp
@@ -263,7 +276,7 @@ geometry_msgs_generate_messages_cpp: cmake_check_build_system
 
 # fast build rule for target.
 geometry_msgs_generate_messages_cpp/fast:
-	$(MAKE) -f square_detect/CMakeFiles/geometry_msgs_generate_messages_cpp.dir/build.make square_detect/CMakeFiles/geometry_msgs_generate_messages_cpp.dir/build
+	$(MAKE) -f imu/CMakeFiles/geometry_msgs_generate_messages_cpp.dir/build.make imu/CMakeFiles/geometry_msgs_generate_messages_cpp.dir/build
 .PHONY : geometry_msgs_generate_messages_cpp/fast
 
 #=============================================================================
@@ -276,7 +289,7 @@ geometry_msgs_generate_messages_lisp: cmake_check_build_system
 
 # fast build rule for target.
 geometry_msgs_generate_messages_lisp/fast:
-	$(MAKE) -f square_detect/CMakeFiles/geometry_msgs_generate_messages_lisp.dir/build.make square_detect/CMakeFiles/geometry_msgs_generate_messages_lisp.dir/build
+	$(MAKE) -f imu/CMakeFiles/geometry_msgs_generate_messages_lisp.dir/build.make imu/CMakeFiles/geometry_msgs_generate_messages_lisp.dir/build
 .PHONY : geometry_msgs_generate_messages_lisp/fast
 
 #=============================================================================
@@ -289,8 +302,99 @@ geometry_msgs_generate_messages_py: cmake_check_build_system
 
 # fast build rule for target.
 geometry_msgs_generate_messages_py/fast:
-	$(MAKE) -f square_detect/CMakeFiles/geometry_msgs_generate_messages_py.dir/build.make square_detect/CMakeFiles/geometry_msgs_generate_messages_py.dir/build
+	$(MAKE) -f imu/CMakeFiles/geometry_msgs_generate_messages_py.dir/build.make imu/CMakeFiles/geometry_msgs_generate_messages_py.dir/build
 .PHONY : geometry_msgs_generate_messages_py/fast
+
+#=============================================================================
+# Target rules for targets named imu_gencpp
+
+# Build rule for target.
+imu_gencpp: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 imu_gencpp
+.PHONY : imu_gencpp
+
+# fast build rule for target.
+imu_gencpp/fast:
+	$(MAKE) -f imu/CMakeFiles/imu_gencpp.dir/build.make imu/CMakeFiles/imu_gencpp.dir/build
+.PHONY : imu_gencpp/fast
+
+#=============================================================================
+# Target rules for targets named imu_generate_messages
+
+# Build rule for target.
+imu_generate_messages: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 imu_generate_messages
+.PHONY : imu_generate_messages
+
+# fast build rule for target.
+imu_generate_messages/fast:
+	$(MAKE) -f imu/CMakeFiles/imu_generate_messages.dir/build.make imu/CMakeFiles/imu_generate_messages.dir/build
+.PHONY : imu_generate_messages/fast
+
+#=============================================================================
+# Target rules for targets named imu_generate_messages_cpp
+
+# Build rule for target.
+imu_generate_messages_cpp: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 imu_generate_messages_cpp
+.PHONY : imu_generate_messages_cpp
+
+# fast build rule for target.
+imu_generate_messages_cpp/fast:
+	$(MAKE) -f imu/CMakeFiles/imu_generate_messages_cpp.dir/build.make imu/CMakeFiles/imu_generate_messages_cpp.dir/build
+.PHONY : imu_generate_messages_cpp/fast
+
+#=============================================================================
+# Target rules for targets named imu_generate_messages_lisp
+
+# Build rule for target.
+imu_generate_messages_lisp: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 imu_generate_messages_lisp
+.PHONY : imu_generate_messages_lisp
+
+# fast build rule for target.
+imu_generate_messages_lisp/fast:
+	$(MAKE) -f imu/CMakeFiles/imu_generate_messages_lisp.dir/build.make imu/CMakeFiles/imu_generate_messages_lisp.dir/build
+.PHONY : imu_generate_messages_lisp/fast
+
+#=============================================================================
+# Target rules for targets named imu_generate_messages_py
+
+# Build rule for target.
+imu_generate_messages_py: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 imu_generate_messages_py
+.PHONY : imu_generate_messages_py
+
+# fast build rule for target.
+imu_generate_messages_py/fast:
+	$(MAKE) -f imu/CMakeFiles/imu_generate_messages_py.dir/build.make imu/CMakeFiles/imu_generate_messages_py.dir/build
+.PHONY : imu_generate_messages_py/fast
+
+#=============================================================================
+# Target rules for targets named imu_genlisp
+
+# Build rule for target.
+imu_genlisp: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 imu_genlisp
+.PHONY : imu_genlisp
+
+# fast build rule for target.
+imu_genlisp/fast:
+	$(MAKE) -f imu/CMakeFiles/imu_genlisp.dir/build.make imu/CMakeFiles/imu_genlisp.dir/build
+.PHONY : imu_genlisp/fast
+
+#=============================================================================
+# Target rules for targets named imu_genpy
+
+# Build rule for target.
+imu_genpy: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 imu_genpy
+.PHONY : imu_genpy
+
+# fast build rule for target.
+imu_genpy/fast:
+	$(MAKE) -f imu/CMakeFiles/imu_genpy.dir/build.make imu/CMakeFiles/imu_genpy.dir/build
+.PHONY : imu_genpy/fast
 
 #=============================================================================
 # Target rules for targets named roscpp_generate_messages_cpp
@@ -302,7 +406,7 @@ roscpp_generate_messages_cpp: cmake_check_build_system
 
 # fast build rule for target.
 roscpp_generate_messages_cpp/fast:
-	$(MAKE) -f square_detect/CMakeFiles/roscpp_generate_messages_cpp.dir/build.make square_detect/CMakeFiles/roscpp_generate_messages_cpp.dir/build
+	$(MAKE) -f imu/CMakeFiles/roscpp_generate_messages_cpp.dir/build.make imu/CMakeFiles/roscpp_generate_messages_cpp.dir/build
 .PHONY : roscpp_generate_messages_cpp/fast
 
 #=============================================================================
@@ -315,7 +419,7 @@ roscpp_generate_messages_lisp: cmake_check_build_system
 
 # fast build rule for target.
 roscpp_generate_messages_lisp/fast:
-	$(MAKE) -f square_detect/CMakeFiles/roscpp_generate_messages_lisp.dir/build.make square_detect/CMakeFiles/roscpp_generate_messages_lisp.dir/build
+	$(MAKE) -f imu/CMakeFiles/roscpp_generate_messages_lisp.dir/build.make imu/CMakeFiles/roscpp_generate_messages_lisp.dir/build
 .PHONY : roscpp_generate_messages_lisp/fast
 
 #=============================================================================
@@ -328,7 +432,7 @@ roscpp_generate_messages_py: cmake_check_build_system
 
 # fast build rule for target.
 roscpp_generate_messages_py/fast:
-	$(MAKE) -f square_detect/CMakeFiles/roscpp_generate_messages_py.dir/build.make square_detect/CMakeFiles/roscpp_generate_messages_py.dir/build
+	$(MAKE) -f imu/CMakeFiles/roscpp_generate_messages_py.dir/build.make imu/CMakeFiles/roscpp_generate_messages_py.dir/build
 .PHONY : roscpp_generate_messages_py/fast
 
 #=============================================================================
@@ -341,7 +445,7 @@ rosgraph_msgs_generate_messages_cpp: cmake_check_build_system
 
 # fast build rule for target.
 rosgraph_msgs_generate_messages_cpp/fast:
-	$(MAKE) -f square_detect/CMakeFiles/rosgraph_msgs_generate_messages_cpp.dir/build.make square_detect/CMakeFiles/rosgraph_msgs_generate_messages_cpp.dir/build
+	$(MAKE) -f imu/CMakeFiles/rosgraph_msgs_generate_messages_cpp.dir/build.make imu/CMakeFiles/rosgraph_msgs_generate_messages_cpp.dir/build
 .PHONY : rosgraph_msgs_generate_messages_cpp/fast
 
 #=============================================================================
@@ -354,7 +458,7 @@ rosgraph_msgs_generate_messages_lisp: cmake_check_build_system
 
 # fast build rule for target.
 rosgraph_msgs_generate_messages_lisp/fast:
-	$(MAKE) -f square_detect/CMakeFiles/rosgraph_msgs_generate_messages_lisp.dir/build.make square_detect/CMakeFiles/rosgraph_msgs_generate_messages_lisp.dir/build
+	$(MAKE) -f imu/CMakeFiles/rosgraph_msgs_generate_messages_lisp.dir/build.make imu/CMakeFiles/rosgraph_msgs_generate_messages_lisp.dir/build
 .PHONY : rosgraph_msgs_generate_messages_lisp/fast
 
 #=============================================================================
@@ -367,7 +471,7 @@ rosgraph_msgs_generate_messages_py: cmake_check_build_system
 
 # fast build rule for target.
 rosgraph_msgs_generate_messages_py/fast:
-	$(MAKE) -f square_detect/CMakeFiles/rosgraph_msgs_generate_messages_py.dir/build.make square_detect/CMakeFiles/rosgraph_msgs_generate_messages_py.dir/build
+	$(MAKE) -f imu/CMakeFiles/rosgraph_msgs_generate_messages_py.dir/build.make imu/CMakeFiles/rosgraph_msgs_generate_messages_py.dir/build
 .PHONY : rosgraph_msgs_generate_messages_py/fast
 
 #=============================================================================
@@ -380,7 +484,7 @@ sensor_msgs_generate_messages_cpp: cmake_check_build_system
 
 # fast build rule for target.
 sensor_msgs_generate_messages_cpp/fast:
-	$(MAKE) -f square_detect/CMakeFiles/sensor_msgs_generate_messages_cpp.dir/build.make square_detect/CMakeFiles/sensor_msgs_generate_messages_cpp.dir/build
+	$(MAKE) -f imu/CMakeFiles/sensor_msgs_generate_messages_cpp.dir/build.make imu/CMakeFiles/sensor_msgs_generate_messages_cpp.dir/build
 .PHONY : sensor_msgs_generate_messages_cpp/fast
 
 #=============================================================================
@@ -393,7 +497,7 @@ sensor_msgs_generate_messages_lisp: cmake_check_build_system
 
 # fast build rule for target.
 sensor_msgs_generate_messages_lisp/fast:
-	$(MAKE) -f square_detect/CMakeFiles/sensor_msgs_generate_messages_lisp.dir/build.make square_detect/CMakeFiles/sensor_msgs_generate_messages_lisp.dir/build
+	$(MAKE) -f imu/CMakeFiles/sensor_msgs_generate_messages_lisp.dir/build.make imu/CMakeFiles/sensor_msgs_generate_messages_lisp.dir/build
 .PHONY : sensor_msgs_generate_messages_lisp/fast
 
 #=============================================================================
@@ -406,8 +510,177 @@ sensor_msgs_generate_messages_py: cmake_check_build_system
 
 # fast build rule for target.
 sensor_msgs_generate_messages_py/fast:
-	$(MAKE) -f square_detect/CMakeFiles/sensor_msgs_generate_messages_py.dir/build.make square_detect/CMakeFiles/sensor_msgs_generate_messages_py.dir/build
+	$(MAKE) -f imu/CMakeFiles/sensor_msgs_generate_messages_py.dir/build.make imu/CMakeFiles/sensor_msgs_generate_messages_py.dir/build
 .PHONY : sensor_msgs_generate_messages_py/fast
+
+#=============================================================================
+# Target rules for targets named std_msgs_generate_messages_cpp
+
+# Build rule for target.
+std_msgs_generate_messages_cpp: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 std_msgs_generate_messages_cpp
+.PHONY : std_msgs_generate_messages_cpp
+
+# fast build rule for target.
+std_msgs_generate_messages_cpp/fast:
+	$(MAKE) -f imu/CMakeFiles/std_msgs_generate_messages_cpp.dir/build.make imu/CMakeFiles/std_msgs_generate_messages_cpp.dir/build
+.PHONY : std_msgs_generate_messages_cpp/fast
+
+#=============================================================================
+# Target rules for targets named std_msgs_generate_messages_lisp
+
+# Build rule for target.
+std_msgs_generate_messages_lisp: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 std_msgs_generate_messages_lisp
+.PHONY : std_msgs_generate_messages_lisp
+
+# fast build rule for target.
+std_msgs_generate_messages_lisp/fast:
+	$(MAKE) -f imu/CMakeFiles/std_msgs_generate_messages_lisp.dir/build.make imu/CMakeFiles/std_msgs_generate_messages_lisp.dir/build
+.PHONY : std_msgs_generate_messages_lisp/fast
+
+#=============================================================================
+# Target rules for targets named std_msgs_generate_messages_py
+
+# Build rule for target.
+std_msgs_generate_messages_py: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 std_msgs_generate_messages_py
+.PHONY : std_msgs_generate_messages_py
+
+# fast build rule for target.
+std_msgs_generate_messages_py/fast:
+	$(MAKE) -f imu/CMakeFiles/std_msgs_generate_messages_py.dir/build.make imu/CMakeFiles/std_msgs_generate_messages_py.dir/build
+.PHONY : std_msgs_generate_messages_py/fast
+
+#=============================================================================
+# Target rules for targets named radio_controle_gencpp
+
+# Build rule for target.
+radio_controle_gencpp: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 radio_controle_gencpp
+.PHONY : radio_controle_gencpp
+
+# fast build rule for target.
+radio_controle_gencpp/fast:
+	$(MAKE) -f radio_controle/CMakeFiles/radio_controle_gencpp.dir/build.make radio_controle/CMakeFiles/radio_controle_gencpp.dir/build
+.PHONY : radio_controle_gencpp/fast
+
+#=============================================================================
+# Target rules for targets named radio_controle_generate_messages
+
+# Build rule for target.
+radio_controle_generate_messages: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 radio_controle_generate_messages
+.PHONY : radio_controle_generate_messages
+
+# fast build rule for target.
+radio_controle_generate_messages/fast:
+	$(MAKE) -f radio_controle/CMakeFiles/radio_controle_generate_messages.dir/build.make radio_controle/CMakeFiles/radio_controle_generate_messages.dir/build
+.PHONY : radio_controle_generate_messages/fast
+
+#=============================================================================
+# Target rules for targets named radio_controle_generate_messages_cpp
+
+# Build rule for target.
+radio_controle_generate_messages_cpp: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 radio_controle_generate_messages_cpp
+.PHONY : radio_controle_generate_messages_cpp
+
+# fast build rule for target.
+radio_controle_generate_messages_cpp/fast:
+	$(MAKE) -f radio_controle/CMakeFiles/radio_controle_generate_messages_cpp.dir/build.make radio_controle/CMakeFiles/radio_controle_generate_messages_cpp.dir/build
+.PHONY : radio_controle_generate_messages_cpp/fast
+
+#=============================================================================
+# Target rules for targets named radio_controle_generate_messages_lisp
+
+# Build rule for target.
+radio_controle_generate_messages_lisp: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 radio_controle_generate_messages_lisp
+.PHONY : radio_controle_generate_messages_lisp
+
+# fast build rule for target.
+radio_controle_generate_messages_lisp/fast:
+	$(MAKE) -f radio_controle/CMakeFiles/radio_controle_generate_messages_lisp.dir/build.make radio_controle/CMakeFiles/radio_controle_generate_messages_lisp.dir/build
+.PHONY : radio_controle_generate_messages_lisp/fast
+
+#=============================================================================
+# Target rules for targets named radio_controle_generate_messages_py
+
+# Build rule for target.
+radio_controle_generate_messages_py: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 radio_controle_generate_messages_py
+.PHONY : radio_controle_generate_messages_py
+
+# fast build rule for target.
+radio_controle_generate_messages_py/fast:
+	$(MAKE) -f radio_controle/CMakeFiles/radio_controle_generate_messages_py.dir/build.make radio_controle/CMakeFiles/radio_controle_generate_messages_py.dir/build
+.PHONY : radio_controle_generate_messages_py/fast
+
+#=============================================================================
+# Target rules for targets named radio_controle_genlisp
+
+# Build rule for target.
+radio_controle_genlisp: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 radio_controle_genlisp
+.PHONY : radio_controle_genlisp
+
+# fast build rule for target.
+radio_controle_genlisp/fast:
+	$(MAKE) -f radio_controle/CMakeFiles/radio_controle_genlisp.dir/build.make radio_controle/CMakeFiles/radio_controle_genlisp.dir/build
+.PHONY : radio_controle_genlisp/fast
+
+#=============================================================================
+# Target rules for targets named radio_controle_genpy
+
+# Build rule for target.
+radio_controle_genpy: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 radio_controle_genpy
+.PHONY : radio_controle_genpy
+
+# fast build rule for target.
+radio_controle_genpy/fast:
+	$(MAKE) -f radio_controle/CMakeFiles/radio_controle_genpy.dir/build.make radio_controle/CMakeFiles/radio_controle_genpy.dir/build
+.PHONY : radio_controle_genpy/fast
+
+#=============================================================================
+# Target rules for targets named radio_listener
+
+# Build rule for target.
+radio_listener: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 radio_listener
+.PHONY : radio_listener
+
+# fast build rule for target.
+radio_listener/fast:
+	$(MAKE) -f radio_controle/CMakeFiles/radio_listener.dir/build.make radio_controle/CMakeFiles/radio_listener.dir/build
+.PHONY : radio_listener/fast
+
+#=============================================================================
+# Target rules for targets named radio_talker
+
+# Build rule for target.
+radio_talker: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 radio_talker
+.PHONY : radio_talker
+
+# fast build rule for target.
+radio_talker/fast:
+	$(MAKE) -f radio_controle/CMakeFiles/radio_talker.dir/build.make radio_controle/CMakeFiles/radio_talker.dir/build
+.PHONY : radio_talker/fast
+
+#=============================================================================
+# Target rules for targets named _square_detect_generate_messages_check_deps_squareCenters
+
+# Build rule for target.
+_square_detect_generate_messages_check_deps_squareCenters: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 _square_detect_generate_messages_check_deps_squareCenters
+.PHONY : _square_detect_generate_messages_check_deps_squareCenters
+
+# fast build rule for target.
+_square_detect_generate_messages_check_deps_squareCenters/fast:
+	$(MAKE) -f square_detect/CMakeFiles/_square_detect_generate_messages_check_deps_squareCenters.dir/build.make square_detect/CMakeFiles/_square_detect_generate_messages_check_deps_squareCenters.dir/build
+.PHONY : _square_detect_generate_messages_check_deps_squareCenters/fast
 
 #=============================================================================
 # Target rules for targets named square_detect
@@ -513,45 +786,6 @@ square_detect_genpy/fast:
 	$(MAKE) -f square_detect/CMakeFiles/square_detect_genpy.dir/build.make square_detect/CMakeFiles/square_detect_genpy.dir/build
 .PHONY : square_detect_genpy/fast
 
-#=============================================================================
-# Target rules for targets named std_msgs_generate_messages_cpp
-
-# Build rule for target.
-std_msgs_generate_messages_cpp: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 std_msgs_generate_messages_cpp
-.PHONY : std_msgs_generate_messages_cpp
-
-# fast build rule for target.
-std_msgs_generate_messages_cpp/fast:
-	$(MAKE) -f square_detect/CMakeFiles/std_msgs_generate_messages_cpp.dir/build.make square_detect/CMakeFiles/std_msgs_generate_messages_cpp.dir/build
-.PHONY : std_msgs_generate_messages_cpp/fast
-
-#=============================================================================
-# Target rules for targets named std_msgs_generate_messages_lisp
-
-# Build rule for target.
-std_msgs_generate_messages_lisp: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 std_msgs_generate_messages_lisp
-.PHONY : std_msgs_generate_messages_lisp
-
-# fast build rule for target.
-std_msgs_generate_messages_lisp/fast:
-	$(MAKE) -f square_detect/CMakeFiles/std_msgs_generate_messages_lisp.dir/build.make square_detect/CMakeFiles/std_msgs_generate_messages_lisp.dir/build
-.PHONY : std_msgs_generate_messages_lisp/fast
-
-#=============================================================================
-# Target rules for targets named std_msgs_generate_messages_py
-
-# Build rule for target.
-std_msgs_generate_messages_py: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 std_msgs_generate_messages_py
-.PHONY : std_msgs_generate_messages_py
-
-# fast build rule for target.
-std_msgs_generate_messages_py/fast:
-	$(MAKE) -f square_detect/CMakeFiles/std_msgs_generate_messages_py.dir/build.make square_detect/CMakeFiles/std_msgs_generate_messages_py.dir/build
-.PHONY : std_msgs_generate_messages_py/fast
-
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -572,10 +806,18 @@ help:
 	@echo "... tests"
 	@echo "... gtest"
 	@echo "... gtest_main"
-	@echo "... _square_detect_generate_messages_check_deps_squareCenters"
+	@echo "... _catkin_empty_exported_target"
+	@echo "... arducom"
 	@echo "... geometry_msgs_generate_messages_cpp"
 	@echo "... geometry_msgs_generate_messages_lisp"
 	@echo "... geometry_msgs_generate_messages_py"
+	@echo "... imu_gencpp"
+	@echo "... imu_generate_messages"
+	@echo "... imu_generate_messages_cpp"
+	@echo "... imu_generate_messages_lisp"
+	@echo "... imu_generate_messages_py"
+	@echo "... imu_genlisp"
+	@echo "... imu_genpy"
 	@echo "... roscpp_generate_messages_cpp"
 	@echo "... roscpp_generate_messages_lisp"
 	@echo "... roscpp_generate_messages_py"
@@ -585,6 +827,19 @@ help:
 	@echo "... sensor_msgs_generate_messages_cpp"
 	@echo "... sensor_msgs_generate_messages_lisp"
 	@echo "... sensor_msgs_generate_messages_py"
+	@echo "... std_msgs_generate_messages_cpp"
+	@echo "... std_msgs_generate_messages_lisp"
+	@echo "... std_msgs_generate_messages_py"
+	@echo "... radio_controle_gencpp"
+	@echo "... radio_controle_generate_messages"
+	@echo "... radio_controle_generate_messages_cpp"
+	@echo "... radio_controle_generate_messages_lisp"
+	@echo "... radio_controle_generate_messages_py"
+	@echo "... radio_controle_genlisp"
+	@echo "... radio_controle_genpy"
+	@echo "... radio_listener"
+	@echo "... radio_talker"
+	@echo "... _square_detect_generate_messages_check_deps_squareCenters"
 	@echo "... square_detect"
 	@echo "... square_detect_gencpp"
 	@echo "... square_detect_generate_messages"
@@ -593,9 +848,6 @@ help:
 	@echo "... square_detect_generate_messages_py"
 	@echo "... square_detect_genlisp"
 	@echo "... square_detect_genpy"
-	@echo "... std_msgs_generate_messages_cpp"
-	@echo "... std_msgs_generate_messages_lisp"
-	@echo "... std_msgs_generate_messages_py"
 .PHONY : help
 
 

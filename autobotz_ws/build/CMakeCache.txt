@@ -268,12 +268,6 @@ _CATKIN_GTEST_INCLUDE:FILEPATH=/usr/include/gtest/gtest.h
 //Path to a file.
 _CATKIN_GTEST_SRC:FILEPATH=/usr/src/gtest/src/gtest.cc
 
-//Value Computed by CMake
-blob_detect_BINARY_DIR:STATIC=/home/husky/open-2015/autobotz_ws/build/blob_detect
-
-//Value Computed by CMake
-blob_detect_SOURCE_DIR:STATIC=/home/husky/open-2015/autobotz_ws/src/blob_detect
-
 //The directory containing a CMake configuration file for catkin.
 catkin_DIR:PATH=/opt/ros/indigo/share/catkin/cmake
 
@@ -329,6 +323,12 @@ gtest_main_LIB_DEPENDS:STATIC=general;-lpthread;general;gtest;
 //The directory containing a CMake configuration file for image_transport.
 image_transport_DIR:PATH=/opt/ros/indigo/share/image_transport/cmake
 
+//Value Computed by CMake
+imu_BINARY_DIR:STATIC=/home/husky/open-2015/autobotz_ws/build/imu
+
+//Value Computed by CMake
+imu_SOURCE_DIR:STATIC=/home/husky/open-2015/autobotz_ws/src/imu
+
 //Path to a library.
 lib:FILEPATH=/opt/ros/indigo/lib/libroslib.so
 
@@ -343,6 +343,12 @@ message_runtime_DIR:PATH=/opt/ros/indigo/share/message_runtime/cmake
 
 //The directory containing a CMake configuration file for pluginlib.
 pluginlib_DIR:PATH=/opt/ros/indigo/share/pluginlib/cmake
+
+//Value Computed by CMake
+radio_controle_BINARY_DIR:STATIC=/home/husky/open-2015/autobotz_ws/build/radio_controle
+
+//Value Computed by CMake
+radio_controle_SOURCE_DIR:STATIC=/home/husky/open-2015/autobotz_ws/src/radio_controle
 
 //The directory containing a CMake configuration file for rosconsole.
 rosconsole_DIR:PATH=/opt/ros/indigo/share/rosconsole/cmake
@@ -485,7 +491,7 @@ CMAKE_MODULE_LINKER_FLAGS_RELWITHDEBINFO-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_NM
 CMAKE_NM-ADVANCED:INTERNAL=1
 //number of local generators
-CMAKE_NUMBER_OF_LOCAL_GENERATORS:INTERNAL=3
+CMAKE_NUMBER_OF_LOCAL_GENERATORS:INTERNAL=5
 //ADVANCED property for variable: CMAKE_OBJCOPY
 CMAKE_OBJCOPY-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_OBJDUMP

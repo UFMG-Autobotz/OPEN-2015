@@ -33,10 +33,8 @@ include_directories(include ${catkin_INCLUDE_DIRS})
 
 #--------------------- IMU + PROCESSAMENTO ----------------------#
 
-add_executable(arducom src/arducom/IMU_Data.cpp ) ##usada na IMU
+add_executable(arducom src/arducom/IMU_Data.cpp ) 
 target_link_libraries(arducom ${catkin_LIBRARIES}) 
 
-add_executable(listener src/Processamento/main.cpp) ##usada no processamento
-target_link_libraries(listener ${catkin_LIBRARIES})
-
+## Para executar use rosrun nome_do_pacote(IMU) arducom num_da_porta_serial(ACM0 = 24)
 

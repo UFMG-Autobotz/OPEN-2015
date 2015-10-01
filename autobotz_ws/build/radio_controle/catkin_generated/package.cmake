@@ -1,7 +1,0 @@
-set(_CATKIN_CURRENT_PACKAGE "radio_controle")
-set(radio_controle_MAINTAINER "gabriela <gabriela@todo.todo>")
-set(radio_controle_DEPRECATED "")
-set(radio_controle_VERSION "0.0.0")
-set(radio_controle_BUILD_DEPENDS "roscpp" "rospy" "std_msgs" "sensor_msgs" "cv_bridge" "image_transport" "geometry_msgs" "vrep_common" "message_generation")
-set(radio_controle_RUN_DEPENDS "roscpp" "rospy" "std_msgs" "sensor_msgs" "cv_bridge" "image_transport" "camera1394" "ar_tools" "rosserial_arduino" "geometry_msgs" "vrep_common" "message_runtime")
-set(radio_controle_BUILDTOOL_DEPENDS "catkin")

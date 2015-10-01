@@ -1,8 +1,0 @@
-prefix=/home/husky/open-2015/autobotz_ws/devel
-
-Name: square_detect
-Description: Description of square_detect
-Version: 0.1.0
-Cflags: -I/home/husky/open-2015/autobotz_ws/devel/include
-Libs: -L/home/husky/open-2015/autobotz_ws/devel/lib 
-Requires: 

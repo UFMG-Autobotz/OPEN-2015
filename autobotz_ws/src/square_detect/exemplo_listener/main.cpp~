@@ -1,9 +1,15 @@
-////////////////////////////////////////////////////////////////////////////////
-//////////////////    programa para testes com o ROS ///////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-
-// lê uma menssagem do tipo squareCenters a partir de um tópico
-// e informa os valores lidos no terminal
+//////////////////////////////////////////////////////////////////////////////////
+//
+// Esse codigo é um exemplo de como ler um vetor de tamanho variável publicado
+// pelo pacote quare_detect.
+//
+// square_detect publica menssagens do tipo squareCenters que é definido no
+// diretorio msg do pacote.
+// Essa menssagem customizada contém apenas um campo chamado centers e
+// que é um vetor de objetos do tipo Point (ver callback)
+//
+// Esse programa lê as menssagens e informa
+// no terminal o conteudo do vetor centers
 
 #include <ros/ros.h>
 #include <geometry_msgs/Point.h>

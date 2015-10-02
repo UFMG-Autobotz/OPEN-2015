@@ -14,7 +14,8 @@
 #include <ros/ros.h>
 #include <geometry_msgs/Point.h>
 
-#include "teste/squareCenters.h" //custom message
+
+#include "nome_do_pacote/squareCenters.h" //custom message
 
 #include <iostream>
 

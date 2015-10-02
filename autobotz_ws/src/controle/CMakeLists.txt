@@ -1,10 +1,11 @@
 cmake_minimum_required(VERSION 2.8.3)
-project(estrategia)
+project(controle)
 
 #find_package(catkin REQUIRED)
 find_package(catkin REQUIRED COMPONENTS
   roscpp
   std_msgs
+  geometry_msgs
 )
  
 
@@ -17,6 +18,6 @@ include_directories(include ${catkin_INCLUDE_DIRS})
 
 #----------------------- ESTRATEGIA  ------------------------#
 
-add_executable(strategy src/main.cpp src/estados.h) 
-target_link_libraries(strategy ${catkin_LIBRARIES}) 
+add_executable(control src/main.cpp) 
+target_link_libraries(control ${catkin_LIBRARIES}) 
 

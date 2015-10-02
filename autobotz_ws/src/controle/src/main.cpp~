@@ -1,0 +1,124 @@
+/*
+Autobotz UFMG
+Desenvolvido por Gustavo Martins Domingues 
+(31) 9405-5012
+gustdomar@gmail.com
+
+Código principal do pacote de estratéiga
+*/
+
+
+
+// -------------------- BIBLIOTECAS --------------------
+
+#include <ros/ros.h>
+#include <std_msgs/Bool.h>
+#include <std_msgs/Int32.h>
+#include <std_msgs/Float32.h>
+
+
+
+
+// ---------------- ARQUIVOS INCLUSOS ------------------
+
+
+
+// -------------------- CONSTANTES --------------------
+
+
+
+// ----------------- VARIÁVEIS GLOBAIS ------------------
+
+bool start;
+float distL, distR, distF, distB;
+
+// ---------------- CALLBACK FUNCTIONs -----------------
+
+void poseMessageReceived (const std_msgs::Bool& msg){
+
+    start = msg.data;
+
+ }
+
+void ultrassomL (const std_msgs::Float32& msg){
+
+    distL = msg.data;
+
+ }
+
+void ultrassomR (const std_msgs::Float32& msg){
+
+    distR = msg.data;
+
+ }
+
+ void ultrassomF (const std_msgs::Float32& msg){
+
+    distF = msg.data;
+
+ }
+
+ void ultrassomB (const geometry_msgs::Point& msg){
+
+    distB = msg.data;
+
+ }
+
+void cubosAmarelos (const std_msgs::Float32& msg){
+
+    distB = msg.data;
+
+ }
+
+// ------------------ MAIN FUNCTION-------------------
+
+int main(int argc, char **argv){
+
+
+	// ------------ VARIAVEIS ------------
+
+
+
+	start = false;
+
+
+
+
+	// init ROS stuff
+	ros::init(argc, argv, "controle");
+
+	// Establish this program as a ROS node
+    ros::NodeHandle nh;
+
+
+
+
+
+    ros::Subscriber subR = nh.subscribe("eletronica/ultrassom/R", 1000, &ultrassomR);
+    ros::Subscriber subL = nh.subscribe("eletronica/ultrassom/L", 1000, &ultrassomL);
+    ros::Subscriber subF = nh.subscribe("eletronica/ultrassom/F", 1000, &ultrassomF);
+    ros::Subscriber subB = nh.subscribe("eletronica/ultrassom/B", 1000, &ultrassomB);
+
+    ros::Subscriber sub = nh.subscribe("visao/squares/centers", 1000, &cubosAmarelos);
+
+
+    ros::Publisher pubR = nh.advertise <std_msgs::Int32>("estrategia/estado_atual", 1000);
+    ros::Publisher pubL = nh.advertise <std_msgs::Int32>("estrategia/estado_atual", 1000);
+    ros::Rate rate(2); // Hz
+
+    while (ros::ok()){
+
+    
+		 
+
+		 // Pub lish the message .
+		 pub.publish(msg);
+
+		 // Wait un t i l i t ' s time for another i t e ra t ion .
+		 rate.sleep();
+		 ros::spinOnce();
+ 	}
+
+
+
+}

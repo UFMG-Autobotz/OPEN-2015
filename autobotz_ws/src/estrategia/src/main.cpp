@@ -29,7 +29,7 @@ Código principal do pacote de estratéiga
 
 // ----------------- VARIÁVEIS GLOBAIS ------------------
 
-	bool start;
+bool start;
 
 
 // ---------------- CALLBACK FUNCTIONs -----------------

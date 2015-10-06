@@ -154,6 +154,7 @@ void imageCallback(const sensor_msgs::ImageConstPtr& image)
 	contorno(image_rgb);
 	findYellowBlocks(image_rgb, squaresYellow);
 	drawSquares(image_yellow, squaresYellow);
+	findShapes(image_rgb);
 	
 	blockCenters.clear();   //blockCenters is a global variable
 

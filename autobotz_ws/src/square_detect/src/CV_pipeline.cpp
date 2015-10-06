@@ -104,7 +104,7 @@ void contorno(cv::Mat in_rgb)
 	}     
 
 	//namedWindow("Draw Image"); 
-	//imshow("Draw Image", drawing); 
+    //imshow("Draw Image", drawing); 
 
 }
 

@@ -43,3 +43,44 @@ typedef union U_FloatParse{
 }U_FloatConvert;
 
 #endif
+
+///////////////////////////////////////////////////////////////////////
+// Algumas funcoes e algoritmos que estao sendo usados nesse codigo  //
+///////////////////////////////////////////////////////////////////////
+
+//canny
+//in : imagem greyscale
+//out: imagem PB com bordas
+
+//findcontours
+//in : imagem PB com bordas
+//out: vetor de cnotornos, onde cada contorno é um conjunto de pontos
+
+//approxPolyDP
+//in : contorno
+//out: contorno com menos pontos
+//
+//notas: -usa o algoritmo de douglas-peucker para retirar pontos da linha
+//       -arcLength, contourArea e isContourConvex tambem sao usadas
+//        para selecionar os contornos
+
+//filter
+//in : imagem RGB
+//out: imagem HSV alterada
+//
+//combinacao de uma operacao erode e uma dilate sobre cada
+//canal da imagem
+
+/////// pipes
+
+//mostrar a imagem de contornos
+//
+//RGB -> GS -> canny -> findContours -> drawContours
+
+//findYellowBlocks   (funcao sendo usada para publicar no ROS)
+//
+//RGB -> GS -> thresholding -> findConoturs -> approxPolyDP -> criterios (tamanho, convexo, angulos) -> lista de quadrados
+
+//findShapes
+//
+//igual findYellowBlocks mas com criterios diferentes

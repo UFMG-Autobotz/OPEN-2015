@@ -8,10 +8,8 @@
 
 #include <cmath>
 #include <cv.h> 
-#include <cv_bridge/cv_bridge.h>
 #include <cxcore.h>
-#include <highgui.h>
-#include <image_transport/image_transport.h>	
+#include <highgui.h>	
 #include <iostream> 
 #include <opencv/cv.h>
 #include "opencv/cvaux.h"
@@ -33,6 +31,8 @@
 #include <sensor_msgs/Image.h>
 #include <sensor_msgs/image_encodings.h>
 #include <geometry_msgs/Point.h>
+#include <image_transport/image_transport.h>
+#include <cv_bridge/cv_bridge.h>
 
 #include "UI.hpp"
 #include "CV_pipeline.hpp"

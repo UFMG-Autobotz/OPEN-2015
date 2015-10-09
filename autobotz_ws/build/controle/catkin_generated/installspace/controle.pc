@@ -1,0 +1,8 @@
+prefix=/home/gustavo/open-2015/autobotz_ws/install
+
+Name: controle
+Description: Description of controle
+Version: 0.0.0
+Cflags: -I/home/gustavo/open-2015/autobotz_ws/install/include
+Libs: -L/home/gustavo/open-2015/autobotz_ws/install/lib 
+Requires: 

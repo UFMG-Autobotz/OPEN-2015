@@ -1,7 +1,7 @@
 /*
 
-= {3,4,5,6}; // Echo Pin 
- = {7,8,9,10}; // Trigger Pin
+= {2,4,6,8}; // Echo Pin 
+ = {3,5,7,9}; // Trigger Pin
  int echoPin[5];
 int trigPin[5];
 
@@ -33,10 +33,10 @@ std_msgs::Float32 distE;
 std_msgs::Float32 distF;
 std_msgs::Float32 distT;
 
-ros::Publisher chatterD("/eletronica/ultrassom/D", &distD);
-ros::Publisher chatterE("/eletronica/ultrassom/E", &distE);
+ros::Publisher chatterD("/eletronica/ultrassom/R", &distD);
+ros::Publisher chatterE("/eletronica/ultrassom/L", &distE);
 ros::Publisher chatterF("/eletronica/ultrassom/F", &distF);
-ros::Publisher chatterT("/eletronica/ultrassom/T", &distT);
+ros::Publisher chatterT("/eletronica/ultrassom/B", &distT);
 
 int echoPin[4];  // Echo Pin
 int trigPin[4];  // Trigger Pin
@@ -57,15 +57,14 @@ void setup() {
   nh.advertise(chatterT);
   
   for(int i=0; i<4; i++){ 
-    
-  echoPin[i] = (i+1)*2; 
-  trigPin[i] = (i*2) + 3; 
+    echoPin[i] = (i+1)*2; 
+    trigPin[i] = (i*2) + 3; 
   }
 
   //setup pins
   for(int i=0; i<4; i++){ 
-  pinMode(trigPin[i], OUTPUT);
-  pinMode(echoPin[i], INPUT);
+    pinMode(trigPin[i], OUTPUT);
+    pinMode(echoPin[i], INPUT);
   }
 
   pinMode(LEDPin, OUTPUT); // Use LED indicator (if required)

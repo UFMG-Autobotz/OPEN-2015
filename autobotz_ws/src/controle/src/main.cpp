@@ -16,7 +16,7 @@ Código principal do pacote de estratéiga
 #include <std_msgs/Int32.h>
 #include <std_msgs/Float32.h>
 #include <geometry_msgs/Point.h>
-
+#include <stdio.h>
 
 
 
@@ -30,15 +30,15 @@ Código principal do pacote de estratéiga
 #define TELA_COL 640
 #define VEL_MAX 510
 #define VEL_MIN 0
-#define VEL_NOR 305
+#define VEL_NOR 255 // intervalo de 0 a 510 para ser convertido de -255 a 255. Portanto 305 -> 50
 #define VEL_RET 400
-#define VEL_P 1.5
+#define VEL_P 1.4
 #define DIST_P 5.0
 #define DIST_MIN 12.0
 
 
-#define MODO 1
-#define ANG 180 // nao aceita numero negativo
+#define MODO 2
+#define ANG 180 // nao aceita numero negativo. Intervalo eh de 0 a 360 para ser convertido de -180 a 180. Portanto 180 -> 0
 
 // ----------------- VARIÁVEIS GLOBAIS ------------------
 
@@ -80,10 +80,10 @@ void ultrassomR (const std_msgs::Float32& msg){
  }
 
 
- void imu (const std_msgs::Float32& msg){
+ void imu(const std_msgs::Float32& msg){
 
     yaw = msg.data;
-
+    printf ("YAW: %.2f\n", yaw);
  }
 
  void cubosAmarelos(const controle::squareCenters::ConstPtr& msg)
@@ -114,7 +114,7 @@ int main(int argc, char **argv){
 	// ------------ VARIAVEIS ------------
 	start = false;
     geometry_msgs::Point objetivo;
-    int erro;
+    float erro;
 
 
 
@@ -125,14 +125,14 @@ int main(int argc, char **argv){
     ros::NodeHandle nh;
 
 
-    ros::Subscriber subR = nh.subscribe("eletronica/ultrassom/R", 1000, &ultrassomR);
-    ros::Subscriber subL = nh.subscribe("eletronica/ultrassom/L", 1000, &ultrassomL);
-    ros::Subscriber subF = nh.subscribe("eletronica/ultrassom/F", 1000, &ultrassomF);
-    ros::Subscriber subB = nh.subscribe("eletronica/ultrassom/B", 1000, &ultrassomB);
+    ros::Subscriber subR = nh.subscribe("eletronica/ultrassom/R", 1000, ultrassomR);
+    ros::Subscriber subL = nh.subscribe("eletronica/ultrassom/L", 1000, ultrassomL);
+    ros::Subscriber subF = nh.subscribe("eletronica/ultrassom/F", 1000, ultrassomF);
+    ros::Subscriber subB = nh.subscribe("eletronica/ultrassom/B", 1000, ultrassomB);
 
-    ros::Subscriber sub = nh.subscribe("visao/squares/centers", 1000, &cubosAmarelos);
+    ros::Subscriber sub = nh.subscribe("visao/squares/centers", 1000, cubosAmarelos);
 
-    ros::Subscriber subIMU = nh.subscribe("eletronica/imu/yaw", 1000, &imu);
+    ros::Subscriber subIMU = nh.subscribe("eletronica/imu/yaw", 1000, imu);
 
 
     ros::Publisher pubR = nh.advertise <std_msgs::Int32>("eletronica/propulsor/R", 1000);
@@ -162,6 +162,9 @@ int main(int argc, char **argv){
         msg_propulsorR.data = VEL_NOR + erro * VEL_P;
         msg_propulsorL.data = VEL_NOR - erro * VEL_P;
 
+        printf ("GANHO: %.2f\n", erro*VEL_P);
+
+        /*
         // manter longe das bordas
         if (distL < DIST_MIN){ // distancia esquerda
             // proporcional
@@ -186,6 +189,7 @@ int main(int argc, char **argv){
             msg_propulsorL.data += (DIST_MIN - distR) * DIST_P;
             msg_propulsorR.data += (DIST_MIN - distR) * DIST_P;
         }    
+        */
 
         // limita as velocidades
         // motor ESQUERDO

@@ -1,0 +1,8 @@
+prefix=/home/gustavo/open-2015/autobotz_ws/devel
+
+Name: radio_controle
+Description: Description of radio_controle
+Version: 0.0.0
+Cflags: 
+Libs: -L/home/gustavo/open-2015/autobotz_ws/devel/lib 
+Requires: message_runtime

@@ -64,40 +64,31 @@ void colocarBloco(){
 	    // troca entre estados de mais alto nivel
     switch(estado_atual.data){
 
-    	case 0: // estado IDENTIFICAR BLOCOS
+    	case 0: // estado EXTENDER BRACO
     		
 
     		break;
 
-    	case 1: // estado ESCOLHER BLOCO
+    	case 1: // estado DEIXAR BLOCO
 
     		
     		break;
 
-    	case 2: // estado MOVER BRACO
+    	case 2: // estado RECOLHER
 
     		
     		break;
 
-    	case 3: // estado AGARRAR
+    	case 3: // estado CONTAR
 
     		
     		break;
 
-    	case 4: // estado RECOLHER
+    	case 4: // estado PEGAR SEGUNDO BLOCO
 
     		
     		break;
 
-    	case 5: // estado GUARDAR
-
-    		
-    		break;
-
-    	case 6: // estado CONTAR
-
-    		
-    		break;
 
     	default: 
 
@@ -122,7 +113,7 @@ void transportarBloco(){
 
     		break;
 
-    	case 1: // estado LOCALIZA OBJETIVO
+    	case 1: // estado LOCALIZA OBJETIVO (Porto ou plataforma)
 
     		
     		break;
@@ -137,20 +128,6 @@ void transportarBloco(){
     		
     		break;
 
-    	case 4: // estado RECOLHER
-
-    		
-    		break;
-
-    	case 5: // estado GUARDAR
-
-    		
-    		break;
-
-    	case 6: // estado CONTAR
-
-    		
-    		break;
 
     	default: 
 

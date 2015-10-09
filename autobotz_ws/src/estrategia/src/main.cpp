@@ -89,6 +89,14 @@ int main(int argc, char **argv){
     		colocarBloco();
     		break;
 
+
+    	case 4: // FIM
+
+    		// tem que apertar o botao desligar o barco para começar de novo
+    		if (!start)
+    			estado_atual.data = 0;
+    		break;
+
     	default: 
 
     		break;

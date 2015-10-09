@@ -1,6 +1,6 @@
 // ROS
 #include <ros/ros.h>
-#include <std_msgs/String.h>
+#include <std_msgs/Float32.h>
 #include <stdlib.h>
 #include "rs232.h"
 
@@ -64,7 +64,7 @@ int main(int argc, char **argv){
 
   ros::init(argc, argv, "IMUSerial"); 
   ros::NodeHandle n;
-  ros::Publisher chatter_pub = n.advertise<std_msgs::String>("/eletronica/IMU/yaw", 1000);
+  ros::Publisher chatter_pub = n.advertise<std_msgs::Float32>("/eletronica/imu/yaw", 1000);
   ros::Rate loop_rate(10);
 
   IMU <<"Autobotz UFMG, Jul/2015."<<endl;
@@ -76,22 +76,25 @@ int main(int argc, char **argv){
   double cont = 0;
   IMU << dt <<endl;
 
+  float yaw;
+  
   while(ros::ok()){
-
     int n;
     int s = strlen (texto);
-    std_msgs::String msg;
-    std::stringstream ss;
+    std_msgs::Float32 msg;
 
     if(size>4096)  size = 4096;
     n = read(Cport[serialPort], texto, size);
 
     if(s == 7){
 	IMU << texto <<endl;
-	ROS_INFO("Direcao =  %s\n ", texto);
-        ss << texto;
-        msg.data = ss.str();
+	
+           
+	yaw = atof(texto);
+        msg.data = yaw;
         chatter_pub.publish(msg);
+	ROS_INFO("Direcao =  %f\n ", yaw);
+
         cont++;
 	if(cont==50){
 	time_t now = time(0);

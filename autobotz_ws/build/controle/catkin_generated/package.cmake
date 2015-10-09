@@ -1,0 +1,7 @@
+set(_CATKIN_CURRENT_PACKAGE "controle")
+set(controle_MAINTAINER "gabriela <gustdomar@gmail.com>")
+set(controle_DEPRECATED "")
+set(controle_VERSION "0.0.0")
+set(controle_BUILD_DEPENDS "roscpp" "std_msgs" "geometry_msgs" "message_generation")
+set(controle_RUN_DEPENDS "message_runtime" "roscpp" "std_msgs" "geometry_msgs")
+set(controle_BUILDTOOL_DEPENDS "catkin")

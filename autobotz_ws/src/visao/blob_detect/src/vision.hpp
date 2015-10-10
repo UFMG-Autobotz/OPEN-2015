@@ -8,11 +8,34 @@
 
 using std::vector;
 ////////////  data structures  /////////////
-typedef struct {
+
+//structure to store information about image features
+typedef struct feature {
 	vector< cv::Point > contour;
-	cv::Vec3b avg_color;
-	int diameter;
+
+	cv::Vec3b avgColor;
+	cv::Vec3b colorStdDev;  //std deviation by channel
+	cv::Point centroid;
+	cv::Rect  boundingBox;
+	int       area;
 } feature;
+
+//
+class palette
+{
+	public:
+	//add colors to the palette
+	void addColor(int B, int G, int R);
+	void addColor(cv::Scalar BGR);
+
+	int size() const;                    //return number of elements in the palette
+	cv::Vec3b  getColor(int i) const;    //return the 'i'th color in the palette
+
+	bool hasColor(cv::Vec3b BGR) const;  //returns true if the given color is present in the palette
+
+	private:
+	vector< cv::Vec3b > colors;
+};
 
 /////////////// functions //////////////////
 
@@ -39,8 +62,9 @@ void filterContours(vector< vector<cv::Point> >  in_contours,
 					vector< vector<cv::Point> >& out        );
 //Receives a vector of contours (each contour is a collection of points)
 //
-//the function uses approximations with less points and criteria
-//such as size and convexness to select only contours of interest
+//The function excludes contours that are too small or have too long a border
+//compared to its area.
+//Each valid contour is then approximated with less points
 //
 //Another vector with only approximations of the contours of 
 //interest is returned
@@ -50,5 +74,24 @@ vector< cv::Vec3b > getAvgColorInContours(const cv::Mat image, vector< vector< c
 //
 //The average color of the points inside the each conotur is
 //calculated and the colors are returned in a vector
+
+vector< feature > getFeaturesInfo(const cv::Mat& img, const vector< vector<cv::Point> > contours);
+//Takes a list of contours that are associates with the image 'img'
+//
+//Each contour defines a feature in the image. Information about
+//the features are extracted, assembled in the 'feature' data type
+//and a vector of features is returned
+
+void filterFeatures(vector< feature > in, vector< feature >& out,
+					const palette& relevantColors, float maxDistance);
+//Filters only features relevant to the problem being solved based
+//of information produced by getFeaturesInfo, such as average color
+//
+//Uniting close features and rejecting feature loss during one or two
+//frames should futurely be implemented in this function as well
+
+int getClosestColorInPalette(cv::Vec3b color, const palette& pal);
+//Using colorDistance() as metric, this function finds the closest
+//color to 'color' in the palette and returns the index to that color
 
 #endif

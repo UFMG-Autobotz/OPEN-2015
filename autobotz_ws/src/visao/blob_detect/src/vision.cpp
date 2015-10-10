@@ -3,6 +3,7 @@
 
 //local includes
 #include "vision.hpp"
+#include "settings.hpp"
 //openCV
 #include <opencv2/core/core.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
@@ -21,28 +22,21 @@ void reduceColors(cv::Mat& in, cv::Mat& out)
 	//TODO: palette should be obtained as an argument
 	//TODO: incorporate palette in settings server and pass it to reduceColors when
 	//      the function is called in main()
-	//define a palette 
-	vector< Mat > p;
-	p.push_back(Mat(1, 1, CV_8UC3, Scalar(0, 0, 0)      ));
-	//p.push_back(Mat(1, 1, CV_8UC3, Scalar(100, 100, 100))); //dark grey
-	//p.push_back(Mat(1, 1, CV_8UC3, Scalar(200, 200, 200))); //light grey
-	p.push_back(Mat(1, 1, CV_8UC3, Scalar(255, 255, 255))); //white
-	p.push_back(Mat(1, 1, CV_8UC3, Scalar(200, 200, 255))); //white (bluish)
-    p.push_back(Mat(1, 1, CV_8UC3, Scalar(200, 0, 0)  )); //red
-	p.push_back(Mat(1, 1, CV_8UC3, Scalar(0, 255, 0)  )); //green
-	p.push_back(Mat(1, 1, CV_8UC3, Scalar(0, 0, 255)  )); //blue
-	p.push_back(Mat(1, 1, CV_8UC3, Scalar(200, 200, 50)  )); //yellow1
-	p.push_back(Mat(1, 1, CV_8UC3, Scalar(255, 255, 50)  )); //yellow1
-	p.push_back(Mat(1, 1, CV_8UC3, Scalar(255, 255, 100) )); //yellow1
-	
 
-	//convert palette to HSV
-	for(int i = 0; i < p.size(); i++)  
-		cv::cvtColor(p[i], p[i], CV_RGB2HSV);
-	//create the actual pallete as a vector of cv::Vec3b
-	vector< cv::Vec3b > palette;
-	for(int i = 0; i < p.size(); i++)
-		palette.push_back(p[i].clone().at<cv::Vec3b>(0,0));
+	////////  define a palette  ////////
+	palette pal;
+
+	pal.addColor(0,   0,   0)  ;
+	pal.addColor(255, 255, 255); //white
+	pal.addColor(200, 200, 255); //white (bluish)
+    pal.addColor(200, 0,   0);   //red
+	pal.addColor(0,   255, 0);   //green
+	pal.addColor(0,   0,   255); //blue
+	pal.addColor(200, 200, 50)  ; //yellow1
+	pal.addColor(255, 255, 50)  ; //yellow2
+	pal.addColor(255, 255, 100) ; //yellow3
+
+	int max_distance = 120;
 
 	//initialize the output as a clone of the input
 	out = in.clone();
@@ -57,10 +51,10 @@ void reduceColors(cv::Mat& in, cv::Mat& out)
 
 			//find the index of the closest color to that pixel
 			int closest_color   = 0;
-			float shortest_dist = colorDistance(pixel_color, palette[0]);
-			for(int i = 1; i < palette.size(); i++)
+			float shortest_dist = colorDistance(pixel_color, pal.getColor(0));
+			for(int i = 1; i < pal.size(); i++)
 			{
-				float new_dist = colorDistance(pixel_color, palette[i]);
+				float new_dist = colorDistance(pixel_color, pal.getColor(i));
 				if(new_dist < shortest_dist)
 				{
 					shortest_dist = new_dist;
@@ -68,11 +62,11 @@ void reduceColors(cv::Mat& in, cv::Mat& out)
 				}
 			}
 			//max distance
-			if(shortest_dist > 120)
+			if(shortest_dist > max_distance)
 				closest_color = 0;
 
 			//set the color in that pixel on out to that of the closest one
-			out.at<cv::Vec3b>(y,x) = palette[closest_color];
+			out.at<cv::Vec3b>(y,x) = pal.getColor(closest_color);
 		}
 	}
 }
@@ -92,9 +86,9 @@ void getEdges(cv::Mat& in_rgb, cv::Mat& out)
 {
 	out = in_rgb.clone();
 	//canny parameters
-	double low_threshold = 200;
-	double high_threshold = 3*low_threshold;
-	int kernel_size = 5;
+	double low_threshold  = settingsServer.getEdges_low_threshold;
+	double high_threshold = settingsServer.getEdges_high_threshold;
+	int kernel_size       = settingsServer.getEdges_kernel_size;
 
 	//convert color image to grayscale
 	cv::Mat gray;
@@ -110,11 +104,22 @@ void filterContours(std::vector< std::vector<cv::Point> >   in  ,
 {
 	out.clear();
 
+	int   min_contour_area = 500;
+	float max_PA_rate = 0.2;   //perimeter/area  
+	float cont_approx_error = 0.02;  //factor in determinig precision of contour approximation
+
 	//iterate through each contour
 	for (int i = 0; i < in.size(); i++)
 	{
-		// Skip small or non-convex objects 
-		if (std::fabs(cv::contourArea(in[i])) < 900)// || !cv::isContourConvex(approx))
+		float area      = std::fabs(cv::contourArea(in[i]));
+		float perimeter = cv::arcLength(Mat(in[i]), true);
+
+		// Skip small objects
+		if (area < min_contour_area) //|| !cv::isContourConvex(approx))
+    		continue;
+
+    	// skip objects with big borders and small areas
+    	if(perimeter/area > max_PA_rate)
     		continue;
 
 		// Approximate contour with accuracy proportional
@@ -122,7 +127,7 @@ void filterContours(std::vector< std::vector<cv::Point> >   in  ,
 		std::vector<cv::Point> approx = in[i];
 		bool closed = true;
 		cv::approxPolyDP(cv::Mat(in[i]), approx,
-			             cv::arcLength(cv::Mat(in[i]), true) * 0.01,
+			             perimeter * cont_approx_error,
 			             closed);
 
 		//cv::convexHull(approx, approx);
@@ -151,4 +156,128 @@ vector< cv::Vec3b > getAvgColorInContours(const cv::Mat image, vector< vector< c
 	}
 
 	return avgs;
+}
+
+//extract feature info from the image and the contours
+vector< feature > getFeaturesInfo(const cv::Mat& img, const vector< vector<cv::Point> > contours)
+{
+	vector< feature > out(contours.size());  //create an array of features with the same
+	                                         //number of elements as contours
+
+	if(img.empty() || img.rows < 1 || img.cols < 1)  //invalid input
+		return out;
+
+	for(int i = 0; i < contours.size(); i++)
+	{
+ 		out[i].contour = contours[i];
+
+ 		//get mask of the contour area
+ 		Mat mask = Mat::zeros(img.size(), CV_8UC1);
+ 		cv::drawContours(mask, contours, i, cv::Scalar(i), CV_FILLED);   //draw a mask of 'color' i
+ 	    cv::Rect roi = cv::boundingRect(contours[i]);
+
+		//get color info   -- getAvgColorInContours is not used in order to implement
+		//					  stdDev calculation combined with average
+	    Scalar tmpAvg; Scalar tmpSD;
+//	    cv::meanStdDev(img(roi), tmpAvg, tmpSD, mask(roi) == i);    //find avg and std mean using mask of color i
+	    tmpAvg = cv::mean(img(roi), mask(roi) == i);
+	    tmpSD = tmpAvg;
+
+	    out[i].avgColor   [0] = tmpAvg[0];  //assign tmp valued (Scalar) to output (Vec3b)
+	    out[i].avgColor   [1] = tmpAvg[1];
+	    out[i].avgColor   [2] = tmpAvg[2];
+	    out[i].colorStdDev[0] = tmpSD [0];
+	    out[i].colorStdDev[1] = tmpSD [1];
+	    out[i].colorStdDev[2] = tmpSD [2];
+
+	    //get geometry info
+		cv::Moments m   = cv::moments(mask, true);
+  		out[i].centroid = cv::Point(m.m10/m.m00, m.m01/m.m00);
+
+  		out[i].boundingBox = roi;
+  		out[i].area = std::fabs(cv::contourArea(contours[i]));
+	}
+
+	return out;
+}
+
+void filterFeatures(vector< feature > in, vector< feature >& out,
+	                const palette& pal, float maxDistance)
+{
+	out.clear();
+
+	//for each feature, find the closest color and only 
+	for(int i = 0; i < in.size(); i++)
+	{
+		//get current color
+		cv::Vec3b cur_color = in[i].avgColor;
+
+		//find the index of the closest color to the one in the feature
+		int closest_color_index = getClosestColorInPalette(cur_color, pal);
+		cv::Vec3b closest_color = pal.getColor(closest_color_index);
+
+		//filter by max distance
+		if(colorDistance(closest_color, cur_color) < maxDistance)
+			out.push_back(in[i]);
+
+		//only add feature to output if it is a color of interest
+
+	}
+}
+
+//find the closest color to 'color' in a palette
+//returns the index of the closest color in the palette
+int getClosestColorInPalette(cv::Vec3b color, const palette& pal)
+{
+	//assume the first color is the closest
+	int closest_color   = 0;  //index of the closest color in the palette
+	float shortest_dist = colorDistance(color, pal.getColor(0));
+
+	//test each color to see if its closer
+	for(int i = 1; i < pal.size(); i++)
+	{
+		float new_dist = colorDistance(color, pal.getColor(i));
+		if(new_dist < shortest_dist)
+		{
+			shortest_dist = new_dist;
+			closest_color = i;
+		}
+	}
+
+	return closest_color;
+}
+
+////////////// implement palette class ///////////////
+
+void palette::addColor(int B, int G, int R)
+{
+	cv::Vec3b newColor(B, G, R);
+	colors.push_back(newColor);
+}
+
+void palette::addColor(Scalar BGR)
+{
+	cv::Vec3b newColor(BGR[0], BGR[1], BGR[2]);
+	colors.push_back(newColor);
+}
+
+int palette::size() const
+{
+	return colors.size();
+}
+
+cv::Vec3b palette::getColor(int i) const
+{
+	return colors[i];
+}
+
+bool palette::hasColor(cv::Vec3b c) const
+{
+	for(int i = 0; i < colors.size(); i++)
+	{
+		if(c == colors[i])
+			return true;
+	}
+
+	return false;
 }

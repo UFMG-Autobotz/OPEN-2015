@@ -4,19 +4,38 @@ project(estrategia)
 #find_package(catkin REQUIRED)
 find_package(catkin REQUIRED COMPONENTS
   roscpp
+  genmsg
+  message_generation
   std_msgs
+  geometry_msgs
 )
  
 
-catkin_package()
-# CATKIN_DEPENDS message_runtime 
-#)
+
+add_message_files(
+   FILES
+   velocidade.msg
+   trajetoria.msg
+ )
+
+generate_messages(
+   DEPENDENCIES
+   std_msgs
+   geometry_msgs
+)
+
+catkin_package(
+ #CATKIN_DEPENDS message_runtime 
+)
+
+
 
 #include_directories(${OpenCV_INCLUDE_DIRS})
 include_directories(include ${catkin_INCLUDE_DIRS})
 
 #----------------------- ESTRATEGIA  ------------------------#
 
-add_executable(strategy src/main.cpp src/estados.h) 
+# Cuidado com a ordem dos arquivos abaixo!! Faz diferença!
+add_executable(strategy src/robo.cpp src/estados.cpp src/main.cpp) 
 target_link_libraries(strategy ${catkin_LIBRARIES}) 
 

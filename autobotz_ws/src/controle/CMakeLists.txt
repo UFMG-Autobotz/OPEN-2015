@@ -10,6 +10,7 @@ find_package(catkin REQUIRED COMPONENTS
   message_generation
 )
  
+
 add_message_files(
    FILES
    squareCenters.msg
@@ -22,9 +23,9 @@ generate_messages(
  )
 
 
-catkin_package()
-# CATKIN_DEPENDS message_runtime 
-#)
+catkin_package(
+ CATKIN_DEPENDS message_runtime 
+)
 
 #include_directories(${OpenCV_INCLUDE_DIRS})
 include_directories(include ${catkin_INCLUDE_DIRS})

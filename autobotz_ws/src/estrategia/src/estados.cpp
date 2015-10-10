@@ -1,13 +1,21 @@
 #include <stdio.h>
 
 
-void pegarBloco(){
 
-	std_msgs::Int32 estado_atual;
-	estado_atual.data = 0;
+#include "estados.h"
+#include "transporte.h"
+
+
+
+
+
+
+void pegarBloco(int estado_atual){
+
+	
 
 	    // troca entre estados de mais alto nivel
-    switch(estado_atual.data){
+    switch(estado_atual){
 
     
 
@@ -56,16 +64,15 @@ void pegarBloco(){
 
 }
 
-void colocarBloco(){
+void colocarBloco(int estado_atual){
 
-	std_msgs::Int32 estado_atual;
-	estado_atual.data = 0;
 
 	    // troca entre estados de mais alto nivel
-    switch(estado_atual.data){
+    switch(estado_atual){
 
     	case 0: // estado EXTENDER BRACO
     		
+
 
     		break;
 
@@ -101,29 +108,31 @@ void colocarBloco(){
 
 }
 
-void transportarBloco(){
+void transportarBloco(int *estado_atual, Robo barco){
 
-	std_msgs::Int32 estado_atual;
-	estado_atual.data = 0;
+	
+
 	    // troca entre estados de mais alto nivel
-    switch(estado_atual.data){
+    switch(*estado_atual){
 
-    	case 0: // estado DESATRACAR
+    	case 20: // estado DESATRACAR
     		
+            //if (desatracar(barco))
+             //   *estado_atual = 21;
 
     		break;
 
-    	case 1: // estado LOCALIZA OBJETIVO (Porto ou plataforma)
-
-    		
-    		break;
-
-    	case 2: // estado DECIDE ONDE GUARDAR
+    	case 21: // estado LOCALIZA OBJETIVO (Porto ou plataforma)
 
     		
     		break;
 
-    	case 3: // estado ATRACAR
+    	case 22: // estado DECIDE ONDE GUARDAR
+
+    		
+    		break;
+
+    	case 23: // estado ATRACAR
 
     		
     		break;

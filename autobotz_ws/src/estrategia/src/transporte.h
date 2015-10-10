@@ -5,14 +5,12 @@ Desenvolvido por Gustavo Martins Domingues
 (31) 9405-5012
 gustdomar@gmail.com
 
-Descrição do arquivo
 */
 
 
 
 // -------------------- BIBLIOTECAS --------------------
 
-#include <stdio.h>
 #include <ros/ros.h>
 
 // ---------------- ARQUIVOS INCLUSOS ------------------
@@ -24,9 +22,10 @@ Descrição do arquivo
 
 // -------------------- CABEÇALHOS --------------------
 
+int desatracar(Robo barco);
 
-//void pegarBloco(int estado_atual);
 
-//void colocarBloco(int estado_atual);
 
-void transportarBloco(int *estado_atual, Robo barco);
+// auxiliares
+
+float distancia2pts (geometry_msgs::Pose2D pt1, geometry_msgs::Pose2D pt2);

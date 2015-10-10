@@ -14,14 +14,18 @@ Código principal do pacote de estratéiga
 #include <ros/ros.h>
 #include <std_msgs/Bool.h>
 #include <std_msgs/Int32.h>
-
-
+#include <geometry_msgs/Pose2D.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 
 // ---------------- ARQUIVOS INCLUSOS ------------------
 
-#include "estados.h"
 
+#include "robo.h"
+#include "estados.h"
+#include "estrategia/trajetoria.h"
+#include "estrategia/velocidade.h"
 
 // -------------------- CONSTANTES --------------------
 
@@ -30,17 +34,22 @@ Código principal do pacote de estratéiga
 // ----------------- VARIÁVEIS GLOBAIS ------------------
 
 bool start;
+Robo barco;
 
 
 // ---------------- CALLBACK FUNCTIONs -----------------
 
-void poseMessageReceived (const std_msgs::Bool& msg){
+void inicioMsgRecieved (const std_msgs::Bool& msg){
 
     start = msg.data;
 
  }
 
+void posicaoMsgRecieved (const geometry_msgs::Pose2D& msg){
 
+    barco.setPosicao(msg.x, msg.y, msg.theta);
+
+ }
 
 
 // ------------------ MAIN FUNCTION-------------------
@@ -51,12 +60,11 @@ int main(int argc, char **argv){
 	// ------------ VARIAVEIS ------------
 
 
-	std_msgs::Int32 estado_atual;
-	estado_atual.data = 0;
+	int estado_atual;
+	estado_atual = 0;
 	start = false;
 
-
-
+    
 
 	// init ROS stuff
 	ros::init(argc, argv, "estrategia");
@@ -65,60 +73,83 @@ int main(int argc, char **argv){
     ros::NodeHandle nh;
 
 
-
-    // troca entre estados de mais alto nivel
-    switch(estado_atual.data){
-
-    	case 0: // estado INCIAL
-    		if (start)
-    			estado_atual.data++;
-    		break;
-
-    	case 1: // estado PEGAR BLOCO
-
-    		pegarBloco();
-    		break;
-
-    	case 2: // estado TRANSPORTE
-
-    		transportarBloco();
-    		break;
-
-    	case 3: // estado DEIXAR BLOCO
-
-    		colocarBloco();
-    		break;
+    // ------------------------- SUBSCRIBERS -------------------------
+    ros::Subscriber subInicio = nh.subscribe("eletronica/start", 1000, &inicioMsgRecieved);
+    ros::Subscriber subPosicao = nh.subscribe("estrategia/barco/posicao", 1000, &posicaoMsgRecieved);
 
 
-    	case 4: // FIM
-
-    		// tem que apertar o botao desligar o barco para começar de novo
-    		if (!start)
-    			estado_atual.data = 0;
-    		break;
-
-    	default: 
-
-    		break;
+    // ------------------------- PUBLISHERS -------------------------
+    ros::Publisher pub_estado = nh.advertise <std_msgs::Int32>("estrategia/estado_atual", 1000);
+    ros::Publisher pub_trajetoria = nh.advertise <estrategia::trajetoria>("estrategia/trajetoria", 1000);
+    ros::Publisher pub_velocidade = nh.advertise <estrategia::velocidade>("estrategia/velocidade", 1000);
 
 
 
-    }
 
-
-    ros::Subscriber sub = nh.subscribe("visao/squares/centers", 1000, &poseMessageReceived);
-
-    ros::Publisher pub = nh.advertise <std_msgs::Int32>("estrategia/estado_atual", 1000);
     ros::Rate rate(2); // Hz
+
+
+    // variaveis auxiliar para guardar o que sera publicado
+    std_msgs::Int32 msg_estado; 
+    estrategia::trajetoria msg_trajetoria;
+    estrategia::velocidade msg_velocidade;
+
 
     while (ros::ok()){
 
-    
-		 std_msgs::Int32 msg ;
-		 msg.data = estado_atual.data;
 
-		 // Pub lish the message .
-		 pub.publish(msg);
+	    // troca entre estados de mais alto nivel
+	    switch(estado_atual){
+
+	    	case 0: // estado INCIAL
+	    		if (start)
+	    			estado_atual = 10;
+	    		break;
+
+	    	case 10: // estado PEGAR BLOCO
+
+	    		//pegarBloco(estado_atual);
+	    		estado_atual = 20;
+	    		break;
+
+	    	case 20: // estado TRANSPORTE
+	    	case 21:
+
+	    		transportarBloco(&estado_atual, barco);
+	    		estado_atual = 30;
+	    		break;
+
+	    	case 30: // estado DEIXAR BLOCO
+
+	    		//colocarBloco(estado_atual);
+	    		estado_atual = 40;
+	    		break;
+
+
+	    	case 40: // FIM
+
+	    		// tem que apertar o botao desligar para o barco começar de novo
+	    		if (!start)
+	    			estado_atual = 0;
+	    		break;
+
+	    	default: 
+
+	    		break;
+
+
+	    }
+
+
+    	// preenchendo o que sera publicado
+		msg_estado.data = estado_atual;
+		msg_trajetoria = barco.getTrajetoria();
+		msg_velocidade = barco.getVelocidade();
+
+		 // Publish the message 
+		 pub_estado.publish(msg_estado);
+		 pub_trajetoria.publish(msg_trajetoria);
+		 pub_velocidade.publish(msg_velocidade);
 
 		 // Wait un t i l i t ' s time for another i t e ra t ion .
 		 rate.sleep();

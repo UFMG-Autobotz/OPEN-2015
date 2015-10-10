@@ -4,14 +4,21 @@
 #ifndef _BLOB_DETECT_ROS_HPP_
 	#define _BLOB_DETECT_ROS_HPP_
 
+//cpp
+#include <vector>
 //ROS includes
 #include <ros/ros.h>
 #include <sensor_msgs/Image.h>
 #include <cv_bridge/cv_bridge.h>
 #include <image_transport/image_transport.h>
-
 //openCV includes
 #include <opencv2/core/core.hpp>
+//include vision.hpp to use the 'feature' data type
+#include "vision.hpp"
+//custom message to tell ROS about features
+#include "blob_detect/feature.h"
+
+/////////////////////////// data structures ///////////////////
 
 typedef struct {
  		ros::NodeHandle* nh;
@@ -23,6 +30,8 @@ typedef struct {
 
 //there is a global instance of the struct that stores the ROS info
 extern T_ROSvars ROSvars;
+
+//////////////////////// functions ///////////////////////////
 
 void initROS(int argc, char** argv);
 //function to init ROS and register topics and callbacks
@@ -36,7 +45,12 @@ cv::Mat getHSVImg(int* refCnt = NULL);
 //one may optionally pass an int pointer to the function to get the
 //count associated with the image being returned
 
-////// callbacks
+void pubFeatures(std::vector< feature > F);
+//Receives a vector of features (struct defined in vision.hpp)
+//and publish to the appropriate topic
+
+//////////////////////    callbacks    ////////////////////////
+
 void rgbImgCallback(const sensor_msgs::ImageConstPtr& image);
 //callback for the kinect color image
 

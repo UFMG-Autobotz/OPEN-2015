@@ -1,8 +1,0 @@
-prefix=/home/gustavo/open-2015/autobotz_ws/install
-
-Name: estrategia
-Description: Description of estrategia
-Version: 0.0.0
-Cflags: 
-Libs: -L/home/gustavo/open-2015/autobotz_ws/install/lib 
-Requires: 

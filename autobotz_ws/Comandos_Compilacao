@@ -1,0 +1,18 @@
+
+		Comando pra colocar no terminal:
+
+Ultrassonicos:
+
+rosrun rosserial_python serial_node.py /dev/ttyACM0 (colocar número conveniente da porta serial)
+Para ver o que está sendo publicado no tópico: rostopic echo /eletronica/ultrassom/
+
+IMU:
+
+rosrun rosserial_python serial_node.py arducom 24 (24 corresponde a ACM0, 25 à ACM1 e assim por diante)
+
+Propulsores (Ponte-H):
+
+rosrun rosserial_python serial_node.py /dev/ttyACM0 (colocar número conveniente da porta serial)
+Para ver o que está sendo publicado no tópico:
+rostopic echo /eletronica/propulsor/R
+rostopic echo /eletronica/propulsor/L

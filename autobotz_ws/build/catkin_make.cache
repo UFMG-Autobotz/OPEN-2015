@@ -1,2 +1,0 @@
-controle:estrategia:imu:radio_controle:square_detect
--DCATKIN_DEVEL_PREFIX=/home/gustavo/open-2015/autobotz_ws/devel -DCMAKE_INSTALL_PREFIX=/home/gustavo/open-2015/autobotz_ws/install -G Unix Makefiles

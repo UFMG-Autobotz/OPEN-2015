@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(estrategia)
 
-#find_package(catkin REQUIRED)
+# find_package(catkin REQUIRED)
 find_package(catkin REQUIRED COMPONENTS
   roscpp
   genmsg
@@ -25,7 +25,7 @@ generate_messages(
 )
 
 catkin_package(
- #CATKIN_DEPENDS message_runtime 
+ # CATKIN_DEPENDS message_runtime 
 )
 
 
@@ -33,9 +33,9 @@ catkin_package(
 #include_directories(${OpenCV_INCLUDE_DIRS})
 include_directories(include ${catkin_INCLUDE_DIRS})
 
-#----------------------- ESTRATEGIA  ------------------------#
+#----------------------- ESTRATEGIA  ------------------------ #
 
 # Cuidado com a ordem dos arquivos abaixo!! Faz diferença!
-add_executable(strategy src/robo.cpp src/estados.cpp src/main.cpp) 
+add_executable(strategy src/robo.cpp src/transporte.cpp src/estados.cpp src/main.cpp) 
 target_link_libraries(strategy ${catkin_LIBRARIES}) 
 

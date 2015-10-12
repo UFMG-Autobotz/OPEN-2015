@@ -22,9 +22,11 @@ gustdomar@gmail.com
 
 // -------------------- CABEÇALHOS --------------------
 
-int desatracar(Robo barco);
+int desatracar(Robo *barco);
 
+void defineObjetivo(Robo *barco);
 
+int atracar(Robo *barco);
 
 // auxiliares
 

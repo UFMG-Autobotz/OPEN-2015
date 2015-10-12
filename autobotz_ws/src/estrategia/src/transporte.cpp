@@ -37,11 +37,15 @@ Código principal do pacote de estratéiga
 #define RECUO 10 // em centimetros
 #define RESOLUCAO 1 // cm
 
-#define ANG_KP 1.5
+#define ANG_KP 0.7
 
 #define ERRO_OK 5
 
 #define PI 3.14159265
+
+#define OBJ_X 370
+#define OBJ_Y 150
+#define OBJ_THETA 180
 
 // ----------------- VARIÁVEIS GLOBAIS ------------------
 
@@ -69,25 +73,18 @@ void posicao (const geometry_msgs::Pose2D& msg){
 
 ----------------------------------------------------------*/
 
-int desatracar(Robo barco){
+int desatracar(Robo *barco){
 
 	int i, delta_x, delta_y;
 	int lado; 
 	float vel_linear, vel_angular;
-
-
-	if (barco.getPosicao().x < ARENA_X/2)
-		lado = -1; // porto
-	else
-		lado = 1; // plataforma
-
 
 	/*
 
 	// Faz um recuo
 	for (i=0; i<RECUO/REOLUCAO; i++){
 
-		barco.trajetoria.pontos[i] = barco.posicao.x - (lado) * i * RESOLUCAO;
+		barco.trajetoria.pontos[i] = barco.posicao.x - (barco.getLadoArena()) * i * RESOLUCAO;
 
 	}
 
@@ -98,21 +95,58 @@ int desatracar(Robo barco){
 
 	
 	// definindo angulo de saida
-	delta_y = barco.getObjetivo().y - barco.getPosicao().y;
-	delta_x = barco.getObjetivo().x - barco.getPosicao().x;
-	angulo_saida = atan(delta_y/delta_x) * 180 / PI;
-	// velocidade angular proporcional ao erro
-	vel_angular = ANG_KP * (barco.getPosicao().theta - angulo_saida) * lado; // positivo: anti-horario; negativo: horario
+	delta_y = barco->getObjetivo().y - barco->getPosicao().y;
+	delta_x = barco->getObjetivo().x - barco->getPosicao().x;
+	angulo_saida = atan(delta_y/delta_x) * 180 / PI;  // angulo em GRAUS
+	// velocidade angular proporcional ao erro. Velocidade em GRAUS/SEGUNDO
+	vel_angular = ANG_KP * (barco->getPosicao().theta - angulo_saida) * barco->getLadoArena(); // positivo: anti-horario; negativo: horario
 
-	barco.setVelocidade(vel_linear, vel_angular);
+	barco->setVelocidade(vel_linear, vel_angular);
 
-	if (distancia2pts(barco.getPosicao(), barco.getObjetivo()) <= ERRO_OK)
+	if (distancia2pts(barco->getPosicao(), barco->getObjetivo()) <= ERRO_OK)
 		return 1;
 
 	return 0;
 
 }
 
+
+/* ------------------ FUNCAO ATRACAR -------------------
+
+	Entrada: Objeto do tipo Robo (classe definida em robo.cpp)
+	Saida: 1 ou 0. 1 indica fim do processo
+	Finalidade: Rotacionar o robo e deixá-lo apto a atracar 
+	no porto/plataforma
+
+----------------------------------------------------------*/
+
+int atracar(Robo *barco){
+
+
+	return 0;
+}
+
+
+
+/* ------------------ FUNCAO ATRACAR -------------------
+
+	Entrada: Objeto do tipo Robo (classe definida em robo.cpp)
+	Saida: Nada.
+	Finalidade: Setar a posição na qual o barco estará se
+	movendo nos próximos instantes
+
+----------------------------------------------------------*/
+
+void defineObjetivo(Robo *barco){
+
+	// Sempre mesmo ponto durante a prova
+	barco->setObjetivo(OBJ_X, OBJ_Y, OBJ_THETA);
+
+}
+
+
+
+// ----------------------- AUXILIARES -----------------------
 
 
 /* ------------------ FUNCAO DISTANCIA2PTS -------------------

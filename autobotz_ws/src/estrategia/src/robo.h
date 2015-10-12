@@ -21,7 +21,6 @@ gustdomar@gmail.com
 
 
 
-
 #include "estrategia/trajetoria.h"
 #include "estrategia/velocidade.h"
 
@@ -37,9 +36,12 @@ gustdomar@gmail.com
  class Robo 
    {
    private:
+      int blocos_vermelhos;
+      int blocos_amarelos;
+      int lado_arena; // -1 indica porto, 1 indica plataforma
       geometry_msgs::Pose2D posicao;
       geometry_msgs::Pose2D objetivo;
-      estrategia::velocidade velocidade;
+      estrategia::velocidade velocidade; // checar se este membro eh realmente necessário
       estrategia::velocidade vel_desejada;
       estrategia::trajetoria trajetoria;
 
@@ -47,15 +49,20 @@ gustdomar@gmail.com
 
    public:
       // Construtor e Destrutor
-     // Robo();
+      Robo();
      // ~Robo();
       // Set
+      void addBlocoVermelho();
+      void addBlocoAmarelo();
       void setPosicao(float x, float y, float theta);
       void setObjetivo(float x, float y, float theta);
       void setVelocidade(float linear, float angular);
       void setVelDesejada(float linear, float angular);
       void setTrajetoria(float x, float y, float theta, int pos);
       // Get
+      int getBlocosVermelhos();
+      int getBlocosAmarelos();
+      int getLadoArena();
       geometry_msgs::Pose2D getPosicao();
       geometry_msgs::Pose2D getObjetivo();
       estrategia::velocidade getVelocidade();

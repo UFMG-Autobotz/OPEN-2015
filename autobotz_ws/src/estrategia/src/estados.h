@@ -25,8 +25,8 @@ Descrição do arquivo
 // -------------------- CABEÇALHOS --------------------
 
 
-//void pegarBloco(int estado_atual);
+//int pegarBloco(int estado_atual, Robo *barco);
 
-//void colocarBloco(int estado_atual);
+//int colocarBloco(int estado_atual, Robo *barco);
 
-void transportarBloco(int *estado_atual, Robo barco);
+int transportarBloco(int *estado_atual, Robo *barco);

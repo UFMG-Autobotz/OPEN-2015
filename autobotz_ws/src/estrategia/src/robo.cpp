@@ -24,7 +24,8 @@ Descrição do arquivo
 
 // -------------------- CONSTANTES --------------------
 
-
+#define ARENA_X 500
+#define ARENA_Y 300
 
 // ----------------- VARIÁVEIS GLOBAIS ------------------
 
@@ -35,10 +36,11 @@ Descrição do arquivo
 // ------------------ FUNÇÕES -------------------
 
 // Construtor
-//Robo::Robo(){
-
-
-//}
+Robo::Robo(){
+   this->blocos_vermelhos = 0;
+   this->blocos_amarelos = 0;
+   this->lado_arena = -1;  // -1 indica porto, 1 indica plataforma
+}
 
 //Destrutor
 //Robo::~Robo(){
@@ -48,11 +50,27 @@ Descrição do arquivo
 //}
 
 // Set
+
+void Robo::addBlocoVermelho(){
+
+   this->blocos_vermelhos += 1;
+
+}
+void Robo::addBlocoAmarelo(){
+
+    this->blocos_amarelos += 1;
+
+}
 void Robo::setPosicao(float x, float y, float theta){
 
    this->posicao.x =  x;
    this->posicao.y =  y;
    this->posicao.theta = theta;
+
+   if (this->posicao.x >= ARENA_X/2)
+      this->lado_arena = 1; // porto
+   else
+      this->lado_arena = -1; // plataforma
 
 }
 void Robo::setObjetivo(float x, float y, float theta){
@@ -84,6 +102,23 @@ void Robo::setVelDesejada(float linear, float angular){
 
 
 // Get
+
+int Robo::getBlocosVermelhos(){
+
+   return this->blocos_vermelhos;
+
+}
+int Robo::getBlocosAmarelos(){
+
+   return this->blocos_amarelos;
+
+}
+
+int Robo::getLadoArena(){
+
+   return this->lado_arena;
+
+}
 geometry_msgs::Pose2D Robo::getPosicao(){
 
    return this->posicao;

@@ -29,13 +29,15 @@ Código principal do pacote de estratéiga
 
 // -------------------- CONSTANTES --------------------
 
-
+#define TOTAL_BLOCOS_VERMELHOS 4 // informacao retirada do edital 
+#define TOTAL_BLOCOS_AMARELOS 10 // informacao retirada do edital 
 
 // ----------------- VARIÁVEIS GLOBAIS ------------------
 
 bool start;
 Robo barco;
 
+int blocos_vermelhos, blocos_amarelos;
 
 // ---------------- CALLBACK FUNCTIONs -----------------
 
@@ -57,7 +59,7 @@ void posicaoMsgRecieved (const geometry_msgs::Pose2D& msg){
 int main(int argc, char **argv){
 
 
-	// ------------ VARIAVEIS ------------
+// ------------ VARIAVEIS ------------
 
 
 	int estado_atual;
@@ -65,6 +67,9 @@ int main(int argc, char **argv){
 	start = false;
 
     
+	// TESTES
+	barco.setObjetivo(370.0, 150.0, 180.0);
+
 
 	// init ROS stuff
 	ros::init(argc, argv, "estrategia");
@@ -76,6 +81,7 @@ int main(int argc, char **argv){
     // ------------------------- SUBSCRIBERS -------------------------
     ros::Subscriber subInicio = nh.subscribe("eletronica/start", 1000, &inicioMsgRecieved);
     ros::Subscriber subPosicao = nh.subscribe("estrategia/barco/posicao", 1000, &posicaoMsgRecieved);
+
 
 
     // ------------------------- PUBLISHERS -------------------------
@@ -115,14 +121,17 @@ int main(int argc, char **argv){
 	    	case 20: // estado TRANSPORTE
 	    	case 21:
 
-	    		transportarBloco(&estado_atual, barco);
-	    		estado_atual = 30;
+	    		if (transportarBloco(&estado_atual, &barco))
+	    			estado_atual = 30;
 	    		break;
 
 	    	case 30: // estado DEIXAR BLOCO
 
 	    		//colocarBloco(estado_atual);
-	    		estado_atual = 40;
+	    		if (barco.getBlocosVermelhos() >= TOTAL_BLOCOS_VERMELHOS &&
+	    		    barco.getBlocosAmarelos() >= TOTAL_BLOCOS_AMARELOS)
+
+	    			estado_atual = 40;
 	    		break;
 
 

@@ -1,0 +1,38 @@
+#Script usado para criar uma mensagem personalizada no Arduino para os ultrassonicos
+cd ~/open-2015/autobotz_ws/src/rosserial/rosserial_arduino/msg/
+touch ultrassom.msg
+echo "float32 dir
+float32 esq
+float32 frente
+float32 tras" | tee ultrassom.msg
+cd ~/open-2015/autobotz_ws/src/rosserial/rosserial_arduino/
+echo "cmake_minimum_required(VERSION 2.8.3)
+project(rosserial_arduino)
+
+find_package(catkin REQUIRED COMPONENTS message_generation)
+
+add_message_files(FILES
+                  Adc.msg
+		  ultrassom.msg
+                 )
+
+add_service_files(FILES
+                  Test.srv
+                 )
+
+generate_messages()
+
+catkin_package(CATKIN_DEPENDS message_runtime)
+
+install(DIRECTORY src/ros_lib
+  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/src
+)
+
+install(PROGRAMS src/rosserial_arduino/make_libraries.py
+  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
+)
+
+" | tee CMakeLists.txt
+cd ~/sketchbook/libraries/
+rm ros_lib/ -R
+rosrun rosserial_arduino make_libraries.py ~/sketchbook/libraries ultrassom

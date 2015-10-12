@@ -17,7 +17,7 @@ find_package(catkin REQUIRED COMPONENTS
  
 find_package(OpenCV REQUIRED)
 
-add_message_files(FILES Num.msg)
+add_message_files(FILES )
  
 generate_messages(
    DEPENDENCIES
@@ -41,5 +41,4 @@ target_link_libraries(infoS ${catkin_LIBRARIES})
 
 #add_executable(infoS src/Processamento/subscreve.cpp) 
 #target_link_libraries(infoS ${catkin_LIBRARIES})
-
 

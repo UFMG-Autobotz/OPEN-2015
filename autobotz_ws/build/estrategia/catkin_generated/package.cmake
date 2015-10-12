@@ -1,7 +1,0 @@
-set(_CATKIN_CURRENT_PACKAGE "estrategia")
-set(estrategia_MAINTAINER "gabriela <gustdomar@gmail.com>")
-set(estrategia_DEPRECATED "")
-set(estrategia_VERSION "0.0.0")
-set(estrategia_BUILD_DEPENDS "std_msgs" "roscpp" "geometry_msgs" "message_generation")
-set(estrategia_RUN_DEPENDS "roscpp" "std_msgs" "geometry_msgs" "message_runtime")
-set(estrategia_BUILDTOOL_DEPENDS "catkin")

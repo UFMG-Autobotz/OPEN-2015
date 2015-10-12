@@ -1,8 +1,0 @@
-prefix=/home/gabriela/open-2015/autobotz_ws/install
-
-Name: blob_detect
-Description: Description of blob_detect
-Version: 0.1.0
-Cflags: -I/home/gabriela/open-2015/autobotz_ws/install/include
-Libs: -L/home/gabriela/open-2015/autobotz_ws/install/lib 
-Requires: 

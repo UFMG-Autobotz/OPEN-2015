@@ -1,8 +1,0 @@
-prefix=/home/gabriela/open-2015/autobotz_ws/install
-
-Name: rosserial_arduino
-Description: Description of rosserial_arduino
-Version: 0.5.6
-Cflags: -I/home/gabriela/open-2015/autobotz_ws/install/include
-Libs: -L/home/gabriela/open-2015/autobotz_ws/install/lib 
-Requires: message_runtime

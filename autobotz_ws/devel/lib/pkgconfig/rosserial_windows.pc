@@ -1,8 +1,0 @@
-prefix=/home/gabriela/open-2015/autobotz_ws/devel
-
-Name: rosserial_windows
-Description: Description of rosserial_windows
-Version: 0.5.6
-Cflags: 
-Libs: -L/home/gabriela/open-2015/autobotz_ws/devel/lib 
-Requires: 

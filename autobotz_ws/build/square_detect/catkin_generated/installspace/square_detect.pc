@@ -1,8 +1,0 @@
-prefix=/home/gustavo/open-2015/autobotz_ws/install
-
-Name: square_detect
-Description: Description of square_detect
-Version: 0.1.0
-Cflags: -I/home/gustavo/open-2015/autobotz_ws/install/include
-Libs: -L/home/gustavo/open-2015/autobotz_ws/install/lib 
-Requires: 

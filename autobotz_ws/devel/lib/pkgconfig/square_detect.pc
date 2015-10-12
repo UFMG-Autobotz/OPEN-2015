@@ -1,8 +1,0 @@
-prefix=/home/gabriela/open-2015/autobotz_ws/devel
-
-Name: square_detect
-Description: Description of square_detect
-Version: 0.1.0
-Cflags: -I/home/gabriela/open-2015/autobotz_ws/devel/include
-Libs: -L/home/gabriela/open-2015/autobotz_ws/devel/lib 
-Requires: 

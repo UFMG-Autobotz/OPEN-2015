@@ -26,6 +26,8 @@ int desatracar(Robo *barco);
 
 void defineObjetivo(Robo *barco);
 
+int fazTrajetoria(Robo *barco);
+
 int atracar(Robo *barco);
 
 // auxiliares

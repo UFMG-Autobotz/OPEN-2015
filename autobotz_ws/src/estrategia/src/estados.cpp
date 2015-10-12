@@ -197,7 +197,14 @@ int transportarBloco(int *estado_atual, Robo *barco){
             *estado_atual = 23; 
     		break;
 
-    	case 23: // estado ATRACAR
+        case 23: // estado DECIDE ONDE GUARDAR
+
+            if (fazTrajetoria(barco))
+                *estado_atual = 24; 
+            break;
+
+
+    	case 24: // estado ATRACAR
 
     		if (atracar(barco))
                return 1; // processo concluído
@@ -207,7 +214,6 @@ int transportarBloco(int *estado_atual, Robo *barco){
     	default: 
 
     		break;
-
 
 
     }

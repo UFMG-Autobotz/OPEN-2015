@@ -68,7 +68,7 @@ int main(int argc, char **argv){
 
     
 	// TESTES
-	barco.setObjetivo(370.0, 150.0, 180.0);
+	barco.setObjetivo(370.0, 150.0, 0.0);
 
 
 	// init ROS stuff
@@ -120,6 +120,9 @@ int main(int argc, char **argv){
 
 	    	case 20: // estado TRANSPORTE
 	    	case 21:
+	    	case 22:
+	    	case 23:
+	    	case 24:
 
 	    		if (transportarBloco(&estado_atual, &barco))
 	    			estado_atual = 30;
@@ -132,6 +135,10 @@ int main(int argc, char **argv){
 	    		    barco.getBlocosAmarelos() >= TOTAL_BLOCOS_AMARELOS)
 
 	    			estado_atual = 40;
+
+	    		else
+
+	    			estado_atual = 10;
 	    		break;
 
 

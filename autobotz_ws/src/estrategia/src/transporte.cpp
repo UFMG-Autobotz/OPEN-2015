@@ -37,15 +37,22 @@ Código principal do pacote de estratéiga
 #define RECUO 10 // em centimetros
 #define RESOLUCAO 1 // cm
 
-#define ANG_KP 0.7
+#define VEL_ANG_KP 0.7
+#define VEL_LIN_KP 1.0 // isso não tem relação com controle, é só pra determinar a curva da velocidade
+#define VEL_LIN_MAX 10 // velocidade máxima em cm/s
 
-#define ERRO_OK 5
+#define ERRO_LIN_OK 5
+#define ERRO_ANG_OK 5
 
 #define PI 3.14159265
 
-#define OBJ_X 370
-#define OBJ_Y 150
-#define OBJ_THETA 180
+#define PORT_OBJ_X 120
+#define PORT_OBJ_Y 75
+#define PORT_OBJ_THETA 180
+
+#define PLAT_OBJ_X 370
+#define PLAT_OBJ_Y 150
+#define PLAT_OBJ_THETA 0
 
 // ----------------- VARIÁVEIS GLOBAIS ------------------
 
@@ -76,6 +83,112 @@ void posicao (const geometry_msgs::Pose2D& msg){
 int desatracar(Robo *barco){
 
 	int i, delta_x, delta_y;
+	float vel_linear, vel_angular;
+
+	/*
+
+	// Faz um recuo
+	for (i=0; i<RECUO/REOLUCAO; i++){
+
+		barco.trajetoria.pontos[i] = barco.posicao.x - (barco.getLadoArena()) * i * RESOLUCAO;
+
+	}
+
+	*/
+
+	// velocidade linear igual a zero, o barco so vai rodar
+	vel_linear = 0.0;
+
+	
+	// definindo angulo de saida
+	delta_y = barco->getObjetivo().y - barco->getPosicao().y;
+	delta_x = barco->getObjetivo().x - barco->getPosicao().x;
+	angulo_saida = atan(delta_y/delta_x) * 180 / PI;  // angulo em GRAUS
+	// velocidade angular proporcional ao erro. Velocidade em GRAUS/SEGUNDO
+	vel_angular = VEL_ANG_KP * (barco->getPosicao().theta - angulo_saida) * barco->getLadoArena(); // positivo: anti-horario; negativo: horario
+
+	barco->setVelocidade(vel_linear, vel_angular);
+
+	if ((barco->getPosicao().theta - barco->getObjetivo().theta) <= ERRO_ANG_OK)
+		return 1;
+
+	return 0;
+
+}
+
+
+/* ------------------ FUNCAO FAZTRAJETORIA -------------------
+
+	Entrada: Objeto do tipo Robo (classe definida em robo.cpp)
+	Saida: 1 ou 0. 1 indica fim do processo
+	Finalidade: Determina caminho a ser seguido e faz o trajeto
+
+----------------------------------------------------------*/
+
+int fazTrajetoria(Robo *barco){
+
+
+	int i, delta_x, delta_y;
+	float delta_d;
+	float theta, traj_x, traj_y;
+	float vel_linear, vel_angular;
+
+	// definindo angulo trajetoria
+	delta_y = barco->getObjetivo().y - barco->getPosicao().y;
+	delta_x = barco->getObjetivo().x - barco->getPosicao().x;
+	theta = atan(delta_y/delta_x) * 180 / PI;  // angulo em GRAUS;
+
+	barco->limpaTrajetoria();
+
+	// calculando distância
+	delta_d = distancia2pts(barco->getPosicao(), barco->getObjetivo());
+
+	for (i=1; i <= (delta_d / RESOLUCAO); i++){
+
+		traj_x = cos(RESOLUCAO)*i+barco->getPosicao().x;
+		traj_y = sin(RESOLUCAO)*i+barco->getPosicao().y;
+
+
+		barco->setTrajetoria(traj_x, traj_y, theta);
+
+	}
+
+	// velocidade linear igual a zero, o barco so vai rodar
+	vel_angular = 0.0;
+
+	
+
+
+	
+	// velocidade linear proporcional ao erro. Velocidade em CENTIMETROS/SEGUNDO
+	vel_linear = VEL_LIN_KP * (1/delta_d) * barco->getLadoArena(); // positivo: anti-horario; negativo: horario
+
+	if (vel_linear > VEL_LIN_MAX)
+		vel_linear = VEL_LIN_MAX;
+
+	barco->setVelocidade(vel_linear, vel_angular);
+
+	if (distancia2pts(barco->getPosicao(), barco->getObjetivo()) <= ERRO_LIN_OK)
+		return 1;
+
+	return 0;
+
+
+}
+
+/* ------------------ FUNCAO ATRACAR -------------------
+
+	Entrada: Objeto do tipo Robo (classe definida em robo.cpp)
+	Saida: 1 ou 0. 1 indica fim do processo
+	Finalidade: Rotacionar o robo e deixá-lo apto a atracar 
+	no porto/plataforma
+
+----------------------------------------------------------*/
+
+int atracar(Robo *barco){
+
+
+	int i, delta_x, delta_y;
 	int lado; 
 	float vel_linear, vel_angular;
 
@@ -99,28 +212,12 @@ int desatracar(Robo *barco){
 	delta_x = barco->getObjetivo().x - barco->getPosicao().x;
 	angulo_saida = atan(delta_y/delta_x) * 180 / PI;  // angulo em GRAUS
 	// velocidade angular proporcional ao erro. Velocidade em GRAUS/SEGUNDO
-	vel_angular = ANG_KP * (barco->getPosicao().theta - angulo_saida) * barco->getLadoArena(); // positivo: anti-horario; negativo: horario
+	vel_angular = VEL_ANG_KP * (barco->getPosicao().theta - angulo_saida) * barco->getLadoArena(); // positivo: anti-horario; negativo: horario
 
 	barco->setVelocidade(vel_linear, vel_angular);
 
-	if (distancia2pts(barco->getPosicao(), barco->getObjetivo()) <= ERRO_OK)
+	if ((barco->getPosicao().theta - barco->getObjetivo().theta) <= ERRO_ANG_OK)
 		return 1;
-
-	return 0;
-
-}
-
-
-/* ------------------ FUNCAO ATRACAR -------------------
-
-	Entrada: Objeto do tipo Robo (classe definida em robo.cpp)
-	Saida: 1 ou 0. 1 indica fim do processo
-	Finalidade: Rotacionar o robo e deixá-lo apto a atracar 
-	no porto/plataforma
-
-----------------------------------------------------------*/
-
-int atracar(Robo *barco){
 
 
 	return 0;
@@ -140,8 +237,10 @@ int atracar(Robo *barco){
 void defineObjetivo(Robo *barco){
 
 	// Sempre mesmo ponto durante a prova
-	barco->setObjetivo(OBJ_X, OBJ_Y, OBJ_THETA);
-
+	//if (barco->getLadoArena() == -1) // porto
+	//	barco->setObjetivo(PLAT_OBJ_X, PLAT_OBJ_Y, PLAT_OBJ_THETA);
+	//else if (barco->getLadoArena() == 1) // plataforma
+	//	barco->setObjetivo(PORT_OBJ_X, PORT_OBJ_Y, PORT_OBJ_THETA);
 }
 
 

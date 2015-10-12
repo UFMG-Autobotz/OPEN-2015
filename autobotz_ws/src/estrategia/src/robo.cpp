@@ -12,7 +12,7 @@ Descrição do arquivo
 
 // -------------------- BIBLIOTECAS --------------------
 
-
+#include <geometry_msgs/Pose2D.h>
 
 // ---------------- ARQUIVOS INCLUSOS ------------------
 
@@ -40,6 +40,7 @@ Robo::Robo(){
    this->blocos_vermelhos = 0;
    this->blocos_amarelos = 0;
    this->lado_arena = -1;  // -1 indica porto, 1 indica plataforma
+   this->trajetoria.pontos.clear();
 }
 
 //Destrutor
@@ -80,11 +81,13 @@ void Robo::setObjetivo(float x, float y, float theta){
    this->objetivo.theta = theta;
 
 }
-void Robo::setTrajetoria(float x, float y, float theta, int pos){
+void Robo::setTrajetoria(float x, float y, float theta){
   
-   this->trajetoria.pontos[pos].x = x;
-   this->trajetoria.pontos[pos].y = y;
-   this->trajetoria.pontos[pos].theta = theta;
+   geometry_msgs::Pose2D posicao;
+   posicao.x = x;
+   posicao.y = y;
+   posicao.theta = theta;
+   this->trajetoria.pontos.push_back(posicao);
  
 }
 void Robo::setVelocidade(float linear, float angular){
@@ -142,5 +145,13 @@ estrategia::velocidade Robo::getVelDesejada(){
 estrategia::trajetoria Robo::getTrajetoria(){
 
    return this->trajetoria;
+
+}
+
+// Outros
+
+void Robo::limpaTrajetoria(){
+
+   this->trajetoria.pontos.clear();
 
 }

@@ -18,6 +18,7 @@ add_message_files(
    trajetoria.msg
  )
 
+
 generate_messages(
    DEPENDENCIES
    std_msgs
@@ -25,7 +26,7 @@ generate_messages(
 )
 
 catkin_package(
- # CATKIN_DEPENDS message_runtime 
+ CATKIN_DEPENDS message_runtime 
 )
 
 
@@ -35,7 +36,9 @@ include_directories(include ${catkin_INCLUDE_DIRS})
 
 #----------------------- ESTRATEGIA  ------------------------ #
 
-# Cuidado com a ordem dos arquivos abaixo!! Faz diferença!
+
 add_executable(strategy src/robo.cpp src/transporte.cpp src/estados.cpp src/main.cpp) 
 target_link_libraries(strategy ${catkin_LIBRARIES}) 
+
+add_dependencies(strategy ${catkin_EXPORTED_TARGETS})
 

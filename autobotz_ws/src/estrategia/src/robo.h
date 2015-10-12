@@ -15,6 +15,7 @@ gustdomar@gmail.com
 #include <geometry_msgs/Pose2D.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <vector>
 
 
 // ---------------- ARQUIVOS INCLUSOS ------------------
@@ -50,7 +51,7 @@ gustdomar@gmail.com
    public:
       // Construtor e Destrutor
       Robo();
-     // ~Robo();
+      // ~Robo();
       // Set
       void addBlocoVermelho();
       void addBlocoAmarelo();
@@ -58,7 +59,8 @@ gustdomar@gmail.com
       void setObjetivo(float x, float y, float theta);
       void setVelocidade(float linear, float angular);
       void setVelDesejada(float linear, float angular);
-      void setTrajetoria(float x, float y, float theta, int pos);
+      void setTrajetoria(float x, float y, float theta);
+      
       // Get
       int getBlocosVermelhos();
       int getBlocosAmarelos();
@@ -68,6 +70,10 @@ gustdomar@gmail.com
       estrategia::velocidade getVelocidade();
       estrategia::velocidade getVelDesejada();
       estrategia::trajetoria getTrajetoria();
+
+      // outros
+      void limpaTrajetoria();
+
    };
 
 

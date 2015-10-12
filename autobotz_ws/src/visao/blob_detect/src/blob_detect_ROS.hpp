@@ -16,7 +16,7 @@
 //include vision.hpp to use the 'feature' data type
 #include "vision.hpp"
 //custom message to tell ROS about features
-#include "blob_detect/feature.h"
+#include "blob_detect/feature1.h"
 
 /////////////////////////// data structures ///////////////////
 

@@ -1,7 +1,7 @@
 FILE(REMOVE_RECURSE
   "CMakeFiles/controle_generate_messages_py"
-  "/home/gustavo/open-2015/autobotz_ws/devel/lib/python2.7/dist-packages/controle/msg/_squareCenters.py"
-  "/home/gustavo/open-2015/autobotz_ws/devel/lib/python2.7/dist-packages/controle/msg/__init__.py"
+  "/home/gabriela/open-2015/autobotz_ws/devel/lib/python2.7/dist-packages/controle/msg/_squareCenters.py"
+  "/home/gabriela/open-2015/autobotz_ws/devel/lib/python2.7/dist-packages/controle/msg/__init__.py"
 )
 
 # Per-language clean rules from dependency scanning.

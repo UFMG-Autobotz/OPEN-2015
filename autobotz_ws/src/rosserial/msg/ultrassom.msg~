@@ -1,0 +1,4 @@
+float dir;
+float esq;
+float frente;
+float tras;

@@ -4,7 +4,7 @@ message(WARNING "Invoking generate_messages() without having added any message o
 You should either add add_message_files() and/or add_service_files() calls or remove the invocation of generate_messages().")
 message(STATUS "imu: 0 messages, 0 services")
 
-set(MSG_I_FLAGS "-Istd_msgs:/opt/ros/indigo/share/std_msgs/cmake/../msg")
+set(MSG_I_FLAGS "-Istd_msgs:/opt/ros/hydro/share/std_msgs/cmake/../msg")
 
 # Find all generators
 find_package(gencpp REQUIRED)
@@ -12,10 +12,6 @@ find_package(genlisp REQUIRED)
 find_package(genpy REQUIRED)
 
 add_custom_target(imu_generate_messages ALL)
-
-# verify that message/service dependencies have not changed since configure
-
-
 
 #
 #  langs = gencpp;genlisp;genpy
@@ -36,8 +32,6 @@ add_custom_target(imu_generate_messages_cpp
   DEPENDS ${ALL_GEN_OUTPUT_FILES_cpp}
 )
 add_dependencies(imu_generate_messages imu_generate_messages_cpp)
-
-# add dependencies to all check dependencies targets
 
 # target for backward compatibility
 add_custom_target(imu_gencpp)
@@ -62,8 +56,6 @@ add_custom_target(imu_generate_messages_lisp
 )
 add_dependencies(imu_generate_messages imu_generate_messages_lisp)
 
-# add dependencies to all check dependencies targets
-
 # target for backward compatibility
 add_custom_target(imu_genlisp)
 add_dependencies(imu_genlisp imu_generate_messages_lisp)
@@ -86,8 +78,6 @@ add_custom_target(imu_generate_messages_py
   DEPENDS ${ALL_GEN_OUTPUT_FILES_py}
 )
 add_dependencies(imu_generate_messages imu_generate_messages_py)
-
-# add dependencies to all check dependencies targets
 
 # target for backward compatibility
 add_custom_target(imu_genpy)

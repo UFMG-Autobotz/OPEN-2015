@@ -1,0 +1,8 @@
+prefix=/home/gabriela/open-2015/autobotz_ws/install
+
+Name: rosserial_xbee
+Description: Description of rosserial_xbee
+Version: 0.5.6
+Cflags: 
+Libs: -L/home/gabriela/open-2015/autobotz_ws/install/lib 
+Requires: 

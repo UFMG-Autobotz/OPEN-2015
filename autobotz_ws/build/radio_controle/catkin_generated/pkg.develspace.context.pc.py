@@ -4,5 +4,5 @@ PROJECT_PKG_CONFIG_INCLUDE_DIRS = "".split(';') if "" != "" else []
 PROJECT_CATKIN_DEPENDS = "message_runtime".replace(';', ' ')
 PKG_CONFIG_LIBRARIES_WITH_PREFIX = "".split(';') if "" != "" else []
 PROJECT_NAME = "radio_controle"
-PROJECT_SPACE_DIR = "/home/gustavo/open-2015/autobotz_ws/devel"
+PROJECT_SPACE_DIR = "/home/gabriela/open-2015/autobotz_ws/devel"
 PROJECT_VERSION = "0.0.0"

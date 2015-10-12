@@ -1,8 +1,8 @@
-# Install script for directory: /home/gustavo/open-2015/autobotz_ws/src/controle
+# Install script for directory: /home/gabriela/open-2015/autobotz_ws/src/controle
 
 # Set the install prefix
 IF(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  SET(CMAKE_INSTALL_PREFIX "/home/gustavo/open-2015/autobotz_ws/install")
+  SET(CMAKE_INSTALL_PREFIX "/home/gabriela/open-2015/autobotz_ws/install")
 ENDIF(NOT DEFINED CMAKE_INSTALL_PREFIX)
 STRING(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 
@@ -33,45 +33,45 @@ IF(NOT DEFINED CMAKE_INSTALL_SO_NO_EXE)
 ENDIF(NOT DEFINED CMAKE_INSTALL_SO_NO_EXE)
 
 IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
-  FILE(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/controle/msg" TYPE FILE FILES "/home/gustavo/open-2015/autobotz_ws/src/controle/msg/squareCenters.msg")
+  FILE(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/controle/msg" TYPE FILE FILES "/home/gabriela/open-2015/autobotz_ws/src/controle/msg/squareCenters.msg")
 ENDIF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
 
 IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
-  FILE(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/controle/cmake" TYPE FILE FILES "/home/gustavo/open-2015/autobotz_ws/build/controle/catkin_generated/installspace/controle-msg-paths.cmake")
+  FILE(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/controle/cmake" TYPE FILE FILES "/home/gabriela/open-2015/autobotz_ws/build/controle/catkin_generated/installspace/controle-msg-paths.cmake")
 ENDIF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
 
 IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
-  FILE(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include" TYPE DIRECTORY FILES "/home/gustavo/open-2015/autobotz_ws/devel/include/controle")
+  FILE(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include" TYPE DIRECTORY FILES "/home/gabriela/open-2015/autobotz_ws/devel/include/controle")
 ENDIF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
 
 IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
-  FILE(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/common-lisp/ros" TYPE DIRECTORY FILES "/home/gustavo/open-2015/autobotz_ws/devel/share/common-lisp/ros/controle")
+  FILE(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/common-lisp/ros" TYPE DIRECTORY FILES "/home/gabriela/open-2015/autobotz_ws/devel/share/common-lisp/ros/controle")
 ENDIF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
 
 IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
-  execute_process(COMMAND "/usr/bin/python" -m compileall "/home/gustavo/open-2015/autobotz_ws/devel/lib/python2.7/dist-packages/controle")
+  execute_process(COMMAND "/usr/bin/python" -m compileall "/home/gabriela/open-2015/autobotz_ws/devel/lib/python2.7/dist-packages/controle")
 ENDIF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
 
 IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
-  FILE(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/python2.7/dist-packages" TYPE DIRECTORY FILES "/home/gustavo/open-2015/autobotz_ws/devel/lib/python2.7/dist-packages/controle")
+  FILE(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/python2.7/dist-packages" TYPE DIRECTORY FILES "/home/gabriela/open-2015/autobotz_ws/devel/lib/python2.7/dist-packages/controle")
 ENDIF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
 
 IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
-  FILE(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig" TYPE FILE FILES "/home/gustavo/open-2015/autobotz_ws/build/controle/catkin_generated/installspace/controle.pc")
+  FILE(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig" TYPE FILE FILES "/home/gabriela/open-2015/autobotz_ws/build/controle/catkin_generated/installspace/controle.pc")
 ENDIF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
 
 IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
-  FILE(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/controle/cmake" TYPE FILE FILES "/home/gustavo/open-2015/autobotz_ws/build/controle/catkin_generated/installspace/controle-msg-extras.cmake")
+  FILE(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/controle/cmake" TYPE FILE FILES "/home/gabriela/open-2015/autobotz_ws/build/controle/catkin_generated/installspace/controle-msg-extras.cmake")
 ENDIF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
 
 IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
   FILE(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/controle/cmake" TYPE FILE FILES
-    "/home/gustavo/open-2015/autobotz_ws/build/controle/catkin_generated/installspace/controleConfig.cmake"
-    "/home/gustavo/open-2015/autobotz_ws/build/controle/catkin_generated/installspace/controleConfig-version.cmake"
+    "/home/gabriela/open-2015/autobotz_ws/build/controle/catkin_generated/installspace/controleConfig.cmake"
+    "/home/gabriela/open-2015/autobotz_ws/build/controle/catkin_generated/installspace/controleConfig-version.cmake"
     )
 ENDIF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
 
 IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
-  FILE(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/controle" TYPE FILE FILES "/home/gustavo/open-2015/autobotz_ws/src/controle/package.xml")
+  FILE(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/controle" TYPE FILE FILES "/home/gabriela/open-2015/autobotz_ws/src/controle/package.xml")
 ENDIF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
 

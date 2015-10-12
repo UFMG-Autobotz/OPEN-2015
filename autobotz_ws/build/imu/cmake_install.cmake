@@ -1,8 +1,8 @@
-# Install script for directory: /home/gustavo/open-2015/autobotz_ws/src/imu
+# Install script for directory: /home/gabriela/open-2015/autobotz_ws/src/imu
 
 # Set the install prefix
 IF(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  SET(CMAKE_INSTALL_PREFIX "/home/gustavo/open-2015/autobotz_ws/install")
+  SET(CMAKE_INSTALL_PREFIX "/home/gabriela/open-2015/autobotz_ws/install")
 ENDIF(NOT DEFINED CMAKE_INSTALL_PREFIX)
 STRING(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 
@@ -33,33 +33,33 @@ IF(NOT DEFINED CMAKE_INSTALL_SO_NO_EXE)
 ENDIF(NOT DEFINED CMAKE_INSTALL_SO_NO_EXE)
 
 IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
-  FILE(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/imu/cmake" TYPE FILE FILES "/home/gustavo/open-2015/autobotz_ws/build/imu/catkin_generated/installspace/imu-msg-paths.cmake")
+  FILE(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/imu/cmake" TYPE FILE FILES "/home/gabriela/open-2015/autobotz_ws/build/imu/catkin_generated/installspace/imu-msg-paths.cmake")
 ENDIF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
 
 IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
-  execute_process(COMMAND "/usr/bin/python" -m compileall "/home/gustavo/open-2015/autobotz_ws/devel/lib/python2.7/dist-packages/imu")
+  execute_process(COMMAND "/usr/bin/python" -m compileall "/home/gabriela/open-2015/autobotz_ws/devel/lib/python2.7/dist-packages/imu")
 ENDIF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
 
 IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
-  FILE(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/python2.7/dist-packages" TYPE DIRECTORY FILES "/home/gustavo/open-2015/autobotz_ws/devel/lib/python2.7/dist-packages/imu")
+  FILE(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/python2.7/dist-packages" TYPE DIRECTORY FILES "/home/gabriela/open-2015/autobotz_ws/devel/lib/python2.7/dist-packages/imu")
 ENDIF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
 
 IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
-  FILE(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig" TYPE FILE FILES "/home/gustavo/open-2015/autobotz_ws/build/imu/catkin_generated/installspace/imu.pc")
+  FILE(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig" TYPE FILE FILES "/home/gabriela/open-2015/autobotz_ws/build/imu/catkin_generated/installspace/imu.pc")
 ENDIF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
 
 IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
-  FILE(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/imu/cmake" TYPE FILE FILES "/home/gustavo/open-2015/autobotz_ws/build/imu/catkin_generated/installspace/imu-msg-extras.cmake")
+  FILE(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/imu/cmake" TYPE FILE FILES "/home/gabriela/open-2015/autobotz_ws/build/imu/catkin_generated/installspace/imu-msg-extras.cmake")
 ENDIF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
 
 IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
   FILE(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/imu/cmake" TYPE FILE FILES
-    "/home/gustavo/open-2015/autobotz_ws/build/imu/catkin_generated/installspace/imuConfig.cmake"
-    "/home/gustavo/open-2015/autobotz_ws/build/imu/catkin_generated/installspace/imuConfig-version.cmake"
+    "/home/gabriela/open-2015/autobotz_ws/build/imu/catkin_generated/installspace/imuConfig.cmake"
+    "/home/gabriela/open-2015/autobotz_ws/build/imu/catkin_generated/installspace/imuConfig-version.cmake"
     )
 ENDIF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
 
 IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
-  FILE(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/imu" TYPE FILE FILES "/home/gustavo/open-2015/autobotz_ws/src/imu/package.xml")
+  FILE(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/imu" TYPE FILE FILES "/home/gabriela/open-2015/autobotz_ws/src/imu/package.xml")
 ENDIF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
 

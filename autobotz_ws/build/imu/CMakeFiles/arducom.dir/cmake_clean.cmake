@@ -1,7 +1,7 @@
 FILE(REMOVE_RECURSE
   "CMakeFiles/arducom.dir/src/arducom/IMU_Data.cpp.o"
-  "/home/gustavo/open-2015/autobotz_ws/devel/lib/imu/arducom.pdb"
-  "/home/gustavo/open-2015/autobotz_ws/devel/lib/imu/arducom"
+  "/home/gabriela/open-2015/autobotz_ws/devel/lib/imu/arducom.pdb"
+  "/home/gabriela/open-2015/autobotz_ws/devel/lib/imu/arducom"
 )
 
 # Per-language clean rules from dependency scanning.

@@ -31,14 +31,11 @@ CMAKE_COMMAND = /usr/bin/cmake
 # The command to remove a file.
 RM = /usr/bin/cmake -E remove -f
 
-# Escaping for special characters.
-EQUALS = =
-
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/gustavo/open-2015/autobotz_ws/src
+CMAKE_SOURCE_DIR = /home/gabriela/open-2015/autobotz_ws/src
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/gustavo/open-2015/autobotz_ws/build
+CMAKE_BINARY_DIR = /home/gabriela/open-2015/autobotz_ws/build
 
 # Include any dependencies generated for this target.
 include imu/CMakeFiles/arducom.dir/depend.make
@@ -50,18 +47,18 @@ include imu/CMakeFiles/arducom.dir/progress.make
 include imu/CMakeFiles/arducom.dir/flags.make
 
 imu/CMakeFiles/arducom.dir/src/arducom/IMU_Data.cpp.o: imu/CMakeFiles/arducom.dir/flags.make
-imu/CMakeFiles/arducom.dir/src/arducom/IMU_Data.cpp.o: /home/gustavo/open-2015/autobotz_ws/src/imu/src/arducom/IMU_Data.cpp
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/gustavo/open-2015/autobotz_ws/build/CMakeFiles $(CMAKE_PROGRESS_1)
+imu/CMakeFiles/arducom.dir/src/arducom/IMU_Data.cpp.o: /home/gabriela/open-2015/autobotz_ws/src/imu/src/arducom/IMU_Data.cpp
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/gabriela/open-2015/autobotz_ws/build/CMakeFiles $(CMAKE_PROGRESS_1)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object imu/CMakeFiles/arducom.dir/src/arducom/IMU_Data.cpp.o"
-	cd /home/gustavo/open-2015/autobotz_ws/build/imu && /usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/arducom.dir/src/arducom/IMU_Data.cpp.o -c /home/gustavo/open-2015/autobotz_ws/src/imu/src/arducom/IMU_Data.cpp
+	cd /home/gabriela/open-2015/autobotz_ws/build/imu && /usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/arducom.dir/src/arducom/IMU_Data.cpp.o -c /home/gabriela/open-2015/autobotz_ws/src/imu/src/arducom/IMU_Data.cpp
 
 imu/CMakeFiles/arducom.dir/src/arducom/IMU_Data.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/arducom.dir/src/arducom/IMU_Data.cpp.i"
-	cd /home/gustavo/open-2015/autobotz_ws/build/imu && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/gustavo/open-2015/autobotz_ws/src/imu/src/arducom/IMU_Data.cpp > CMakeFiles/arducom.dir/src/arducom/IMU_Data.cpp.i
+	cd /home/gabriela/open-2015/autobotz_ws/build/imu && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/gabriela/open-2015/autobotz_ws/src/imu/src/arducom/IMU_Data.cpp > CMakeFiles/arducom.dir/src/arducom/IMU_Data.cpp.i
 
 imu/CMakeFiles/arducom.dir/src/arducom/IMU_Data.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/arducom.dir/src/arducom/IMU_Data.cpp.s"
-	cd /home/gustavo/open-2015/autobotz_ws/build/imu && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/gustavo/open-2015/autobotz_ws/src/imu/src/arducom/IMU_Data.cpp -o CMakeFiles/arducom.dir/src/arducom/IMU_Data.cpp.s
+	cd /home/gabriela/open-2015/autobotz_ws/build/imu && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/gabriela/open-2015/autobotz_ws/src/imu/src/arducom/IMU_Data.cpp -o CMakeFiles/arducom.dir/src/arducom/IMU_Data.cpp.s
 
 imu/CMakeFiles/arducom.dir/src/arducom/IMU_Data.cpp.o.requires:
 .PHONY : imu/CMakeFiles/arducom.dir/src/arducom/IMU_Data.cpp.o.requires
@@ -79,66 +76,67 @@ arducom_OBJECTS = \
 # External object files for target arducom
 arducom_EXTERNAL_OBJECTS =
 
-/home/gustavo/open-2015/autobotz_ws/devel/lib/imu/arducom: imu/CMakeFiles/arducom.dir/src/arducom/IMU_Data.cpp.o
-/home/gustavo/open-2015/autobotz_ws/devel/lib/imu/arducom: imu/CMakeFiles/arducom.dir/build.make
-/home/gustavo/open-2015/autobotz_ws/devel/lib/imu/arducom: /opt/ros/indigo/lib/libcv_bridge.so
-/home/gustavo/open-2015/autobotz_ws/devel/lib/imu/arducom: /usr/lib/x86_64-linux-gnu/libopencv_videostab.so.2.4.8
-/home/gustavo/open-2015/autobotz_ws/devel/lib/imu/arducom: /usr/lib/x86_64-linux-gnu/libopencv_video.so.2.4.8
-/home/gustavo/open-2015/autobotz_ws/devel/lib/imu/arducom: /usr/lib/x86_64-linux-gnu/libopencv_superres.so.2.4.8
-/home/gustavo/open-2015/autobotz_ws/devel/lib/imu/arducom: /usr/lib/x86_64-linux-gnu/libopencv_stitching.so.2.4.8
-/home/gustavo/open-2015/autobotz_ws/devel/lib/imu/arducom: /usr/lib/x86_64-linux-gnu/libopencv_photo.so.2.4.8
-/home/gustavo/open-2015/autobotz_ws/devel/lib/imu/arducom: /usr/lib/x86_64-linux-gnu/libopencv_ocl.so.2.4.8
-/home/gustavo/open-2015/autobotz_ws/devel/lib/imu/arducom: /usr/lib/x86_64-linux-gnu/libopencv_objdetect.so.2.4.8
-/home/gustavo/open-2015/autobotz_ws/devel/lib/imu/arducom: /usr/lib/x86_64-linux-gnu/libopencv_ml.so.2.4.8
-/home/gustavo/open-2015/autobotz_ws/devel/lib/imu/arducom: /usr/lib/x86_64-linux-gnu/libopencv_legacy.so.2.4.8
-/home/gustavo/open-2015/autobotz_ws/devel/lib/imu/arducom: /usr/lib/x86_64-linux-gnu/libopencv_imgproc.so.2.4.8
-/home/gustavo/open-2015/autobotz_ws/devel/lib/imu/arducom: /usr/lib/x86_64-linux-gnu/libopencv_highgui.so.2.4.8
-/home/gustavo/open-2015/autobotz_ws/devel/lib/imu/arducom: /usr/lib/x86_64-linux-gnu/libopencv_gpu.so.2.4.8
-/home/gustavo/open-2015/autobotz_ws/devel/lib/imu/arducom: /usr/lib/x86_64-linux-gnu/libopencv_flann.so.2.4.8
-/home/gustavo/open-2015/autobotz_ws/devel/lib/imu/arducom: /usr/lib/x86_64-linux-gnu/libopencv_features2d.so.2.4.8
-/home/gustavo/open-2015/autobotz_ws/devel/lib/imu/arducom: /usr/lib/x86_64-linux-gnu/libopencv_core.so.2.4.8
-/home/gustavo/open-2015/autobotz_ws/devel/lib/imu/arducom: /usr/lib/x86_64-linux-gnu/libopencv_contrib.so.2.4.8
-/home/gustavo/open-2015/autobotz_ws/devel/lib/imu/arducom: /usr/lib/x86_64-linux-gnu/libopencv_calib3d.so.2.4.8
-/home/gustavo/open-2015/autobotz_ws/devel/lib/imu/arducom: /opt/ros/indigo/lib/libimage_transport.so
-/home/gustavo/open-2015/autobotz_ws/devel/lib/imu/arducom: /opt/ros/indigo/lib/libmessage_filters.so
-/home/gustavo/open-2015/autobotz_ws/devel/lib/imu/arducom: /usr/lib/x86_64-linux-gnu/libtinyxml.so
-/home/gustavo/open-2015/autobotz_ws/devel/lib/imu/arducom: /opt/ros/indigo/lib/libclass_loader.so
-/home/gustavo/open-2015/autobotz_ws/devel/lib/imu/arducom: /usr/lib/libPocoFoundation.so
-/home/gustavo/open-2015/autobotz_ws/devel/lib/imu/arducom: /usr/lib/x86_64-linux-gnu/libdl.so
-/home/gustavo/open-2015/autobotz_ws/devel/lib/imu/arducom: /opt/ros/indigo/lib/libroslib.so
-/home/gustavo/open-2015/autobotz_ws/devel/lib/imu/arducom: /opt/ros/indigo/lib/libroscpp.so
-/home/gustavo/open-2015/autobotz_ws/devel/lib/imu/arducom: /usr/lib/x86_64-linux-gnu/libboost_signals.so
-/home/gustavo/open-2015/autobotz_ws/devel/lib/imu/arducom: /usr/lib/x86_64-linux-gnu/libboost_filesystem.so
-/home/gustavo/open-2015/autobotz_ws/devel/lib/imu/arducom: /opt/ros/indigo/lib/librosconsole.so
-/home/gustavo/open-2015/autobotz_ws/devel/lib/imu/arducom: /opt/ros/indigo/lib/librosconsole_log4cxx.so
-/home/gustavo/open-2015/autobotz_ws/devel/lib/imu/arducom: /opt/ros/indigo/lib/librosconsole_backend_interface.so
-/home/gustavo/open-2015/autobotz_ws/devel/lib/imu/arducom: /usr/lib/liblog4cxx.so
-/home/gustavo/open-2015/autobotz_ws/devel/lib/imu/arducom: /usr/lib/x86_64-linux-gnu/libboost_regex.so
-/home/gustavo/open-2015/autobotz_ws/devel/lib/imu/arducom: /opt/ros/indigo/lib/libxmlrpcpp.so
-/home/gustavo/open-2015/autobotz_ws/devel/lib/imu/arducom: /opt/ros/indigo/lib/libroscpp_serialization.so
-/home/gustavo/open-2015/autobotz_ws/devel/lib/imu/arducom: /opt/ros/indigo/lib/librostime.so
-/home/gustavo/open-2015/autobotz_ws/devel/lib/imu/arducom: /usr/lib/x86_64-linux-gnu/libboost_date_time.so
-/home/gustavo/open-2015/autobotz_ws/devel/lib/imu/arducom: /opt/ros/indigo/lib/libcpp_common.so
-/home/gustavo/open-2015/autobotz_ws/devel/lib/imu/arducom: /usr/lib/x86_64-linux-gnu/libboost_system.so
-/home/gustavo/open-2015/autobotz_ws/devel/lib/imu/arducom: /usr/lib/x86_64-linux-gnu/libboost_thread.so
-/home/gustavo/open-2015/autobotz_ws/devel/lib/imu/arducom: /usr/lib/x86_64-linux-gnu/libpthread.so
-/home/gustavo/open-2015/autobotz_ws/devel/lib/imu/arducom: /usr/lib/x86_64-linux-gnu/libconsole_bridge.so
-/home/gustavo/open-2015/autobotz_ws/devel/lib/imu/arducom: imu/CMakeFiles/arducom.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --red --bold "Linking CXX executable /home/gustavo/open-2015/autobotz_ws/devel/lib/imu/arducom"
-	cd /home/gustavo/open-2015/autobotz_ws/build/imu && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/arducom.dir/link.txt --verbose=$(VERBOSE)
+/home/gabriela/open-2015/autobotz_ws/devel/lib/imu/arducom: imu/CMakeFiles/arducom.dir/src/arducom/IMU_Data.cpp.o
+/home/gabriela/open-2015/autobotz_ws/devel/lib/imu/arducom: /opt/ros/hydro/lib/libcv_bridge.so
+/home/gabriela/open-2015/autobotz_ws/devel/lib/imu/arducom: /opt/ros/hydro/lib/libopencv_videostab.so.2.4.9
+/home/gabriela/open-2015/autobotz_ws/devel/lib/imu/arducom: /opt/ros/hydro/lib/libopencv_video.so.2.4.9
+/home/gabriela/open-2015/autobotz_ws/devel/lib/imu/arducom: /opt/ros/hydro/lib/libopencv_superres.so.2.4.9
+/home/gabriela/open-2015/autobotz_ws/devel/lib/imu/arducom: /opt/ros/hydro/lib/libopencv_stitching.so.2.4.9
+/home/gabriela/open-2015/autobotz_ws/devel/lib/imu/arducom: /opt/ros/hydro/lib/libopencv_photo.so.2.4.9
+/home/gabriela/open-2015/autobotz_ws/devel/lib/imu/arducom: /opt/ros/hydro/lib/libopencv_ocl.so.2.4.9
+/home/gabriela/open-2015/autobotz_ws/devel/lib/imu/arducom: /opt/ros/hydro/lib/libopencv_objdetect.so.2.4.9
+/home/gabriela/open-2015/autobotz_ws/devel/lib/imu/arducom: /opt/ros/hydro/lib/libopencv_nonfree.so.2.4.9
+/home/gabriela/open-2015/autobotz_ws/devel/lib/imu/arducom: /opt/ros/hydro/lib/libopencv_ml.so.2.4.9
+/home/gabriela/open-2015/autobotz_ws/devel/lib/imu/arducom: /opt/ros/hydro/lib/libopencv_legacy.so.2.4.9
+/home/gabriela/open-2015/autobotz_ws/devel/lib/imu/arducom: /opt/ros/hydro/lib/libopencv_imgproc.so.2.4.9
+/home/gabriela/open-2015/autobotz_ws/devel/lib/imu/arducom: /opt/ros/hydro/lib/libopencv_highgui.so.2.4.9
+/home/gabriela/open-2015/autobotz_ws/devel/lib/imu/arducom: /opt/ros/hydro/lib/libopencv_gpu.so.2.4.9
+/home/gabriela/open-2015/autobotz_ws/devel/lib/imu/arducom: /opt/ros/hydro/lib/libopencv_flann.so.2.4.9
+/home/gabriela/open-2015/autobotz_ws/devel/lib/imu/arducom: /opt/ros/hydro/lib/libopencv_features2d.so.2.4.9
+/home/gabriela/open-2015/autobotz_ws/devel/lib/imu/arducom: /opt/ros/hydro/lib/libopencv_core.so.2.4.9
+/home/gabriela/open-2015/autobotz_ws/devel/lib/imu/arducom: /opt/ros/hydro/lib/libopencv_contrib.so.2.4.9
+/home/gabriela/open-2015/autobotz_ws/devel/lib/imu/arducom: /opt/ros/hydro/lib/libopencv_calib3d.so.2.4.9
+/home/gabriela/open-2015/autobotz_ws/devel/lib/imu/arducom: /opt/ros/hydro/lib/libimage_transport.so
+/home/gabriela/open-2015/autobotz_ws/devel/lib/imu/arducom: /opt/ros/hydro/lib/libmessage_filters.so
+/home/gabriela/open-2015/autobotz_ws/devel/lib/imu/arducom: /usr/lib/libtinyxml.so
+/home/gabriela/open-2015/autobotz_ws/devel/lib/imu/arducom: /opt/ros/hydro/lib/libclass_loader.so
+/home/gabriela/open-2015/autobotz_ws/devel/lib/imu/arducom: /usr/lib/libPocoFoundation.so
+/home/gabriela/open-2015/autobotz_ws/devel/lib/imu/arducom: /usr/lib/x86_64-linux-gnu/libdl.so
+/home/gabriela/open-2015/autobotz_ws/devel/lib/imu/arducom: /opt/ros/hydro/lib/libroslib.so
+/home/gabriela/open-2015/autobotz_ws/devel/lib/imu/arducom: /opt/ros/hydro/lib/libroscpp.so
+/home/gabriela/open-2015/autobotz_ws/devel/lib/imu/arducom: /usr/lib/libboost_signals-mt.so
+/home/gabriela/open-2015/autobotz_ws/devel/lib/imu/arducom: /usr/lib/libboost_filesystem-mt.so
+/home/gabriela/open-2015/autobotz_ws/devel/lib/imu/arducom: /opt/ros/hydro/lib/librosconsole.so
+/home/gabriela/open-2015/autobotz_ws/devel/lib/imu/arducom: /opt/ros/hydro/lib/librosconsole_log4cxx.so
+/home/gabriela/open-2015/autobotz_ws/devel/lib/imu/arducom: /opt/ros/hydro/lib/librosconsole_backend_interface.so
+/home/gabriela/open-2015/autobotz_ws/devel/lib/imu/arducom: /usr/lib/liblog4cxx.so
+/home/gabriela/open-2015/autobotz_ws/devel/lib/imu/arducom: /usr/lib/libboost_regex-mt.so
+/home/gabriela/open-2015/autobotz_ws/devel/lib/imu/arducom: /opt/ros/hydro/lib/libxmlrpcpp.so
+/home/gabriela/open-2015/autobotz_ws/devel/lib/imu/arducom: /opt/ros/hydro/lib/libroscpp_serialization.so
+/home/gabriela/open-2015/autobotz_ws/devel/lib/imu/arducom: /opt/ros/hydro/lib/librostime.so
+/home/gabriela/open-2015/autobotz_ws/devel/lib/imu/arducom: /usr/lib/libboost_date_time-mt.so
+/home/gabriela/open-2015/autobotz_ws/devel/lib/imu/arducom: /usr/lib/libboost_system-mt.so
+/home/gabriela/open-2015/autobotz_ws/devel/lib/imu/arducom: /usr/lib/libboost_thread-mt.so
+/home/gabriela/open-2015/autobotz_ws/devel/lib/imu/arducom: /usr/lib/x86_64-linux-gnu/libpthread.so
+/home/gabriela/open-2015/autobotz_ws/devel/lib/imu/arducom: /opt/ros/hydro/lib/libcpp_common.so
+/home/gabriela/open-2015/autobotz_ws/devel/lib/imu/arducom: /opt/ros/hydro/lib/libconsole_bridge.so
+/home/gabriela/open-2015/autobotz_ws/devel/lib/imu/arducom: imu/CMakeFiles/arducom.dir/build.make
+/home/gabriela/open-2015/autobotz_ws/devel/lib/imu/arducom: imu/CMakeFiles/arducom.dir/link.txt
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --red --bold "Linking CXX executable /home/gabriela/open-2015/autobotz_ws/devel/lib/imu/arducom"
+	cd /home/gabriela/open-2015/autobotz_ws/build/imu && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/arducom.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
-imu/CMakeFiles/arducom.dir/build: /home/gustavo/open-2015/autobotz_ws/devel/lib/imu/arducom
+imu/CMakeFiles/arducom.dir/build: /home/gabriela/open-2015/autobotz_ws/devel/lib/imu/arducom
 .PHONY : imu/CMakeFiles/arducom.dir/build
 
 imu/CMakeFiles/arducom.dir/requires: imu/CMakeFiles/arducom.dir/src/arducom/IMU_Data.cpp.o.requires
 .PHONY : imu/CMakeFiles/arducom.dir/requires
 
 imu/CMakeFiles/arducom.dir/clean:
-	cd /home/gustavo/open-2015/autobotz_ws/build/imu && $(CMAKE_COMMAND) -P CMakeFiles/arducom.dir/cmake_clean.cmake
+	cd /home/gabriela/open-2015/autobotz_ws/build/imu && $(CMAKE_COMMAND) -P CMakeFiles/arducom.dir/cmake_clean.cmake
 .PHONY : imu/CMakeFiles/arducom.dir/clean
 
 imu/CMakeFiles/arducom.dir/depend:
-	cd /home/gustavo/open-2015/autobotz_ws/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/gustavo/open-2015/autobotz_ws/src /home/gustavo/open-2015/autobotz_ws/src/imu /home/gustavo/open-2015/autobotz_ws/build /home/gustavo/open-2015/autobotz_ws/build/imu /home/gustavo/open-2015/autobotz_ws/build/imu/CMakeFiles/arducom.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/gabriela/open-2015/autobotz_ws/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/gabriela/open-2015/autobotz_ws/src /home/gabriela/open-2015/autobotz_ws/src/imu /home/gabriela/open-2015/autobotz_ws/build /home/gabriela/open-2015/autobotz_ws/build/imu /home/gabriela/open-2015/autobotz_ws/build/imu/CMakeFiles/arducom.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : imu/CMakeFiles/arducom.dir/depend
 

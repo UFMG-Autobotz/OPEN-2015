@@ -1,6 +1,6 @@
 FILE(REMOVE_RECURSE
   "CMakeFiles/controle_generate_messages_cpp"
-  "/home/gustavo/open-2015/autobotz_ws/devel/include/controle/squareCenters.h"
+  "/home/gabriela/open-2015/autobotz_ws/devel/include/controle/squareCenters.h"
 )
 
 # Per-language clean rules from dependency scanning.

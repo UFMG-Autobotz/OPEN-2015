@@ -1,8 +1,8 @@
-prefix=/home/gustavo/open-2015/autobotz_ws/install
+prefix=/home/gabriela/open-2015/autobotz_ws/install
 
 Name: radio_controle
 Description: Description of radio_controle
 Version: 0.0.0
 Cflags: 
-Libs: -L/home/gustavo/open-2015/autobotz_ws/install/lib 
+Libs: -L/home/gabriela/open-2015/autobotz_ws/install/lib 
 Requires: message_runtime

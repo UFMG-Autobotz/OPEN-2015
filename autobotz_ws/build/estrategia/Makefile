@@ -35,14 +35,11 @@ CMAKE_COMMAND = /usr/bin/cmake
 # The command to remove a file.
 RM = /usr/bin/cmake -E remove -f
 
-# Escaping for special characters.
-EQUALS = =
-
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/gustavo/open-2015/autobotz_ws/src
+CMAKE_SOURCE_DIR = /home/gabriela/open-2015/autobotz_ws/src
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/gustavo/open-2015/autobotz_ws/build
+CMAKE_BINARY_DIR = /home/gabriela/open-2015/autobotz_ws/build
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -120,14 +117,14 @@ test/fast: test
 
 # The main all target
 all: cmake_check_build_system
-	cd /home/gustavo/open-2015/autobotz_ws/build && $(CMAKE_COMMAND) -E cmake_progress_start /home/gustavo/open-2015/autobotz_ws/build/CMakeFiles /home/gustavo/open-2015/autobotz_ws/build/estrategia/CMakeFiles/progress.marks
-	cd /home/gustavo/open-2015/autobotz_ws/build && $(MAKE) -f CMakeFiles/Makefile2 estrategia/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/gustavo/open-2015/autobotz_ws/build/CMakeFiles 0
+	cd /home/gabriela/open-2015/autobotz_ws/build && $(CMAKE_COMMAND) -E cmake_progress_start /home/gabriela/open-2015/autobotz_ws/build/CMakeFiles /home/gabriela/open-2015/autobotz_ws/build/estrategia/CMakeFiles/progress.marks
+	cd /home/gabriela/open-2015/autobotz_ws/build && $(MAKE) -f CMakeFiles/Makefile2 estrategia/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/gabriela/open-2015/autobotz_ws/build/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
 clean:
-	cd /home/gustavo/open-2015/autobotz_ws/build && $(MAKE) -f CMakeFiles/Makefile2 estrategia/clean
+	cd /home/gabriela/open-2015/autobotz_ws/build && $(MAKE) -f CMakeFiles/Makefile2 estrategia/clean
 .PHONY : clean
 
 # The main clean target
@@ -136,22 +133,120 @@ clean/fast: clean
 
 # Prepare targets for installation.
 preinstall: all
-	cd /home/gustavo/open-2015/autobotz_ws/build && $(MAKE) -f CMakeFiles/Makefile2 estrategia/preinstall
+	cd /home/gabriela/open-2015/autobotz_ws/build && $(MAKE) -f CMakeFiles/Makefile2 estrategia/preinstall
 .PHONY : preinstall
 
 # Prepare targets for installation.
 preinstall/fast:
-	cd /home/gustavo/open-2015/autobotz_ws/build && $(MAKE) -f CMakeFiles/Makefile2 estrategia/preinstall
+	cd /home/gabriela/open-2015/autobotz_ws/build && $(MAKE) -f CMakeFiles/Makefile2 estrategia/preinstall
 .PHONY : preinstall/fast
 
 # clear depends
 depend:
-	cd /home/gustavo/open-2015/autobotz_ws/build && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
+	cd /home/gabriela/open-2015/autobotz_ws/build && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
 
 # Convenience name for target.
+estrategia/CMakeFiles/estrategia_gencpp.dir/rule:
+	cd /home/gabriela/open-2015/autobotz_ws/build && $(MAKE) -f CMakeFiles/Makefile2 estrategia/CMakeFiles/estrategia_gencpp.dir/rule
+.PHONY : estrategia/CMakeFiles/estrategia_gencpp.dir/rule
+
+# Convenience name for target.
+estrategia_gencpp: estrategia/CMakeFiles/estrategia_gencpp.dir/rule
+.PHONY : estrategia_gencpp
+
+# fast build rule for target.
+estrategia_gencpp/fast:
+	cd /home/gabriela/open-2015/autobotz_ws/build && $(MAKE) -f estrategia/CMakeFiles/estrategia_gencpp.dir/build.make estrategia/CMakeFiles/estrategia_gencpp.dir/build
+.PHONY : estrategia_gencpp/fast
+
+# Convenience name for target.
+estrategia/CMakeFiles/estrategia_generate_messages.dir/rule:
+	cd /home/gabriela/open-2015/autobotz_ws/build && $(MAKE) -f CMakeFiles/Makefile2 estrategia/CMakeFiles/estrategia_generate_messages.dir/rule
+.PHONY : estrategia/CMakeFiles/estrategia_generate_messages.dir/rule
+
+# Convenience name for target.
+estrategia_generate_messages: estrategia/CMakeFiles/estrategia_generate_messages.dir/rule
+.PHONY : estrategia_generate_messages
+
+# fast build rule for target.
+estrategia_generate_messages/fast:
+	cd /home/gabriela/open-2015/autobotz_ws/build && $(MAKE) -f estrategia/CMakeFiles/estrategia_generate_messages.dir/build.make estrategia/CMakeFiles/estrategia_generate_messages.dir/build
+.PHONY : estrategia_generate_messages/fast
+
+# Convenience name for target.
+estrategia/CMakeFiles/estrategia_generate_messages_cpp.dir/rule:
+	cd /home/gabriela/open-2015/autobotz_ws/build && $(MAKE) -f CMakeFiles/Makefile2 estrategia/CMakeFiles/estrategia_generate_messages_cpp.dir/rule
+.PHONY : estrategia/CMakeFiles/estrategia_generate_messages_cpp.dir/rule
+
+# Convenience name for target.
+estrategia_generate_messages_cpp: estrategia/CMakeFiles/estrategia_generate_messages_cpp.dir/rule
+.PHONY : estrategia_generate_messages_cpp
+
+# fast build rule for target.
+estrategia_generate_messages_cpp/fast:
+	cd /home/gabriela/open-2015/autobotz_ws/build && $(MAKE) -f estrategia/CMakeFiles/estrategia_generate_messages_cpp.dir/build.make estrategia/CMakeFiles/estrategia_generate_messages_cpp.dir/build
+.PHONY : estrategia_generate_messages_cpp/fast
+
+# Convenience name for target.
+estrategia/CMakeFiles/estrategia_generate_messages_lisp.dir/rule:
+	cd /home/gabriela/open-2015/autobotz_ws/build && $(MAKE) -f CMakeFiles/Makefile2 estrategia/CMakeFiles/estrategia_generate_messages_lisp.dir/rule
+.PHONY : estrategia/CMakeFiles/estrategia_generate_messages_lisp.dir/rule
+
+# Convenience name for target.
+estrategia_generate_messages_lisp: estrategia/CMakeFiles/estrategia_generate_messages_lisp.dir/rule
+.PHONY : estrategia_generate_messages_lisp
+
+# fast build rule for target.
+estrategia_generate_messages_lisp/fast:
+	cd /home/gabriela/open-2015/autobotz_ws/build && $(MAKE) -f estrategia/CMakeFiles/estrategia_generate_messages_lisp.dir/build.make estrategia/CMakeFiles/estrategia_generate_messages_lisp.dir/build
+.PHONY : estrategia_generate_messages_lisp/fast
+
+# Convenience name for target.
+estrategia/CMakeFiles/estrategia_generate_messages_py.dir/rule:
+	cd /home/gabriela/open-2015/autobotz_ws/build && $(MAKE) -f CMakeFiles/Makefile2 estrategia/CMakeFiles/estrategia_generate_messages_py.dir/rule
+.PHONY : estrategia/CMakeFiles/estrategia_generate_messages_py.dir/rule
+
+# Convenience name for target.
+estrategia_generate_messages_py: estrategia/CMakeFiles/estrategia_generate_messages_py.dir/rule
+.PHONY : estrategia_generate_messages_py
+
+# fast build rule for target.
+estrategia_generate_messages_py/fast:
+	cd /home/gabriela/open-2015/autobotz_ws/build && $(MAKE) -f estrategia/CMakeFiles/estrategia_generate_messages_py.dir/build.make estrategia/CMakeFiles/estrategia_generate_messages_py.dir/build
+.PHONY : estrategia_generate_messages_py/fast
+
+# Convenience name for target.
+estrategia/CMakeFiles/estrategia_genlisp.dir/rule:
+	cd /home/gabriela/open-2015/autobotz_ws/build && $(MAKE) -f CMakeFiles/Makefile2 estrategia/CMakeFiles/estrategia_genlisp.dir/rule
+.PHONY : estrategia/CMakeFiles/estrategia_genlisp.dir/rule
+
+# Convenience name for target.
+estrategia_genlisp: estrategia/CMakeFiles/estrategia_genlisp.dir/rule
+.PHONY : estrategia_genlisp
+
+# fast build rule for target.
+estrategia_genlisp/fast:
+	cd /home/gabriela/open-2015/autobotz_ws/build && $(MAKE) -f estrategia/CMakeFiles/estrategia_genlisp.dir/build.make estrategia/CMakeFiles/estrategia_genlisp.dir/build
+.PHONY : estrategia_genlisp/fast
+
+# Convenience name for target.
+estrategia/CMakeFiles/estrategia_genpy.dir/rule:
+	cd /home/gabriela/open-2015/autobotz_ws/build && $(MAKE) -f CMakeFiles/Makefile2 estrategia/CMakeFiles/estrategia_genpy.dir/rule
+.PHONY : estrategia/CMakeFiles/estrategia_genpy.dir/rule
+
+# Convenience name for target.
+estrategia_genpy: estrategia/CMakeFiles/estrategia_genpy.dir/rule
+.PHONY : estrategia_genpy
+
+# fast build rule for target.
+estrategia_genpy/fast:
+	cd /home/gabriela/open-2015/autobotz_ws/build && $(MAKE) -f estrategia/CMakeFiles/estrategia_genpy.dir/build.make estrategia/CMakeFiles/estrategia_genpy.dir/build
+.PHONY : estrategia_genpy/fast
+
+# Convenience name for target.
 estrategia/CMakeFiles/strategy.dir/rule:
-	cd /home/gustavo/open-2015/autobotz_ws/build && $(MAKE) -f CMakeFiles/Makefile2 estrategia/CMakeFiles/strategy.dir/rule
+	cd /home/gabriela/open-2015/autobotz_ws/build && $(MAKE) -f CMakeFiles/Makefile2 estrategia/CMakeFiles/strategy.dir/rule
 .PHONY : estrategia/CMakeFiles/strategy.dir/rule
 
 # Convenience name for target.
@@ -160,15 +255,39 @@ strategy: estrategia/CMakeFiles/strategy.dir/rule
 
 # fast build rule for target.
 strategy/fast:
-	cd /home/gustavo/open-2015/autobotz_ws/build && $(MAKE) -f estrategia/CMakeFiles/strategy.dir/build.make estrategia/CMakeFiles/strategy.dir/build
+	cd /home/gabriela/open-2015/autobotz_ws/build && $(MAKE) -f estrategia/CMakeFiles/strategy.dir/build.make estrategia/CMakeFiles/strategy.dir/build
 .PHONY : strategy/fast
+
+src/estados.o: src/estados.cpp.o
+.PHONY : src/estados.o
+
+# target to build an object file
+src/estados.cpp.o:
+	cd /home/gabriela/open-2015/autobotz_ws/build && $(MAKE) -f estrategia/CMakeFiles/strategy.dir/build.make estrategia/CMakeFiles/strategy.dir/src/estados.cpp.o
+.PHONY : src/estados.cpp.o
+
+src/estados.i: src/estados.cpp.i
+.PHONY : src/estados.i
+
+# target to preprocess a source file
+src/estados.cpp.i:
+	cd /home/gabriela/open-2015/autobotz_ws/build && $(MAKE) -f estrategia/CMakeFiles/strategy.dir/build.make estrategia/CMakeFiles/strategy.dir/src/estados.cpp.i
+.PHONY : src/estados.cpp.i
+
+src/estados.s: src/estados.cpp.s
+.PHONY : src/estados.s
+
+# target to generate assembly for a file
+src/estados.cpp.s:
+	cd /home/gabriela/open-2015/autobotz_ws/build && $(MAKE) -f estrategia/CMakeFiles/strategy.dir/build.make estrategia/CMakeFiles/strategy.dir/src/estados.cpp.s
+.PHONY : src/estados.cpp.s
 
 src/main.o: src/main.cpp.o
 .PHONY : src/main.o
 
 # target to build an object file
 src/main.cpp.o:
-	cd /home/gustavo/open-2015/autobotz_ws/build && $(MAKE) -f estrategia/CMakeFiles/strategy.dir/build.make estrategia/CMakeFiles/strategy.dir/src/main.cpp.o
+	cd /home/gabriela/open-2015/autobotz_ws/build && $(MAKE) -f estrategia/CMakeFiles/strategy.dir/build.make estrategia/CMakeFiles/strategy.dir/src/main.cpp.o
 .PHONY : src/main.cpp.o
 
 src/main.i: src/main.cpp.i
@@ -176,7 +295,7 @@ src/main.i: src/main.cpp.i
 
 # target to preprocess a source file
 src/main.cpp.i:
-	cd /home/gustavo/open-2015/autobotz_ws/build && $(MAKE) -f estrategia/CMakeFiles/strategy.dir/build.make estrategia/CMakeFiles/strategy.dir/src/main.cpp.i
+	cd /home/gabriela/open-2015/autobotz_ws/build && $(MAKE) -f estrategia/CMakeFiles/strategy.dir/build.make estrategia/CMakeFiles/strategy.dir/src/main.cpp.i
 .PHONY : src/main.cpp.i
 
 src/main.s: src/main.cpp.s
@@ -184,8 +303,56 @@ src/main.s: src/main.cpp.s
 
 # target to generate assembly for a file
 src/main.cpp.s:
-	cd /home/gustavo/open-2015/autobotz_ws/build && $(MAKE) -f estrategia/CMakeFiles/strategy.dir/build.make estrategia/CMakeFiles/strategy.dir/src/main.cpp.s
+	cd /home/gabriela/open-2015/autobotz_ws/build && $(MAKE) -f estrategia/CMakeFiles/strategy.dir/build.make estrategia/CMakeFiles/strategy.dir/src/main.cpp.s
 .PHONY : src/main.cpp.s
+
+src/robo.o: src/robo.cpp.o
+.PHONY : src/robo.o
+
+# target to build an object file
+src/robo.cpp.o:
+	cd /home/gabriela/open-2015/autobotz_ws/build && $(MAKE) -f estrategia/CMakeFiles/strategy.dir/build.make estrategia/CMakeFiles/strategy.dir/src/robo.cpp.o
+.PHONY : src/robo.cpp.o
+
+src/robo.i: src/robo.cpp.i
+.PHONY : src/robo.i
+
+# target to preprocess a source file
+src/robo.cpp.i:
+	cd /home/gabriela/open-2015/autobotz_ws/build && $(MAKE) -f estrategia/CMakeFiles/strategy.dir/build.make estrategia/CMakeFiles/strategy.dir/src/robo.cpp.i
+.PHONY : src/robo.cpp.i
+
+src/robo.s: src/robo.cpp.s
+.PHONY : src/robo.s
+
+# target to generate assembly for a file
+src/robo.cpp.s:
+	cd /home/gabriela/open-2015/autobotz_ws/build && $(MAKE) -f estrategia/CMakeFiles/strategy.dir/build.make estrategia/CMakeFiles/strategy.dir/src/robo.cpp.s
+.PHONY : src/robo.cpp.s
+
+src/transporte.o: src/transporte.cpp.o
+.PHONY : src/transporte.o
+
+# target to build an object file
+src/transporte.cpp.o:
+	cd /home/gabriela/open-2015/autobotz_ws/build && $(MAKE) -f estrategia/CMakeFiles/strategy.dir/build.make estrategia/CMakeFiles/strategy.dir/src/transporte.cpp.o
+.PHONY : src/transporte.cpp.o
+
+src/transporte.i: src/transporte.cpp.i
+.PHONY : src/transporte.i
+
+# target to preprocess a source file
+src/transporte.cpp.i:
+	cd /home/gabriela/open-2015/autobotz_ws/build && $(MAKE) -f estrategia/CMakeFiles/strategy.dir/build.make estrategia/CMakeFiles/strategy.dir/src/transporte.cpp.i
+.PHONY : src/transporte.cpp.i
+
+src/transporte.s: src/transporte.cpp.s
+.PHONY : src/transporte.s
+
+# target to generate assembly for a file
+src/transporte.cpp.s:
+	cd /home/gabriela/open-2015/autobotz_ws/build && $(MAKE) -f estrategia/CMakeFiles/strategy.dir/build.make estrategia/CMakeFiles/strategy.dir/src/transporte.cpp.s
+.PHONY : src/transporte.cpp.s
 
 # Help Target
 help:
@@ -194,6 +361,13 @@ help:
 	@echo "... clean"
 	@echo "... depend"
 	@echo "... edit_cache"
+	@echo "... estrategia_gencpp"
+	@echo "... estrategia_generate_messages"
+	@echo "... estrategia_generate_messages_cpp"
+	@echo "... estrategia_generate_messages_lisp"
+	@echo "... estrategia_generate_messages_py"
+	@echo "... estrategia_genlisp"
+	@echo "... estrategia_genpy"
 	@echo "... install"
 	@echo "... install/local"
 	@echo "... install/strip"
@@ -201,9 +375,18 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... strategy"
 	@echo "... test"
+	@echo "... src/estados.o"
+	@echo "... src/estados.i"
+	@echo "... src/estados.s"
 	@echo "... src/main.o"
 	@echo "... src/main.i"
 	@echo "... src/main.s"
+	@echo "... src/robo.o"
+	@echo "... src/robo.i"
+	@echo "... src/robo.s"
+	@echo "... src/transporte.o"
+	@echo "... src/transporte.i"
+	@echo "... src/transporte.s"
 .PHONY : help
 
 
@@ -215,6 +398,6 @@ help:
 # No rule that depends on this can have commands that come from listfiles
 # because they might be regenerated.
 cmake_check_build_system:
-	cd /home/gustavo/open-2015/autobotz_ws/build && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
+	cd /home/gabriela/open-2015/autobotz_ws/build && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
 .PHONY : cmake_check_build_system
 

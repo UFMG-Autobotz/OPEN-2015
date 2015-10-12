@@ -31,14 +31,11 @@ CMAKE_COMMAND = /usr/bin/cmake
 # The command to remove a file.
 RM = /usr/bin/cmake -E remove -f
 
-# Escaping for special characters.
-EQUALS = =
-
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/gustavo/open-2015/autobotz_ws/src
+CMAKE_SOURCE_DIR = /home/gabriela/open-2015/autobotz_ws/src
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/gustavo/open-2015/autobotz_ws/build
+CMAKE_BINARY_DIR = /home/gabriela/open-2015/autobotz_ws/build
 
 # Utility rule file for roscpp_generate_messages_py.
 
@@ -56,10 +53,10 @@ controle/CMakeFiles/roscpp_generate_messages_py.dir/build: roscpp_generate_messa
 .PHONY : controle/CMakeFiles/roscpp_generate_messages_py.dir/build
 
 controle/CMakeFiles/roscpp_generate_messages_py.dir/clean:
-	cd /home/gustavo/open-2015/autobotz_ws/build/controle && $(CMAKE_COMMAND) -P CMakeFiles/roscpp_generate_messages_py.dir/cmake_clean.cmake
+	cd /home/gabriela/open-2015/autobotz_ws/build/controle && $(CMAKE_COMMAND) -P CMakeFiles/roscpp_generate_messages_py.dir/cmake_clean.cmake
 .PHONY : controle/CMakeFiles/roscpp_generate_messages_py.dir/clean
 
 controle/CMakeFiles/roscpp_generate_messages_py.dir/depend:
-	cd /home/gustavo/open-2015/autobotz_ws/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/gustavo/open-2015/autobotz_ws/src /home/gustavo/open-2015/autobotz_ws/src/controle /home/gustavo/open-2015/autobotz_ws/build /home/gustavo/open-2015/autobotz_ws/build/controle /home/gustavo/open-2015/autobotz_ws/build/controle/CMakeFiles/roscpp_generate_messages_py.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/gabriela/open-2015/autobotz_ws/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/gabriela/open-2015/autobotz_ws/src /home/gabriela/open-2015/autobotz_ws/src/controle /home/gabriela/open-2015/autobotz_ws/build /home/gabriela/open-2015/autobotz_ws/build/controle /home/gabriela/open-2015/autobotz_ws/build/controle/CMakeFiles/roscpp_generate_messages_py.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : controle/CMakeFiles/roscpp_generate_messages_py.dir/depend
 

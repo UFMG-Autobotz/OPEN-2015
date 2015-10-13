@@ -117,6 +117,7 @@ include_directories(
 
 add_executable(square_detect src/main.cpp src/UI.cpp src/CV_pipeline.cpp)
 target_link_libraries(square_detect	 ${catkin_LIBRARIES})
+add_dependencies(square_detect ${square_detect_EXPORTED_TARGETS})
 
 ## Add cmake target dependencies of the executable/library
 ## as an example, message headers may need to be generated before nodes

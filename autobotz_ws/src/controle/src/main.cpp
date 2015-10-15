@@ -39,7 +39,7 @@ Código principal do pacote de estratéiga
 
 
 #define MODO 2
-#define ANG 0 // intervalo considerado de -180 a 180
+#define ANG -20.3 // intervalo considerado de -180 a 180
 
 // ----------------- VARIÁVEIS GLOBAIS ------------------
 
@@ -201,9 +201,9 @@ int main(int argc, char **argv){
 
 
         // se esta chegando perto de um obstaculo, freia
-        if (distL < DIST_MIN){
+        if (distF < DIST_MIN){
 
-        	msg_propulsorR.data = VEL_NOR * (distL/DIST_MIN);
+        	msg_propulsorR.data = VEL_NOR * (distF/DIST_MIN);
 
         }
 

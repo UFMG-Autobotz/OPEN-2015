@@ -9,6 +9,7 @@
 //local includes
 #include "blob_detect_ROS.hpp"
 #include "vision.hpp"
+#include "settings.hpp"
 //cpp
 #include <iostream>
 #include <vector>
@@ -33,6 +34,9 @@ void visionCode5(Mat& img, vector< feature >& features);
 //main function
 int main(int argc, char** argv)
 {
+	//read program settings from files
+	settingsServer.updatePaletteFromFile("visao/palette.conf");
+
 	//init ROS
 	initROS(argc, argv);
 
@@ -46,12 +50,13 @@ int main(int argc, char** argv)
 		vector< feature > F;
 		visionCode5(img, F);
 		
-		//TODO: publish to topics
-		
+		//publish to topics
+		pubFeatures(F);
+
 		//spin ROS
 		ros::spinOnce();
-		ROS_INFO("Period: got: %ims,   ideal: %ims", 
-			     loop_rate.cycleTime().nsec/1000000, loop_rate.expectedCycleTime().nsec/1000000);
+		// ROS_INFO("Period: got: %ims,   ideal: %ims\n", 
+		//           loop_rate.cycleTime().nsec/1000000, loop_rate.expectedCycleTime().nsec/1000000);
 
 		//wait
 		loop_rate.sleep();
@@ -77,7 +82,20 @@ void visionCode1()
 	Mat tmp(img.size(), img.type());
 
 	//reduce number of colors
-	reduceColors(img, color_reduced);
+	palette pal;  //define a custom palette
+	int max_distance = 120;
+
+	pal.addColor(cv::Scalar(0,   0,   0  ), max_distance);
+	pal.addColor(cv::Scalar(255, 255, 255), max_distance);  //white
+	pal.addColor(cv::Scalar(200, 200, 255), max_distance);  //white (bluish)
+    pal.addColor(cv::Scalar(200, 0,   0  ), max_distance);  //red
+	pal.addColor(cv::Scalar(0,   255, 0  ), max_distance);  //green
+	pal.addColor(cv::Scalar(0,   0,   255), max_distance);  //blue
+	pal.addColor(cv::Scalar(200, 200, 50 ), max_distance);  //yellow1
+	pal.addColor(cv::Scalar(255, 255, 50 ), max_distance);  //yellow2
+	pal.addColor(cv::Scalar(255, 255, 100), max_distance);  //yellow3
+
+	reduceColors(img, color_reduced, pal);
 	 	//DEBUG
 		//cvtColor(img, tmp, CV_HSV2BGR);
 		cv::namedWindow("color reduced"); cv::imshow("color reduced", color_reduced); cv::waitKey(1);
@@ -307,15 +325,7 @@ void visionCode5(Mat& img, vector< feature >& features)
 		cv::namedWindow("features - pre filter"); cv::imshow("features - pre filter", tmp);	
 
 	//filter only relevant features
-	palette relevantColors;
-	relevantColors.addColor(0  , 0,   200);  //red
-	relevantColors.addColor(50 , 200, 200);  //yellow1
-	relevantColors.addColor(50 , 255, 255);  //yellow2
-	relevantColors.addColor(100, 255, 255);  //yellow3
-
-	float maxDistance = 100;
-
-	filterFeatures(features, features, relevantColors, maxDistance);
+	filterFeatures(features, features, settingsServer.targetPalette);
 
 		tmp = cv::Scalar(0, 0, 0);
 		for(int i = 0; i < features.size(); i++)

@@ -30,15 +30,16 @@ Código principal do pacote de estratéiga
 #define TELA_COL 640
 #define VEL_MAX 510
 #define VEL_MIN 0
-#define VEL_NOR 255 // intervalo de 0 a 510 para ser convertido de -255 a 255. Portanto 305 -> 50
+#define VEL_NOR 80 // intervalo de -255 a 255
 #define VEL_RET 400
-#define VEL_P 1.4
+#define VEL_P_ANG 1.4
+#define VEL_P_DIST 1.4
 #define DIST_P 5.0
 #define DIST_MIN 12.0
 
 
 #define MODO 2
-#define ANG 180 // nao aceita numero negativo. Intervalo eh de 0 a 360 para ser convertido de -180 a 180. Portanto 180 -> 0
+#define ANG 0 // intervalo considerado de -180 a 180
 
 // ----------------- VARIÁVEIS GLOBAIS ------------------
 
@@ -114,7 +115,7 @@ int main(int argc, char **argv){
 	// ------------ VARIAVEIS ------------
 	start = false;
     geometry_msgs::Point objetivo;
-    float erro;
+    float erro_ang;
 
 
 
@@ -146,23 +147,29 @@ int main(int argc, char **argv){
 		 if (MODO == 1){  // segue a direcao do bloco
 
             // calcula quao desalinhado o bloco esta do robo
-            erro = TELA_COL/2 - centerSquare.x;
+            erro_ang = TELA_COL/2 - centerSquare.x;
 
         }
 
         else if(MODO == 2){ // segue um angulo desejado
 
             // calcula quao desalinhado o bloco esta do robo
-            erro = (ANG - 180) - yaw; // ajusta o angulo do intervalo de 0 a 360 para -180 a 180
+            erro_ang = ANG - yaw; // calcula diferenca entre angulo desejado e real
            
         }
 
 
-        // proporcional
-        msg_propulsorR.data = VEL_NOR + erro * VEL_P;
-        msg_propulsorL.data = VEL_NOR - erro * VEL_P;
+        // proporcional para distancia
+        msg_propulsorR.data = VEL_NOR;
 
-        printf ("GANHO: %.2f\n", erro*VEL_P);
+        // proporcional para angulo
+        msg_propulsorR.data += erro_ang * VEL_P_ANG;
+        msg_propulsorL.data -= erro_ang * VEL_P_ANG;
+
+        
+
+
+        printf ("GANHO: %.2f\n", erro_ang *VEL_P_ANG);
 
         /*
         // manter longe das bordas
@@ -191,6 +198,16 @@ int main(int argc, char **argv){
         }    
         */
 
+
+
+        // se esta chegando perto de um obstaculo, freia
+        if (distL < DIST_MIN){
+
+        	msg_propulsorR.data = VEL_NOR * (distL/DIST_MIN);
+
+        }
+
+
         // limita as velocidades
         // motor ESQUERDO
         if (msg_propulsorL.data > VEL_MAX)
@@ -204,9 +221,6 @@ int main(int argc, char **argv){
             msg_propulsorR.data = VEL_MIN;
        
 
-        // muda a referencia de 0 a 510 para -255 a 255 (isso porque o define nao aceitou valor negativo)
-        msg_propulsorR.data -= 255;
-        msg_propulsorL.data -= 255;
 
 		 // Pub lish the message .
 		 pubR.publish(msg_propulsorR);

@@ -1,6 +1,7 @@
 // Implements the computer vision functions for the blob_detect package
 //
 
+#include <ros/ros.h>
 //local includes
 #include "vision.hpp"
 #include "settings.hpp"
@@ -10,6 +11,7 @@
 //cpp
 #include <vector>
 #include <cmath>
+#include <string>
 
 using cv::Mat;
 using cv::Scalar;
@@ -17,27 +19,8 @@ using cv::Point;
 using namespace std;
 
 
-void reduceColors(cv::Mat& in, cv::Mat& out)
+void reduceColors(cv::Mat& in, cv::Mat& out, const palette pal)
 {
-	//TODO: palette should be obtained as an argument
-	//TODO: incorporate palette in settings server and pass it to reduceColors when
-	//      the function is called in main()
-
-	////////  define a palette  ////////
-	palette pal;
-
-	pal.addColor(0,   0,   0)  ;
-	pal.addColor(255, 255, 255); //white
-	pal.addColor(200, 200, 255); //white (bluish)
-    pal.addColor(200, 0,   0);   //red
-	pal.addColor(0,   255, 0);   //green
-	pal.addColor(0,   0,   255); //blue
-	pal.addColor(200, 200, 50)  ; //yellow1
-	pal.addColor(255, 255, 50)  ; //yellow2
-	pal.addColor(255, 255, 100) ; //yellow3
-
-	int max_distance = 120;
-
 	//initialize the output as a clone of the input
 	out = in.clone();
 
@@ -62,7 +45,7 @@ void reduceColors(cv::Mat& in, cv::Mat& out)
 				}
 			}
 			//max distance
-			if(shortest_dist > max_distance)
+			if(shortest_dist > pal.getMaxDistance(closest_color))
 				closest_color = 0;
 
 			//set the color in that pixel on out to that of the closest one
@@ -179,9 +162,7 @@ vector< feature > getFeaturesInfo(const cv::Mat& img, const vector< vector<cv::P
 		//get color info   -- getAvgColorInContours is not used in order to implement
 		//					  stdDev calculation combined with average
 	    Scalar tmpAvg; Scalar tmpSD;
-//	    cv::meanStdDev(img(roi), tmpAvg, tmpSD, mask(roi) == i);    //find avg and std mean using mask of color i
-	    tmpAvg = cv::mean(img(roi), mask(roi) == i);
-	    tmpSD = tmpAvg;
+	    cv::meanStdDev(img(roi), tmpAvg, tmpSD, mask(roi) == i);    //find avg and stddev using mask of color i
 
 	    out[i].avgColor   [0] = tmpAvg[0];  //assign tmp valued (Scalar) to output (Vec3b)
 	    out[i].avgColor   [1] = tmpAvg[1];
@@ -192,7 +173,7 @@ vector< feature > getFeaturesInfo(const cv::Mat& img, const vector< vector<cv::P
 
 	    //get geometry info
 		cv::Moments m   = cv::moments(mask, true);
-  		out[i].centroid = cv::Point(m.m10/m.m00, m.m01/m.m00);
+  		out[i].centroid = cv::Point(m.m10/m.m00, m.m01/m.m00);  //centroid is computed from image moments
 
   		out[i].boundingBox = roi;
   		out[i].area = std::fabs(cv::contourArea(contours[i]));
@@ -201,12 +182,14 @@ vector< feature > getFeaturesInfo(const cv::Mat& img, const vector< vector<cv::P
 	return out;
 }
 
+//discard features not relevant to robot operation
+//fill the "colorName" field of the selected features
 void filterFeatures(vector< feature > in, vector< feature >& out,
-	                const palette& pal, float maxDistance)
+	                const palette& pal)
 {
 	out.clear();
 
-	//for each feature, find the closest color and only 
+	//for each feature, find the closest color
 	for(int i = 0; i < in.size(); i++)
 	{
 		//get current color
@@ -217,11 +200,11 @@ void filterFeatures(vector< feature > in, vector< feature >& out,
 		cv::Vec3b closest_color = pal.getColor(closest_color_index);
 
 		//filter by max distance
-		if(colorDistance(closest_color, cur_color) < maxDistance)
-			out.push_back(in[i]);
-
-		//only add feature to output if it is a color of interest
-
+		if(colorDistance(closest_color, cur_color) < pal.getMaxDistance(closest_color_index))
+		{
+			out.push_back(in[i]);      //only add feature to output if it is a color of interest
+			out.back().colorName = pal.getName(closest_color_index);  //give a name to the feature's avg color
+		}
 	}
 }
 
@@ -249,16 +232,30 @@ int getClosestColorInPalette(cv::Vec3b color, const palette& pal)
 
 ////////////// implement palette class ///////////////
 
-void palette::addColor(int B, int G, int R)
+void palette::addColor(Scalar BGR, float maxDist)
 {
-	cv::Vec3b newColor(B, G, R);
-	colors.push_back(newColor);
-}
-
-void palette::addColor(Scalar BGR)
-{
+	//add color
 	cv::Vec3b newColor(BGR[0], BGR[1], BGR[2]);
 	colors.push_back(newColor);
+
+	//add distance
+	maxDistances.push_back(maxDist);
+
+	//use empty string as name
+	names.push_back(std::string(""));
+}
+
+void palette::addColor(Scalar BGR, float maxDist, string name)
+{
+	//add color
+	cv::Vec3b newColor(BGR[0], BGR[1], BGR[2]);
+	colors.push_back(newColor);
+
+	//add distance
+	maxDistances.push_back(maxDist);
+
+	//add name
+	names.push_back(name);
 }
 
 int palette::size() const
@@ -269,6 +266,16 @@ int palette::size() const
 cv::Vec3b palette::getColor(int i) const
 {
 	return colors[i];
+}
+
+float palette::getMaxDistance(int i) const
+{
+	return maxDistances[i];
+}
+
+string palette::getName(int i) const
+{
+	return names[i];
 }
 
 bool palette::hasColor(cv::Vec3b c) const

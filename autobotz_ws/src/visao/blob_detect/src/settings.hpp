@@ -35,9 +35,12 @@ class settingsServer_T
 		settingsServer_T();
 		//constructor
 
-		void updateFromFile(std::string fileName);
+		void updateSettingsFromFile(std::string fileName);
 		//parses a settings file and write the new values
 		//to the settings variables
+		void updatePaletteFromFile(std::string fileName);
+		//parses a palette file and write the new
+		//values to targetPalette
 
 		//TODO: maybe a way to get settings from ROS?
 
@@ -54,9 +57,17 @@ class settingsServer_T
 			double getEdges_high_threshold;
 			int    getEdges_kernel_size   ;
 
-	private:
-		//functions to help in parsing the configuration file
+		//paltte used in clipping colors to send to ROS
+			palette targetPalette;
 
+	private:
+		//functions to help in parsing the configuration files
+
+		int parsePaletteLine(std::string L, 
+			                 int& B, int& G, int& R, float& maxDist, string& name);
+		//extracts information from a string containing a line from a palette file
+		//
+		//returnss -1 if there was an error, 0 otherwise
 };
 
 #endif

@@ -1,5 +1,8 @@
-<!-- -->
+<!-- this launch also records all topics to a rosbag file -->
 <launch>
+	<!-- launch rosbag to record all topics -->
+	<node name="rosbag" pkg="rosbag" type="rosbag" args="-a" /> 
+	
 	<!-- start kinect server -->
 	<include file="$(find freenect_launch)/launch/freenect.launch" />
 	

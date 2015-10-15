@@ -15,14 +15,16 @@
 #include <opencv2/core/core.hpp>
 //include vision.hpp to use the 'feature' data type
 #include "vision.hpp"
-//custom message to tell ROS about features
-#include "blob_detect/feature1.h"
+//custom messages to tell ROS about features
+#include "blob_detect/feature.h"     //data about a single feature
+#include "blob_detect/featureVec.h" //message containing a list of features
 
 /////////////////////////// data structures ///////////////////
 
 typedef struct {
  		ros::NodeHandle* nh;
- 		image_transport::Subscriber color_sub;  //subscriber for the color image topic
+ 		image_transport::Subscriber color_sub;     //subscriber for kinects's color image topic
+ 		ros::Publisher              features_pub;  //publishes vectors of features
 
  		cv::Mat lastFrame;        //stores the last frame received from ROS
  		unsigned long frameCnt;   //counter that is incremented each time a frame is received

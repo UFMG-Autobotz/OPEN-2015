@@ -36,8 +36,10 @@ include_directories(include ${catkin_INCLUDE_DIRS})
 add_executable(infoP src/Publica.cpp) 
 target_link_libraries(infoP ${catkin_LIBRARIES})
 
+
 add_executable(infoS src/Velocidade_real.cpp) 
 target_link_libraries(infoS ${catkin_LIBRARIES})
+add_dependencies(infoS ${catkin_EXPORTED_TARGETS})
 
 #add_executable(infoS src/Processamento/subscreve.cpp) 
 #target_link_libraries(infoS ${catkin_LIBRARIES})

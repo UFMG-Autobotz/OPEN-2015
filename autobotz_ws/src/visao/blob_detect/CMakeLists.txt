@@ -117,7 +117,7 @@ include_directories(
 
 add_executable(blob_detect src/main.cpp src/vision.cpp src/blob_detect_ROS.cpp src/UI.cpp src/settings.cpp)
 target_link_libraries(blob_detect ${catkin_LIBRARIES})
-add_dependencies(blob_detect ${catkin_EXPORTED_TARGETS})
+add_dependencies(blob_detect ${blob_detect_EXPORTED_TARGETS})
 
 ## Add cmake target dependencies of the executable/library
 ## as an example, message headers may need to be generated before nodes

@@ -4,7 +4,7 @@ Desenvolvido por Gustavo Martins Domingues
 (31) 9405-5012
 gustdomar@gmail.com
 
-Código principal do pacote de estratéiga
+Código principal do pacote de controle
 */
 
 
@@ -17,7 +17,7 @@ Código principal do pacote de estratéiga
 #include <std_msgs/Float32.h>
 #include <geometry_msgs/Point.h>
 #include <stdio.h>
-
+#include <stdlib.h>
 
 
 // ---------------- ARQUIVOS INCLUSOS ------------------
@@ -28,18 +28,19 @@ Código principal do pacote de estratéiga
 
 #define TELA_LIN 480
 #define TELA_COL 640
-#define VEL_MAX 510
-#define VEL_MIN 0
+#define VEL_MAX 255
+#define VEL_MIN -255
 #define VEL_NOR 80 // intervalo de -255 a 255
-#define VEL_RET 400
-#define VEL_P_ANG 1.4
+#define VEL_RET 100
+//#define VEL_P_ANG 1.2
+//#define VEL_D_ANG 1.6
 #define VEL_P_DIST 1.4
 #define DIST_P 5.0
 #define DIST_MIN 12.0
 
 
 #define MODO 2
-#define ANG -20.3 // intervalo considerado de -180 a 180
+//#define ANG -20.3 // intervalo considerado de -180 a 180
 
 // ----------------- VARIÁVEIS GLOBAIS ------------------
 
@@ -116,8 +117,19 @@ int main(int argc, char **argv){
 	start = false;
     geometry_msgs::Point objetivo;
     float erro_ang;
+    float ang_anterior;
+
+    if(!argv[1] || !argv[2] || !argv[3]){
+        ROS_INFO("\n\nUse: rosrun nome_do_pacote control [Angulo desejado] [KP = constante proporcional do angulo] [KD = constante derivativa do angulo]\n\n");
+        return -1;
+    }
 
 
+    // parametros recebidos na chamada do nó
+    float ANG = atof(argv[0]);
+    float VEL_P_ANG = atof(argv[1]);
+    float VEL_D_ANG = atof(argv[2]);
+    
 
 	// init ROS stuff
 	ros::init(argc, argv, "controle");
@@ -160,14 +172,18 @@ int main(int argc, char **argv){
 
 
         // proporcional para distancia
-        msg_propulsorR.data = VEL_NOR;
+        //msg_propulsorR.data = VEL_NOR;
+        //msg_propulsorL.data = VEL_NOR;
+        msg_propulsorR.data = 0;
+        msg_propulsorL.data = 0;
 
         // proporcional para angulo
         msg_propulsorR.data += erro_ang * VEL_P_ANG;
         msg_propulsorL.data -= erro_ang * VEL_P_ANG;
 
-        
-
+        // derivativo para angulo
+        msg_propulsorR.data += (yaw - ang_anterior) * VEL_D_ANG;
+        msg_propulsorL.data -= (yaw - ang_anterior) * VEL_D_ANG;
 
         printf ("GANHO: %.2f\n", erro_ang *VEL_P_ANG);
 
@@ -199,14 +215,16 @@ int main(int argc, char **argv){
         */
 
 
-
+/*
         // se esta chegando perto de um obstaculo, freia
         if (distF < DIST_MIN){
 
         	msg_propulsorR.data = VEL_NOR * (distF/DIST_MIN);
 
         }
+*/
 
+        
 
         // limita as velocidades
         // motor ESQUERDO
@@ -226,7 +244,12 @@ int main(int argc, char **argv){
 		 pubR.publish(msg_propulsorR);
          pubL.publish(msg_propulsorL);   
 
-		 // Wait un t i l i t ' s time for another i t e ra t ion .
+
+        // pega o valor anterior do angulo para uso do controle derivativo do angulo
+        ang_anterior =  yaw;
+         
+
+		 // Wait until it's time for another iteration .
 		 rate.sleep();
 		 ros::spinOnce();
  	}

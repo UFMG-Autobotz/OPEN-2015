@@ -11,6 +11,8 @@
 	
 	<node name="propulsores" pkg="rosserial_python" type="serial_node.py" args="/dev/ttyACM1" />
 	
+	<!-- IMU -->
+	<node name="IMU" pkg="rosserial_python" type="serial_node.py" args="arducom 24" />
 	
 	<!-- estrategia -->
 	<node name="estrategia" pkg="estrategia" type="strategy" />

@@ -17,12 +17,16 @@ Descrição do arquivo
 
 // ---------------- ARQUIVOS INCLUSOS ------------------
 
-
+#ifndef INCLUIR
+#define INCLUIR
 
 #include "robo.h"
 #include "estados.h"
-#include "transporte.h"
+#include "transportarBloco.h"
+#include "pegarBloco.h"
 
+
+#endif
 
 // -------------------- CONSTANTES --------------------
 
@@ -48,28 +52,32 @@ Descrição do arquivo
 
 ----------------------------------------------------------*/
 
-int pegarBloco(int estado_atual, Robo *barco){
+int pegarBloco(int *estado_atual, Robo *barco, int tem_bloco[2]){
 
 	
 
 	    // troca entre estados de mais alto nivel
-    switch(estado_atual){
+    switch(*estado_atual){
 
     
 
     	case 10: // estado IDENTIFICAR BLOCOS
     		
 
+            *estado_atual = 11;
+            // acho que isso é só ler do topico de visao o tempo todo e guardar no objeto barco
     		break;
 
     	case 11: // estado ESCOLHER BLOCO
 
-    		
+            *estado_atual = 12;
+    		// pega o array de blocos e mantem track da posicao do melhor deles
     		break;
 
-    	case 12: // estado MOVER BRACO
+    	case 12: // estado ESTENDER BRACO
 
-    		
+    		if (estenderBraco(barco, tem_bloco))
+                *estado_atual = 31;
     		break;
 
     	case 13: // estado AGARRAR
@@ -111,26 +119,26 @@ int pegarBloco(int estado_atual, Robo *barco){
 
 ----------------------------------------------------------*/
 
-int colocarBloco(int estado_atual, Robo *barco){
+int colocarBloco(int *estado_atual, Robo *barco){
 
 
 	    // troca entre estados de mais alto nivel
-    switch(estado_atual){
+    switch(*estado_atual){
 
-    	case 30: // estado EXTENDER BRACO
+    	case 30: // estado ESTENDER BRACO
     		
 
-
+            // publicar velocidade dos motores do braço para extender o braço até a garra alcançar algum bloco
     		break;
 
     	case 31: // estado DEIXAR BLOCO
 
-    		
+    		// publicar velocidade do motor da garra para largar o bloc, talvez não seja necessário um estado só para isso
     		break;
 
     	case 32: // estado RECOLHER
 
-    		
+    		// publicar velocidade dos motores do braço para recolher o braço até a garra estar no casco de volta
     		break;
 
     	case 33: // estado CONTAR
@@ -145,7 +153,7 @@ int colocarBloco(int estado_atual, Robo *barco){
 
     	case 34: // estado PEGAR SEGUNDO BLOCO
 
-    		
+    		// por enquanto nao sera implementado, primeiro deve-se conseguir pegar um bloco
     		break;
 
 

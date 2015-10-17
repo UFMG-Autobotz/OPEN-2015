@@ -42,8 +42,8 @@ gustdomar@gmail.com
       int lado_arena; // -1 indica porto, 1 indica plataforma
       geometry_msgs::Pose2D posicao;
       geometry_msgs::Pose2D objetivo;
-      estrategia::velocidade velocidade; // checar se este membro eh realmente necessário
-      estrategia::velocidade vel_desejada;
+      estrategia::velocidade velocidade_braco; 
+      estrategia::velocidade velocidade_barco;
       estrategia::trajetoria trajetoria;
 
 
@@ -57,8 +57,8 @@ gustdomar@gmail.com
       void addBlocoAmarelo();
       void setPosicao(float x, float y, float theta);
       void setObjetivo(float x, float y, float theta);
-      void setVelocidade(float linear, float angular);
-      void setVelDesejada(float linear, float angular);
+      void setVelocidadeBarco(float linear, float angular);
+      void setVelocidadeBraco(float linear, float angular);
       void setTrajetoria(float x, float y, float theta);
       
       // Get
@@ -68,7 +68,8 @@ gustdomar@gmail.com
       geometry_msgs::Pose2D getPosicao();
       geometry_msgs::Pose2D getObjetivo();
       estrategia::velocidade getVelocidade();
-      estrategia::velocidade getVelDesejada();
+      estrategia::velocidade getVelocidadeBarco();
+      estrategia::velocidade getVelocidadeBraco();
       estrategia::trajetoria getTrajetoria();
 
       // outros

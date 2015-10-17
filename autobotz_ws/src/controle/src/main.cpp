@@ -120,7 +120,7 @@ int main(int argc, char **argv){
     float ang_anterior;
 
     if(!argv[1] || !argv[2] || !argv[3]){
-        ROS_INFO("\n\nUse: rosrun nome_do_pacote control [Angulo desejado] [KP = constante proporcional do angulo] [KD = constante derivativa do angulo]\n\n");
+        ROS_INFO("\n\nUse: rosrun controle control [Angulo desejado] [KP = constante proporcional do angulo] [KD = constante derivativa do angulo]\n\n");
         return -1;
     }
 

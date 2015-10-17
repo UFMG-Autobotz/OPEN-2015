@@ -35,7 +35,8 @@ Código principal do pacote de estratéiga
 // ----------------- VARIÁVEIS GLOBAIS ------------------
 
 bool start;
-Robo barco;
+Robo barco; // assim não chama o construtor
+int tem_bloco[2];
 
 int blocos_vermelhos, blocos_amarelos;
 
@@ -53,6 +54,13 @@ void posicaoMsgRecieved (const geometry_msgs::Pose2D& msg){
 
  }
 
+ //void temBlocoMsgRecieved (const geometry_msgs::Pose2D& msg){
+
+    //tem_bloco[0] = ;
+    //tem_bloco[1] = ;
+
+ //}
+
 
 // ------------------ MAIN FUNCTION-------------------
 
@@ -63,6 +71,8 @@ int main(int argc, char **argv){
 
 
 	int estado_atual;
+
+
 	estado_atual = 0;
 	start = false;
 
@@ -114,7 +124,8 @@ int main(int argc, char **argv){
 
 	    	case 10: // estado PEGAR BLOCO
 
-	    		//pegarBloco(estado_atual);
+	    		//pegarBloco(estado_atual, array_de_blocos_visiveis, tem_bloco[2]);
+	    		pegarBloco(&estado_atual, &barco, tem_bloco);
 	    		estado_atual = 20;
 	    		break;
 
@@ -160,7 +171,7 @@ int main(int argc, char **argv){
     	// preenchendo o que sera publicado
 		msg_estado.data = estado_atual;
 		msg_trajetoria = barco.getTrajetoria();
-		msg_velocidade = barco.getVelocidade();
+		msg_velocidade = barco.getVelocidadeBarco();
 
 		 // Publish the message 
 		 pub_estado.publish(msg_estado);

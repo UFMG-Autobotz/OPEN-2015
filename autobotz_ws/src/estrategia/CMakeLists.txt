@@ -39,7 +39,7 @@ include_directories(include ${catkin_INCLUDE_DIRS})
 #----------------------- ESTRATEGIA  ------------------------ #
 
 
-add_executable(strategy src/robo.cpp src/transporte.cpp src/estados.cpp src/main.cpp) 
+add_executable(strategy src/robo.cpp src/pegarBloco.cpp src/transportarBloco.cpp src/estados.cpp src/main.cpp) 
 target_link_libraries(strategy ${catkin_LIBRARIES}) 
 
 add_dependencies(strategy ${estrategia_EXPORTED_TARGETS})

@@ -1,0 +1,28 @@
+<!-- inicia os nos do barco usando envrionment variables
+     para saber em que porta esta cada arduino             -->
+<launch>
+	<!-- start kinect server -->
+	<include file="$(find freenect_launch)/launch/freenect.launch" />
+	
+	<!-- launch vision code -->
+	<node name="blob_detect" pkg="blob_detect" type="blob_detect" />
+	
+	<!-- rosserial_arduino -->
+		<!-- ultrassom e base giratoria -->
+		<node name="ardusom" pkg="rosserial_python" type="serial_node.py" args="$(env BARCO_LAUNCH_ARDUSOM)"   />
+		<!-- ponte H e radio -->
+		<node name="turbino" pkg="rosserial_python" type="serial_node.py" args="$(env BARCO_LAUNCH_TURBINO)" />
+		<!-- caracol e garra -->
+		<node name="arducol" pkg="rosserial_python" type="serial_node.py" args="$(env BARCO_LAUNCH_ARDUCOL)" />
+
+	
+	<!-- IMU -->
+	<!-- <node name="IMU" pkg="rosserial_python" type="arducom" args="arducom 24" />
+	-->
+	<!-- estrategia -->
+	<node name="estrategia" pkg="estrategia" type="strategy" />
+
+	<!-- controle -->
+	<node name="controle" pkg="controle" type="control" />
+</launch>
+

@@ -26,6 +26,8 @@
 #include <iostream>
 #include <fstream>
 
+#include <ros/ros.h>
+
 #include "tinydir.h"  //biblioteca para acessar diretorios
 using namespace std;
 
@@ -48,6 +50,8 @@ void calibra_imu();   //calibra a imu
 vector < string > listaArquivos(const char* dir);
 vector < string > achaNovosElementos(vector < string > antigo, vector < string > novo);
 vector < string > filtraPorSubstring(vector <string> in, const char* mask);
+
+void runOnNewTerminal(string command, bool keepOpen = true);
 
 string conectaArduino(const char* nome_legivel);
 
@@ -141,17 +145,66 @@ void arduinos()
 
 void launch(bool rec)
 {
-	
+	////////////////     carregar endereco de cada ultrassom a partir    /////////////////////
+	////////////////            do arquivo de configuracao               /////////////////////
+	ifstream fin;
+	fin.open(arquivo_conf_arduino);
+	if(!fin.is_open() || !fin.good())
+	{
+		cout << "ERRO: leitura do arquivo de configuracao dos arduinos falhou!" << endl;
+		cout << "      working dir: "; system("pwd");
+		cout << "      tentou ler " << arquivo_conf_arduino << endl;
+		return;
+	}
+
+	string ardu_prop;
+	string ardu_som;
+	string ardu_col;
+	string ardu_imu;
+
+	//o programa assume que o arquivo de configuracao dos ultrassons contem o caminho
+	//para os quatro arquivos associados aos arduinos, cada um em uma linha e 
+	//na ordem mostrada abaixo
+	getline(fin, ardu_prop);
+	getline(fin, ardu_som);
+	getline(fin, ardu_col);
+	getline(fin, ardu_imu);
+
+	//TODO: do some checking on the values read from the file
+
+	fin.close()
+
+	/////////////////////////   iniciar ROS e talvez rosbag   ////////////////////////
+	ros::init()
+	if(!ros::master::check()) // if rosmaster is not active
+		runOnNewTerminal("roscore");
+
+	if(rec)  //if rosbag should be run
+		runOnNewTerminal("rosrun rosbag record -a");
+
+
+	/////////////////      iniciar coisas do barco com roslaunch    //////////////////
+
+	string cmd = "export BARCO_LAUNCH_TURBINO && "
+	           + "export BARCO_LAUNCH_ARDUSOM && "
+	           + "export BARCO_LAUNCH_ARDUCOL && "
+	           + "export BARCO_LAUNCH_ARDUIMU && "
+	           + "roslaunch barco_launch using_env_vars.launch";
+	//set environment variables (export) and launch
+	//all the nodes with the appropriate launch file
+	runOnNewTerminal(cmd);
+
+
 }
 
 void calibra_us()
 {
-	
+	cout << "A ser implementado !!!" << endl;
 }
 
 void calibra_imu()
 {
-	
+	cout << "A ser implementado !!!" << endl;
 }
 
 ///////////////////////////////////////////////////////////////
@@ -264,4 +317,16 @@ string conectaArduino(const char* nome_legivel)
 	}
 
 	return devDir + dif[0];
+}
+
+//use feats of linux sorcery to launch a new terminal
+//where "command" will be run
+//
+//The terminal may be kept open after comand is done 
+void runOnNewTerminal(string command, bool keepOpen = true)
+{
+	string s;
+
+	s = "gnome-terminal -x \" bash -e \" " + command + "\"\"";
+	system(s);
 }

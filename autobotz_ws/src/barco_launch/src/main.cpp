@@ -35,7 +35,7 @@ using namespace std;
 const char* devDir            = "/dev/";  //diretorio de dispositivos do linux
 const char* arduino_substring = "ACM"; //substring que difere um arduino dos outros tty
 
-const char* arquivo_conf_arduino = "visao/arduinos.conf";  //arquivo que guarda em qual porta 
+const char* arquivo_conf_arduino = "config/arduinos.conf";  //arquivo que guarda em qual porta 
                                                             //esta cada arduino
 
 ////////////////////////////////////////////
@@ -57,6 +57,9 @@ string conectaArduino(const char* nome_legivel);
 
 int main(int argc, char** argv)
 {
+	//init ROS in order to be able to check if master is up
+	ros::init(argc, argv, "barco_launch");
+
 	//////// tratar os argumentos passados ao programa
 	char arg_rec    [] = "rec"; 	//strings de argumentos correspondentes aos modos
 	char arg_cal_us [] = "calibra-us";
@@ -172,10 +175,9 @@ void launch(bool rec)
 
 	//TODO: do some checking on the values read from the file
 
-	fin.close()
+	fin.close();
 
-	/////////////////////////   iniciar ROS e talvez rosbag   ////////////////////////
-	ros::init()
+	/////////////////////////   iniciar ROS master e talvez rosbag   ////////////////////////
 	if(!ros::master::check()) // if rosmaster is not active
 		runOnNewTerminal("roscore");
 
@@ -185,11 +187,12 @@ void launch(bool rec)
 
 	/////////////////      iniciar coisas do barco com roslaunch    //////////////////
 
-	string cmd = "export BARCO_LAUNCH_TURBINO && "
-	           + "export BARCO_LAUNCH_ARDUSOM && "
-	           + "export BARCO_LAUNCH_ARDUCOL && "
-	           + "export BARCO_LAUNCH_ARDUIMU && "
-	           + "roslaunch barco_launch using_env_vars.launch";
+	string cmd("");
+	cmd += "export BARCO_LAUNCH_TURBINO && ";
+	cmd += "export BARCO_LAUNCH_ARDUSOM && ";
+	cmd += "export BARCO_LAUNCH_ARDUCOL && ";
+	cmd += "export BARCO_LAUNCH_ARDUIMU && ";
+	cmd += "roslaunch barco_launch using_env_vars.launch";
 	//set environment variables (export) and launch
 	//all the nodes with the appropriate launch file
 	runOnNewTerminal(cmd);
@@ -323,10 +326,10 @@ string conectaArduino(const char* nome_legivel)
 //where "command" will be run
 //
 //The terminal may be kept open after comand is done 
-void runOnNewTerminal(string command, bool keepOpen = true)
+void runOnNewTerminal(string command, bool keepOpen)
 {
 	string s;
 
 	s = "gnome-terminal -x \" bash -e \" " + command + "\"\"";
-	system(s);
+	system(s.c_str());
 }

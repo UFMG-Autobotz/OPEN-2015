@@ -15,11 +15,11 @@ if [ -e "src/CMakeLists.txt" ]; then
 fi
 source /opt/ros/indigo/setup.bash
 
-#copy vision configuration to ROS home (~/.ros)
+#copy vision configuration to autobotz_ws/config
 if [ -e "src/visao/blob_detect/config/palette.conf" ]; then
-	if [ -e "~/.ros/" ]; then
-		mkdir .ros/visao/ >/dev/null 2>&1
-		cp src/visao/blob_detect/config/palette.conf ~/.ros/visao/palette.conf
+	if [ -e "~/open-2015/autobotz_ws/" ]; then
+		mkdir ~/open-2015/autobotz_ws/config >/dev/null 2>&1
+		cp src/visao/blob_detect/config/palette.conf ~/open-2015/autobotz_ws/config/palette.conf
 	fi
 fi
 

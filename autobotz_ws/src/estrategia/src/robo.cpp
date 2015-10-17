@@ -103,6 +103,12 @@ void Robo::setVelocidadeBraco(float linear, float angular){
 
 }
 
+void Robo::setVelocidadeGarra(float linear, float angular){
+
+   this->velocidade_garra.linear.data = linear;
+   this->velocidade_garra.angular.data = angular;
+
+}
 
 // Get
 
@@ -140,6 +146,11 @@ estrategia::velocidade Robo::getVelocidadeBarco(){
 estrategia::velocidade Robo::getVelocidadeBraco(){
 
    return this->velocidade_braco;
+
+}
+estrategia::velocidade Robo::getVelocidadeGarra(){
+
+   return this->velocidade_garra;
 
 }
 estrategia::trajetoria Robo::getTrajetoria(){

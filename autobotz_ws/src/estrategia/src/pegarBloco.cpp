@@ -14,6 +14,7 @@ Código principal do pacote de estratéiga
 #include <math.h>
 #include <geometry_msgs/Pose2D.h>
 
+
 // ---------------- ARQUIVOS INCLUSOS ------------------
 
 
@@ -31,9 +32,10 @@ Código principal do pacote de estratéiga
 
 // -------------------- CONSTANTES --------------------
 
-#define VEL_LIN_BRACO 150
-#define VEL_LIN_BRACO_DEVAGAR 50
-#define VEL_ANG_BRACO 60
+#define DELAY_GARRA 2 // em segundos
+#define VEL_GARRA 70.0
+#define VEL_LIN_BRACO 100
+#define VEL_LIN_BRACO_DEVAGAR 50 
 
 // ----------------- VARIÁVEIS GLOBAIS ------------------
 
@@ -82,3 +84,22 @@ int estenderBraco(Robo *barco, int tem_sensor[2]){
 	return 0;
 }
 
+
+
+
+/* ------------------ FUNCAO AGARRABLOCO -------------------
+
+	Entrada: Objeto do tipo Robo (classe definida em robo.cpp)
+	Saida: 1 ou 0. 1 indica que a o bloco já está preso de maneira segura na garra
+	Finalidade: Fechar a garra e prender o bloco
+
+------------------------------------------------------------*/
+
+int agarrarBloco(Robo *barco){
+
+	// velocidade angular da garra igual a 0
+	barco->setVelocidadeGarra(VEL_GARRA, 0);
+
+	return 1;
+
+}

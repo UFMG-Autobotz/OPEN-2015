@@ -77,12 +77,14 @@ int pegarBloco(int *estado_atual, Robo *barco, int tem_bloco[2]){
     	case 12: // estado ESTENDER BRACO
 
     		if (estenderBraco(barco, tem_bloco))
-                *estado_atual = 31;
+                *estado_atual = 13;
     		break;
 
     	case 13: // estado AGARRAR
 
-    		
+            // tem que fazer alguma coisa pra manter o motor funcionando o tempo necessario
+            if (agarrarBloco(barco))
+                *estado_atual = 14;
     		break;
 
     	case 14: // estado RECOLHER

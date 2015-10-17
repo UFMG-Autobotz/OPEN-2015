@@ -44,6 +44,7 @@ gustdomar@gmail.com
       geometry_msgs::Pose2D objetivo;
       estrategia::velocidade velocidade_braco; 
       estrategia::velocidade velocidade_barco;
+      estrategia::velocidade velocidade_garra;
       estrategia::trajetoria trajetoria;
 
 
@@ -59,6 +60,7 @@ gustdomar@gmail.com
       void setObjetivo(float x, float y, float theta);
       void setVelocidadeBarco(float linear, float angular);
       void setVelocidadeBraco(float linear, float angular);
+      void setVelocidadeGarra(float linear, float angular);
       void setTrajetoria(float x, float y, float theta);
       
       // Get
@@ -69,6 +71,7 @@ gustdomar@gmail.com
       geometry_msgs::Pose2D getObjetivo();
       estrategia::velocidade getVelocidade();
       estrategia::velocidade getVelocidadeBarco();
+      estrategia::velocidade getVelocidadeGarra();
       estrategia::velocidade getVelocidadeBraco();
       estrategia::trajetoria getTrajetoria();
 

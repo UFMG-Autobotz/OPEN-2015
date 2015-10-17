@@ -178,7 +178,7 @@ int main(int argc, char **argv){
 		 pub_trajetoria.publish(msg_trajetoria);
 		 pub_velocidade.publish(msg_velocidade);
 
-		 // Wait un t i l i t ' s time for another i t e ra t ion .
+		 // Wait untilit's time for another iteration.
 		 rate.sleep();
 		 ros::spinOnce();
  	}

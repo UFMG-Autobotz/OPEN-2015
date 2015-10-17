@@ -23,3 +23,5 @@ gustdomar@gmail.com
 // -------------------- CABEÇALHOS --------------------
 
 int estenderBraco(Robo *barco, int tem_bloco[2]);
+
+int agarrarBloco(Robo *barco);

@@ -8,7 +8,7 @@ Para ver o que está sendo publicado no tópico: rostopic echo /eletronica/ultra
 
 IMU:
 
-rosrun rosserial_python serial_node.py arducom 24 (24 corresponde a ACM0, 25 à ACM1 e assim por diante)
+rosrun imu arducom 24 (24 corresponde a ACM0, 25 à ACM1 e assim por diante)
 
 Propulsores (Ponte-H):
 

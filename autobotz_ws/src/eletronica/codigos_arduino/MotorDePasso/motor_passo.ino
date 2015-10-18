@@ -16,7 +16,6 @@
 const int stepper_pins[] = {8, 9, 10, 11}; //pinos nos quais esta o stepper
                                           //Os pinos sao ativados na ordem
                                           //desse vetor
-unsigned char indice;  //posicao atual no vetor de pinos
 
 const int T_min = 100;  //menor periodo (|vel| = 255) em ms
                        //1 periodo = ciclo de ativacao dos 4 pinos
@@ -57,24 +56,30 @@ void messageCb(const std_msgs::Int32& msg)
 
 void step()   //faz um passo do stepper
 {	
-	unsigned char atual = stepper_pins[indice];
-	unsigned char proximo;
-	if(indice == 3)
+        static int indice = 0;    
+  
+	int atual = stepper_pins[indice];
+	int proximo;
+	if(indice >= 3)
+        {
 		proximo = stepper_pins[0];
+                indice = 0;
+        }
 	else
-		proximo = stepper_pins[indice+1];
-	
+        {
+		proximo = stepper_pins[indice + 1];
+                indice++;
+        }
+        
 	digitalWrite(atual, LOW);
 	digitalWrite(proximo, HIGH);
-
-        indice++;
 }
 
 unsigned long time_start;
 
 void setup()
 {
-	for(int i = 0; i < 3; i++)
+	for(int i = 0; i < 4; i++)
 		pinMode(stepper_pins[i], OUTPUT);
 	
 	nh.initNode();
@@ -82,8 +87,8 @@ void setup()
 
         time_start = micros();
 
-    pinMode(13, OUTPUT);
-    digitalWrite(13, HIGH);
+    pinMode(13, OUTPUT);     //for debug only
+    digitalWrite(13, HIGH);  // 
 }
 
  
@@ -94,10 +99,10 @@ void loop()
 	//se já passou um quarto de periodo
 	if((micros() - time_start)/1000 >= T_atual/4)
  	{
-           digitalWrite(13, HIGH - digitalRead(13));
  		step();
  		time_start = micros();
- 	}		
- 	
-}
+ 	}
  
+       delay(50);
+}
+

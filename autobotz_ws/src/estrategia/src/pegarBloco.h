@@ -5,14 +5,12 @@ Desenvolvido por Gustavo Martins Domingues
 (31) 9405-5012
 gustdomar@gmail.com
 
-Descrição do arquivo
 */
 
 
 
 // -------------------- BIBLIOTECAS --------------------
 
-#include <stdio.h>
 #include <ros/ros.h>
 
 // ---------------- ARQUIVOS INCLUSOS ------------------
@@ -24,9 +22,6 @@ Descrição do arquivo
 
 // -------------------- CABEÇALHOS --------------------
 
+int estenderBraco(Robo *barco, int tem_bloco[2]);
 
-int pegarBloco(int *estado_atual, Robo *barco, int tem_bloco[2]);
-
-//int colocarBloco(int *estado_atual, Robo *barco);
-
-int transportarBloco(int *estado_atual, Robo *barco);
+int agarrarBloco(Robo *barco);

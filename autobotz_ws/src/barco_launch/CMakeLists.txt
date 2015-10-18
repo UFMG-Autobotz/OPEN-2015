@@ -4,7 +4,8 @@ project(barco_launch)
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
-find_package(catkin REQUIRED COMPONENTS roslaunch)
+find_package(catkin REQUIRED COMPONENTS roslaunch
+                                        roscpp)
 roslaunch_add_file_check(launch/barco.launch)
 
 ## System dependencies are found with CMake's conventions
@@ -129,9 +130,9 @@ add_executable(barco_launch src/main.cpp)
 # add_dependencies(barco_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 ## Specify libraries to link a library or executable target against
-# target_link_libraries(barco_node
-#   ${catkin_LIBRARIES}
-# )
+ target_link_libraries(barco_launch
+   ${catkin_LIBRARIES}
+ )
 
 #############
 ## Install ##

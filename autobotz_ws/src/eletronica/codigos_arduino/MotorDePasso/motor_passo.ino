@@ -7,7 +7,7 @@
 // de -255 a 255, onde 0 é parado
 
 #include <ros.h>
-#include <std_msgs/UInt32.h>
+#include <std_msgs/Int32.h>
 
 #define INF 60000
 
@@ -18,31 +18,41 @@ const int stepper_pins[] = {8, 9, 10, 11}; //pinos nos quais esta o stepper
                                           //desse vetor
 unsigned char indice;  //posicao atual no vetor de pinos
 
-const int T_min = 10;  //menor periodo (|vel| = 255) em ms
+const int T_min = 100;  //menor periodo (|vel| = 255) em ms
                        //1 periodo = ciclo de ativacao dos 4 pinos
-const int T_max = 100;
+const int T_max = 1000;
 
 /////// vairaveis para o ROS
 ros::NodeHandle nh;
-ros::Subscriber<std_msgs::Int32> sub("toggle_led", &messageCb);
+void messageCb(const std_msgs::Int32& msg);
+const char* ROS_stepper_topic = "/eletronica/base/stepper";
+ros::Subscriber<std_msgs::Int32> sub(ROS_stepper_topic, &messageCb);
 
 int T_atual = 0; //periodo a ser setado a partir do topico do ROS
+int dir;      //direcao do stepper
 
-const char* ROS_stepper_topic = "/eletronica/base/stepper";
-
-
-//callback para pegar o valor de velocidade no topic
+//callback para pegar o valor de velocidade no topico
 void messageCb(const std_msgs::Int32& msg)
 {
 	int vel = msg.data;
 	
-	if(vel > 255) vel =  255;
-	if(vel <-255) vel = -255;
+	if(vel > 0)
+	{
+		dir = 1;
+		if(vel >255)
+			vel =  255;
+	}
+	else if(vel < 0) 
+	{
+		dir = -1;
+		if(vel < -255)
+			vel = -255;
+	}
 	
 	if(vel == 0)
 		T_atual = INF;
 	else
-		T_atual = (abs(vel)/float(-255))*(T_max - T_min) + T_min;  //faz com que o periodo seja uma rampa linear
+		T_atual = ( 1 - float(abs(vel))/255 )*(T_max - T_min) + T_min;  //faz com que o periodo seja uma rampa linear
 }
 
 void step()   //faz um passo do stepper
@@ -56,7 +66,11 @@ void step()   //faz um passo do stepper
 	
 	digitalWrite(atual, LOW);
 	digitalWrite(proximo, HIGH);
+
+        indice++;
 }
+
+unsigned long time_start;
 
 void setup()
 {
@@ -64,27 +78,26 @@ void setup()
 		pinMode(stepper_pins[i], OUTPUT);
 	
 	nh.initNode();
-	nh.subscribe(ROS_stepper_topic);
+	nh.subscribe(sub);
+
+        time_start = micros();
+
+    pinMode(13, OUTPUT);
+    digitalWrite(13, HIGH);
 }
 
  
 void loop()
 {
- 	unsigned long time_start = micros();
+ 	nh.spinOnce();
  	
- 	while(1)
+	//se já passou um quarto de periodo
+	if((micros() - time_start)/1000 >= T_atual/4)
  	{
- 		nh.spinOnce();
+           digitalWrite(13, HIGH - digitalRead(13));
+ 		step();
+ 		time_start = micros();
+ 	}		
  	
-	 	//ajustar o período atual de acordo com vel
-	 	int T_atual = T_min * abs(vel)/float(255);
- 	
-		//se já passou um quarto de periodo
-	 	if((micros() - time_start)/1000 >= T_min/4)
-	 	{
-	 		step();
-	 		time_start = micros();
-	 	}		
- 	}
 }
  

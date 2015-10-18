@@ -90,19 +90,25 @@ void Robo::setTrajetoria(float x, float y, float theta){
    this->trajetoria.pontos.push_back(posicao);
  
 }
-void Robo::setVelocidade(float linear, float angular){
+void Robo::setVelocidadeBarco(float linear, float angular){
 
-   this->velocidade.linear.data = linear;
-   this->velocidade.angular.data = angular;
-
-}
-void Robo::setVelDesejada(float linear, float angular){
-
-   this->vel_desejada.linear.data = linear;
-   this->vel_desejada.angular.data = angular;
+   this->velocidade_barco.linear.data = linear;
+   this->velocidade_barco.angular.data = angular;
 
 }
+void Robo::setVelocidadeBraco(float linear, float angular){
 
+   this->velocidade_braco.linear.data = linear;
+   this->velocidade_braco.angular.data = angular;
+
+}
+
+void Robo::setVelocidadeGarra(float linear, float angular){
+
+   this->velocidade_garra.linear.data = linear;
+   this->velocidade_garra.angular.data = angular;
+
+}
 
 // Get
 
@@ -132,14 +138,19 @@ geometry_msgs::Pose2D Robo::getObjetivo(){
    return this->objetivo;
 
 }
-estrategia::velocidade Robo::getVelocidade(){
+estrategia::velocidade Robo::getVelocidadeBarco(){
 
-   return this->velocidade;
+   return this->velocidade_barco;
 
 }
-estrategia::velocidade Robo::getVelDesejada(){
+estrategia::velocidade Robo::getVelocidadeBraco(){
 
-   return this->vel_desejada;
+   return this->velocidade_braco;
+
+}
+estrategia::velocidade Robo::getVelocidadeGarra(){
+
+   return this->velocidade_garra;
 
 }
 estrategia::trajetoria Robo::getTrajetoria(){

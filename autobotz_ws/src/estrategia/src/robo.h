@@ -51,7 +51,7 @@ gustdomar@gmail.com
 
    public:
       // Construtor e Destrutor
-      Robo();
+      //Robo();
       // ~Robo();
       // Set
       void addBlocoVermelho();
@@ -77,7 +77,7 @@ gustdomar@gmail.com
 
       // outros
       void limpaTrajetoria();
-
+      void incializa();
    };
 
 

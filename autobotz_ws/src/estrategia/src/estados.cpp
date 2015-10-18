@@ -30,7 +30,7 @@ Descrição do arquivo
 
 // -------------------- CONSTANTES --------------------
 
-
+#define ANG_RECOLHIMENTO 60.0
 
 // ----------------- VARIÁVEIS GLOBAIS ------------------
 
@@ -89,17 +89,26 @@ int pegarBloco(int *estado_atual, Robo *barco, int tem_bloco[2]){
 
     	case 14: // estado RECOLHER
 
-    		
-    		break;
+    		if (recolherBraco(barco)) // precisa saber de onde vira informacao da hora de parar
+                *estado_atual = 15;
+            break;
 
     	case 15: // estado GUARDAR
 
-    		
+    		if (guardarBraco(barco, ANG_RECOLHIMENTO)) 
+                *estado_atual = 16;
+            break;
     		break;
 
     	case 16: // estado CONTAR
 
-    		
+            if (barco->getLadoArena())
+    		    barco->addBlocoAmarelo();
+            else
+                barco->addBlocoVermelho();
+
+            return 1;
+
     		break;
 
     	default: 
@@ -109,6 +118,8 @@ int pegarBloco(int *estado_atual, Robo *barco, int tem_bloco[2]){
 
 
     }
+
+    return 0;
 
 }
 
@@ -128,9 +139,9 @@ int colocarBloco(int *estado_atual, Robo *barco){
     switch(*estado_atual){
 
     	case 30: // estado ESTENDER BRACO
-    		
-
-            // publicar velocidade dos motores do braço para extender o braço até a garra alcançar algum bloco
+    	
+            
+                        // publicar velocidade dos motores do braço para extender o braço até a garra alcançar algum bloco
     		break;
 
     	case 31: // estado DEIXAR BLOCO

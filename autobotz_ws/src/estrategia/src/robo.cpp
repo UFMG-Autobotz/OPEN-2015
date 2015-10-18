@@ -36,12 +36,11 @@ Descrição do arquivo
 // ------------------ FUNÇÕES -------------------
 
 // Construtor
-Robo::Robo(){
-   this->blocos_vermelhos = 0;
-   this->blocos_amarelos = 0;
-   this->lado_arena = -1;  // -1 indica porto, 1 indica plataforma
-   this->trajetoria.pontos.clear();
-}
+/*Robo::Robo(){
+
+
+
+}*/
 
 //Destrutor
 //Robo::~Robo(){
@@ -164,5 +163,16 @@ estrategia::trajetoria Robo::getTrajetoria(){
 void Robo::limpaTrajetoria(){
 
    this->trajetoria.pontos.clear();
+
+}
+
+void Robo::incializa(){
+
+
+   this->blocos_vermelhos = 0;
+   this->blocos_amarelos = 0;
+   this->lado_arena = -1;  // -1 indica porto, 1 indica plataforma
+   this->trajetoria.pontos.clear();
+
 
 }

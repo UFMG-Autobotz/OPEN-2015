@@ -25,3 +25,7 @@ gustdomar@gmail.com
 int estenderBraco(Robo *barco, int tem_bloco[2]);
 
 int agarrarBloco(Robo *barco);
+
+int recolherBraco(Robo *barco);
+
+int guardarBraco(Robo *barco, float ang_recolhimento);

@@ -36,6 +36,8 @@ Código principal do pacote de estratéiga
 #define VEL_GARRA 70.0
 #define VEL_LIN_BRACO 100
 #define VEL_LIN_BRACO_DEVAGAR 50 
+#define VEL_ANG_BRACO 60
+#define ERRO_ANG_OK 5
 
 // ----------------- VARIÁVEIS GLOBAIS ------------------
 
@@ -86,6 +88,24 @@ int estenderBraco(Robo *barco, int tem_sensor[2]){
 
 
 
+/* ------------------ FUNCAO RECOLHERBRACO -------------------
+
+	Entrada: Objeto do tipo Robo (classe definida em robo.cpp)
+	Saida: 1 ou 0. 1 indica que a garra já está de volta dentro do barco
+	Finalidade: Recolher a garra depois de ter pego um bloco
+
+------------------------------------------------------------*/
+
+int recolherBraco(Robo *barco){
+
+
+		// seta velocidade linear e deixa velocidade angular em zero
+		barco->setVelocidadeBraco((-1)*VEL_LIN_BRACO, 0);		
+		return 1;
+
+}
+
+
 
 /* ------------------ FUNCAO AGARRABLOCO -------------------
 
@@ -101,5 +121,33 @@ int agarrarBloco(Robo *barco){
 	barco->setVelocidadeGarra(VEL_GARRA, 0);
 
 	return 1;
+
+}
+
+
+/* ------------------ FUNCAO GUARDARBLOCO -------------------
+
+	Entrada: Objeto do tipo Robo (classe definida em robo.cpp); angulo que a 
+	base do braço sera girada para guardar a garra
+	Saida: 1 ou 0. 1 indica que a garra já esta guardada
+	Finalidade: colocar a garra em posicao segura dentro do barco, para então
+	proteger o bloco que acabou de ser pego
+
+------------------------------------------------------------*/
+
+int guardarBraco(Robo *barco, float ang_recolhimento){
+
+
+	// foi setado velocidade angular constante, mas é possivel fazer um proporcional, talvez seja melhor
+	barco->setVelocidadeGarra(0, VEL_ANG_BRACO);
+
+	// para e retorna sucesso quando o erro eh aceitavel
+	if (barco->getPosicao().theta - ang_recolhimento <= ERRO_ANG_OK){
+		barco->setVelocidadeGarra(0, 0);
+		return 1;
+	}
+
+
+	return 0;
 
 }

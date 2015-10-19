@@ -32,6 +32,8 @@ Código principal do pacote de estratéiga
 #define TOTAL_BLOCOS_VERMELHOS 4 // informacao retirada do edital 
 #define TOTAL_BLOCOS_AMARELOS 10 // informacao retirada do edital 
 
+#define VEL_ATRACAR 70
+
 // ----------------- VARIÁVEIS GLOBAIS ------------------
 
 bool start;
@@ -67,18 +69,8 @@ void posicaoMsgRecieved (const geometry_msgs::Pose2D& msg){
 int main(int argc, char **argv){
 
 
-// ------------ VARIAVEIS ------------
-
-
+	// ------------ VARIAVEIS ------------
 	int estado_atual;
-
-
-	estado_atual = 0;
-	start = false;
-
-    
-	// TESTES
-	barco.setObjetivo(370.0, 150.0, 0.0);
 
 
 	// init ROS stuff
@@ -114,58 +106,83 @@ int main(int argc, char **argv){
     while (ros::ok()){
 
 
-	    // troca entre estados de mais alto nivel
-	    switch(estado_atual){
+    	if (start){
 
-	    	case 0: // estado INCIAL
-	    		if (start)
-	    			estado_atual = 10;
-	    		break;
+		    // troca entre estados de mais alto nivel
+		    switch(estado_atual){
 
-	    	case 10: // estado PEGAR BLOCO
+		    	case 0: // estado INCIAL
+		    		
+		    		if (start) // isso nao deve ser necessario mais, nesse estado seria bom zerar todas as variaveis
+		    			estado_atual = 10;
+		    			
+		    			estado_atual = 0;
+						start = false;
 
-	    		//pegarBloco(estado_atual, array_de_blocos_visiveis, tem_bloco[2]);
-	    		pegarBloco(&estado_atual, &barco, tem_bloco);
-	    		estado_atual = 20;
-	    		break;
+    
+						// TESTES
+						barco.setObjetivo(370.0, 150.0, 0.0);
+						tem_bloco[0] = 0;
+						tem_bloco[1] = 0;
+						barco.incializa();
 
-	    	case 20: // estado TRANSPORTE
-	    	case 21:
-	    	case 22:
-	    	case 23:
-	    	case 24:
+		    		break;
 
-	    		if (transportarBloco(&estado_atual, &barco))
-	    			estado_atual = 30;
-	    		break;
+		    	case 10: // estado PEGAR BLOCO
+		    	case 11:
+		    	case 12:
+		    	case 13:
+		    	case 14:
+		    	case 15:
+		    	case 16:
 
-	    	case 30: // estado DEIXAR BLOCO
+		    		//pegarBloco(estado_atual, array_de_blocos_visiveis, tem_bloco[2]);
+		    		//if (pegarBloco(&estado_atual, &barco, tem_bloco))
+		    			estado_atual = 20;
 
-	    		//colocarBloco(estado_atual);
-	    		if (barco.getBlocosVermelhos() >= TOTAL_BLOCOS_VERMELHOS &&
-	    		    barco.getBlocosAmarelos() >= TOTAL_BLOCOS_AMARELOS)
+		    		// velocidade angular zero e linear o suficiente para manter o barco atracado
+		    		//barco.setVelocidadeBarco(VEL_ATRACAR, 0);
+		    		break;
 
-	    			estado_atual = 40;
+		    	case 20: // estado TRANSPORTE
+		    	case 21:
+		    	case 22:
+		    	case 23:
+		    	case 24:
 
-	    		else
+		    		if (transportarBloco(&estado_atual, &barco))
+		    			estado_atual = 30;
+		    		break;
 
-	    			estado_atual = 10;
-	    		break;
+		    	case 30: // estado DEIXAR BLOCO
+
+		    		//colocarBloco(estado_atual);
+		    		if (barco.getBlocosVermelhos() >= TOTAL_BLOCOS_VERMELHOS &&
+		    		    barco.getBlocosAmarelos() >= TOTAL_BLOCOS_AMARELOS)
+
+		    			estado_atual = 40;
+
+		    		else
+
+		    			estado_atual = 10;
+		    		break;
 
 
-	    	case 40: // FIM
+		    	case 40: // FIM
 
-	    		// tem que apertar o botao desligar para o barco começar de novo
-	    		if (!start)
-	    			estado_atual = 0;
-	    		break;
+		    		// tem que apertar o botao desligar para o barco começar de novo
+		    		if (!start)
+		    			estado_atual = 0;
+		    		break;
 
-	    	default: 
+		    	default: 
 
-	    		break;
+		    		break;
 
 
-	    }
+		    }
+
+		}
 
 
     	// preenchendo o que sera publicado

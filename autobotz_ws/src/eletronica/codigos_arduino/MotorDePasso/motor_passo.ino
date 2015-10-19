@@ -19,11 +19,11 @@ const int stepper_pins[] = {8, 9, 10, 11}; //pinos nos quais esta o stepper
                                           //Os pinos sao ativados na ordem
                                           //desse vetor
 
-const int T_stepper_min = 100;  //menor periodo (|vel| = 255) em ms
+const int T_stepper_min = 40;  //menor periodo (|vel| = 255) em ms
                        //1 periodo = ciclo de ativacao dos 4 pinos
-const int T_stepper_max = 1000;
+const int T_stepper_max = 400;
 
-int T_stepper_atual = 0; //periodo a ser setado a partir do topico do ROS
+int T_stepper_atual = INF; //periodo a ser setado a partir do topico do ROS
 int dir;      //direcao do stepper 1 = frente, -1 = tras
 
 int T_ROS_spin = 30;  //periodo em ms entre uma chamada do ROS e outra

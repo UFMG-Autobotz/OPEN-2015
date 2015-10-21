@@ -14,6 +14,7 @@ find_package(catkin REQUIRED COMPONENTS
 add_message_files(
    FILES
    squareCenters.msg
+   velocidade.msg
  )
 
 generate_messages(
@@ -32,7 +33,7 @@ include_directories(include ${catkin_INCLUDE_DIRS})
 
 #----------------------- CONTROLE  ------------------------#
 
-add_executable(control src/main.cpp) 
+add_executable(control src/main.cpp src/Funcoes/auxiliares.cpp) 
 target_link_libraries(control ${catkin_LIBRARIES}) 
 
 add_dependencies(control ${controle_EXPORTED_TARGETS})

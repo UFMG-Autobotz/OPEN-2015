@@ -43,6 +43,7 @@ Código principal do pacote de controle
 #define VEL_P_DIST 1.4
 #define DIST_P 5.0
 #define DIST_MIN 12.0
+#define ERRO_ANG_OK 45
 
 
 
@@ -230,6 +231,13 @@ int main(int argc, char **argv){
 
         if (MODO == 1 || MODO == 2){
 
+            if (erro_ang <= ERRO_ANG_OK){
+                // acrescenta velocidade linear
+                msg_propulsorR.data += VEL_NOR * (ERRO_ANG_OK - erro_ang) * linear_kp;
+                msg_propulsorL.data += VEL_NOR * (ERRO_ANG_OK - erro_ang) * linear_kp;
+
+            }
+
             // proporcional para angulo
             msg_propulsorR.data += erro_ang * angular_kp;
             msg_propulsorL.data -= erro_ang * angular_kp;
@@ -268,18 +276,18 @@ int main(int argc, char **argv){
             */
 
 
-    /*
+    
             // se esta chegando perto de um obstaculo, freia
             if (distF < DIST_MIN){
 
             	msg_propulsorR.data = VEL_NOR * (distF/DIST_MIN);
 
             }
-    */
+    
 
         }
 
-        else if (MODO ==3){
+        else if (MODO ==4){
             // linear
             if (velBarco.linear.data > VEL_LIN_MAX)
                 velBarco.linear.data = VEL_LIN_MAX;

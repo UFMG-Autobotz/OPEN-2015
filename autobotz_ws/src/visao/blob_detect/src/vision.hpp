@@ -40,6 +40,8 @@ class palette
 
 	bool hasColor(cv::Vec3b BGR) const;  //returns true if the given color is present in the palette
 
+	void clear();
+
 	private:
 	vector< cv::Vec3b >  colors;
 	vector< int >        maxDistances;

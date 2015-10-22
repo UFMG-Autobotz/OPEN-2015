@@ -48,6 +48,8 @@ void settingsServer_T::updateSettingsFromFile(string fileName)
 
 void settingsServer_T::updatePaletteFromFile(string fileName)
 {
+	targetPalette.clear();  //get rid of old contents
+
 	//open file
 	std::ifstream file;
 	file.open(fileName.c_str());

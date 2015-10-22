@@ -288,3 +288,10 @@ bool palette::hasColor(cv::Vec3b c) const
 
 	return false;
 }
+
+void palette::clear()
+{
+	colors.clear();
+	maxDistances.clear();
+	names.clear();
+}

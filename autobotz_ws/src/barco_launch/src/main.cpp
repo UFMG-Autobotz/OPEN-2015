@@ -173,7 +173,15 @@ void launch(bool rec)
 	getline(fin, ardu_col);
 	getline(fin, ardu_imu);
 
-	//TODO: do some checking on the values read from the file
+	//uma linha escrito NULL indica que a ultima tentativa de calibracao falhou
+	if(ardu_prop == "NULL" || ardu_som == "NULL" ||
+	   ardu_col == "NULL"  || ardu_imu == "NULL" )
+	{
+		cout << "Um dos arduinos nao esta com a porta especificada." << endl
+		     << "Cancelando lancamento..." << endl;
+		return;
+		fin.close();
+	}
 
 	fin.close();
 
@@ -311,12 +319,12 @@ string conectaArduino(const char* nome_legivel)
 	if(dif.size() == 0)
 	{
 		cout << "ERRO: Nenhum dispositivo novo detectado" << endl;
-		return std::string("");
+		return std::string("NULL");
 	}
 	else if(dif.size() > 1)
 	{
 		cout << "ERRO: Mais de um arduino novo detectado" << endl;
-		return std::string("");
+		return std::string("NULL");
 	}
 
 	return devDir + dif[0];

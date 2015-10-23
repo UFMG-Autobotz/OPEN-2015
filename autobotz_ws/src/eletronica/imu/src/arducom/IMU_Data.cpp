@@ -103,8 +103,11 @@ int main(int argc, char **argv){
         chatter_pub.publish(msg);
 	cout<<"Direcao: "<<yaw<<endl;
     }
-    else 
-	cout<<"Erro! \n"; 
+    else
+    {
+	cout<<"Erro!\n";
+	cout<<"Menssagem: " << tx << endl;
+    } 
     
     ros::spinOnce();
     loop_rate.sleep();

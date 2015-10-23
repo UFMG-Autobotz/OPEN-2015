@@ -8,7 +8,7 @@
 #include <math.h>
 #include <stdio.h>
 #include <cstdlib>
-#include<string.h>
+#include <string.h>
 
 //variaveis
 int bdrate = 115200, debug = 1;
@@ -18,25 +18,52 @@ int serialPort; //porta serial de comunicação
 #include <iostream>
 //#include <unistd.h>
 //#include <fstream> 
-//#include <string>
+#include <string>
 
 using namespace std;
 
 int main(int argc, char **argv){
  
-  //char texto[20]; 
-  int size = 7;
+  int size = 7;   //tamanho da string enviada pelo arduino
   unsigned char tx[20];
-  if(!argv[1]){
-    cout<<"\n\nUse: rosrun nome_do_pacote arducom [port number]\nVide port number in: http://www.teuniz.net/RS-232/\nSerial ACM0 => 24,  Serial ACM1 => 25 ...\n\n";
+
+  //conferir se tem argv[1]
+  if(argc < 2){
+    cout << "\nNumero insuficiente de argumentos!" << endl;
+    cout << "Uso: rosrun nome_do_pacote arducom [port name]" << endl;
     return -1;
   }
-	 
-  //tenta abrir a comunicação serial, serial == 24 ou 25 (ACM0 ou ACM1) "/dev/ttyACM0"
-  serialPort = atoi(argv[1]);
+	
+  //converte nome de porta serial para numero
+  string nome_da_porta = argv[1];
+  int serialPort;
 
+  if(nome_da_porta == "/dev/ttyACM0")
+    serialPort = 24;
+  else if(nome_da_porta == "/dev/ttyACM1")
+    serialPort = 25;
+  else if(nome_da_porta == "/dev/ttyACM2")
+    serialPort = 26;
+  else if(nome_da_porta == "/dev/ttyACM3")
+    serialPort = 27;
+  else if(nome_da_porta == "/dev/ttyACM4")
+    serialPort = 28;
+  else if(nome_da_porta == "/dev/ttyACM5")
+    serialPort = 29;
+  else if(nome_da_porta == "/dev/ttyACM6")
+    serialPort = 30;
+  else
+  {
+    cout << "\nO arquivo \"" << argv[1] <<"\" nao esta identificado com uma porta serial." << endl;
+    cout << "\nSe esse arquivo realmente e o endereco correto da porta serial" << endl; 
+    cout << "associada ao arduIMU, adicione no codigo fonte de arducom\n" <<endl;
+
+    return -2;
+  }
+
+  //tenta abrir a comunicação serial
   if(RS232_OpenComport(serialPort, bdrate)){
-	ROS_INFO("Can not open comport\n");
+	ROS_INFO("Can not open COM port\n");
 	return(0);
   }
   else 
@@ -46,6 +73,7 @@ int main(int argc, char **argv){
 	debug = 1;
   }
 
+  //abrir comunicacao com o ROS
   ros::init(argc, argv, "IMUSerial"); 
   ros::NodeHandle n;
   ros::Publisher chatter_pub = n.advertise<std_msgs::Float32>("/eletronica/imu/yaw", 1000);

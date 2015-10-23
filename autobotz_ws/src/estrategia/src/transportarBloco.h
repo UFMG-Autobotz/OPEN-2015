@@ -12,6 +12,7 @@ gustdomar@gmail.com
 // -------------------- BIBLIOTECAS --------------------
 
 #include <ros/ros.h>
+#include <geometry_msgs/Pose2D.h>
 
 // ---------------- ARQUIVOS INCLUSOS ------------------
 
@@ -22,13 +23,14 @@ gustdomar@gmail.com
 
 // -------------------- CABEÇALHOS --------------------
 
-int desatracar(Robo *barco);
+int desatracar(Robo *barco, geometry_msgs::Pose2D *posicao_objetivo);
 
 void defineObjetivo(Robo *barco);
 
-int fazTrajetoria(Robo *barco);
+int fazTrajetoria(Robo *barco, geometry_msgs::Pose2D *posicao_objetivo);
 
-int atracar(Robo *barco);
+int atracar(Robo *barco, geometry_msgs::Pose2D *posicao_objetivo);
+
 
 // auxiliares
 

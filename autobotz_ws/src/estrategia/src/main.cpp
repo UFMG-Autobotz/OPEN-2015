@@ -33,13 +33,20 @@ Código principal do pacote de estratéiga
 #define TOTAL_BLOCOS_AMARELOS 10 // informacao retirada do edital 
 
 #define VEL_ATRACAR 70
+#define VEL_MAX 255
+#define VEL_MIN -255
+
+#define TEMPO_ATRACAR 1000 // em ms
 
 // ----------------- VARIÁVEIS GLOBAIS ------------------
 
 bool start;
+bool atracado;
+bool tem_bloco;
 Robo barco; // assim não chama o construtor
-int tem_bloco[2];
 
+
+geometry_msgs::Pose2D posicao_objetivo;
 int blocos_vermelhos, blocos_amarelos;
 
 // ---------------- CALLBACK FUNCTIONs -----------------
@@ -56,6 +63,19 @@ void posicaoMsgRecieved (const geometry_msgs::Pose2D& msg){
 
  }
 
+ void atracadoMsgRecieved (const std_msgs::Int32 msg){
+
+    atracado = msg.data;
+
+ }
+
+void temBlocoMsgRecieved (const std_msgs::Bool msg){
+
+    tem_bloco = msg.data;
+
+ }
+
+
  //void temBlocoMsgRecieved (const geometry_msgs::Pose2D& msg){
 
     //tem_bloco[0] = ;
@@ -71,6 +91,7 @@ int main(int argc, char **argv){
 
 	// ------------ VARIAVEIS ------------
 	int estado_atual;
+	int id_controlador=0;
 
 
 	// init ROS stuff
@@ -83,13 +104,16 @@ int main(int argc, char **argv){
     // ------------------------- SUBSCRIBERS -------------------------
     ros::Subscriber subInicio = nh.subscribe("eletronica/start", 1000, &inicioMsgRecieved);
     ros::Subscriber subPosicao = nh.subscribe("estrategia/barco/posicao", 1000, &posicaoMsgRecieved);
-
-
+    ros::Subscriber subAtracado = nh.subscribe("controle/barco/atracado", 1000, &atracadoMsgRecieved);
+    ros::Subscriber subTemBloco = nh.subscribe("/eletronica/garra/temBloco", 1000, &temBlocoMsgRecieved);
+/eletronica/garra/temBloco
 
     // ------------------------- PUBLISHERS -------------------------
     ros::Publisher pub_estado = nh.advertise <std_msgs::Int32>("estrategia/estado_atual", 1000);
     ros::Publisher pub_trajetoria = nh.advertise <estrategia::trajetoria>("estrategia/trajetoria", 1000);
     ros::Publisher pub_velocidade = nh.advertise <estrategia::velocidade>("estrategia/velocidade", 1000);
+    ros::Publisher pub_controlador = nh.advertise <estrategia::velocidade>("estrategia/id_controlador", 1000);
+
 
 
 
@@ -99,8 +123,12 @@ int main(int argc, char **argv){
 
     // variaveis auxiliar para guardar o que sera publicado
     std_msgs::Int32 msg_estado; 
+    std_msgs::Int32 msg_controlador; 
     estrategia::trajetoria msg_trajetoria;
     estrategia::velocidade msg_velocidade;
+
+    // PROVISORIO
+//    std_msgs::Int32 msg_propulsorR, msg_propulsorL;
 
 
     while (ros::ok()){
@@ -113,18 +141,17 @@ int main(int argc, char **argv){
 
 		    	case 0: // estado INCIAL
 		    		
-		    		if (start) // isso nao deve ser necessario mais, nesse estado seria bom zerar todas as variaveis
-		    			estado_atual = 10;
-		    			
-		    			estado_atual = 0;
-						start = false;
+		    		
+		    		estado_atual = 10;
+		    		id_controlador = 0;
 
-    
-						// TESTES
-						barco.setObjetivo(370.0, 150.0, 0.0);
-						tem_bloco[0] = 0;
-						tem_bloco[1] = 0;
-						barco.incializa();
+		    		estado_atual = 0;
+					start = false;
+
+ 
+					tem_bloco[0] = 0;
+					tem_bloco[1] = 0;
+					barco.zeraAtributos();
 
 		    		break;
 
@@ -136,9 +163,13 @@ int main(int argc, char **argv){
 		    	case 15:
 		    	case 16:
 
+		    		id_controlador = 0;
 		    		//pegarBloco(estado_atual, array_de_blocos_visiveis, tem_bloco[2]);
 		    		//if (pegarBloco(&estado_atual, &barco, tem_bloco))
+		    		if (atracado)
 		    			estado_atual = 20;
+
+		    		sleep(TEMPO_ATRACAR);
 
 		    		// velocidade angular zero e linear o suficiente para manter o barco atracado
 		    		//barco.setVelocidadeBarco(VEL_ATRACAR, 0);
@@ -150,11 +181,15 @@ int main(int argc, char **argv){
 		    	case 23:
 		    	case 24:
 
-		    		if (transportarBloco(&estado_atual, &barco))
+		    		id_controlador = 2; // controlador por angulo e distancia
+		    		//if (transportarBloco(&estado_atual, &barco, &posicao_objetivo))
+		    		if (atracado)
 		    			estado_atual = 30;
 		    		break;
 
 		    	case 30: // estado DEIXAR BLOCO
+
+		    		id_controlador = 0;
 
 		    		//colocarBloco(estado_atual);
 		    		if (barco.getBlocosVermelhos() >= TOTAL_BLOCOS_VERMELHOS &&
@@ -182,18 +217,30 @@ int main(int argc, char **argv){
 
 		    }
 
+
+
+		}
+
+		else {
+			id_controlador = 0;
+		   	barco.zeraAtributos();
+		   	estado_atual = 0;
 		}
 
 
     	// preenchendo o que sera publicado
 		msg_estado.data = estado_atual;
+		msg_controlador.data = id_controlador;
 		msg_trajetoria = barco.getTrajetoria();
 		msg_velocidade = barco.getVelocidadeBarco();
 
+
 		 // Publish the message 
 		 pub_estado.publish(msg_estado);
+		 pub_controlador.publish(msg_controlador);
 		 pub_trajetoria.publish(msg_trajetoria);
 		 pub_velocidade.publish(msg_velocidade);
+
 
 		 // Wait untilit's time for another iteration.
 		 rate.sleep();

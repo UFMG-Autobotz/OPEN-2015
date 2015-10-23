@@ -57,18 +57,18 @@ gustdomar@gmail.com
       void addBlocoVermelho();
       void addBlocoAmarelo();
       void setPosicao(float x, float y, float theta);
-      void setObjetivo(float x, float y, float theta);
+      //void setObjetivo(float x, float y, float theta);
       void setVelocidadeBarco(float linear, float angular);
       void setVelocidadeBraco(float linear, float angular);
       void setVelocidadeGarra(float linear, float angular);
-      void setTrajetoria(float x, float y, float theta);
+      void addPontoTrajetoria(float x, float y, float theta);
       
       // Get
       int getBlocosVermelhos();
       int getBlocosAmarelos();
       int getLadoArena();
       geometry_msgs::Pose2D getPosicao();
-      geometry_msgs::Pose2D getObjetivo();
+      //geometry_msgs::Pose2D getObjetivo();
       estrategia::velocidade getVelocidade();
       estrategia::velocidade getVelocidadeBarco();
       estrategia::velocidade getVelocidadeGarra();
@@ -77,7 +77,7 @@ gustdomar@gmail.com
 
       // outros
       void limpaTrajetoria();
-      void incializa();
+      void zeraAtributos();
    };
 
 

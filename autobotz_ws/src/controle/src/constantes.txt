@@ -1,7 +1,7 @@
 LINEAR
-KP 1.4
-KD 1.2
+KP 0.0
+KD 0.0
 
 ANGULAR
-KP 1.5
-KD 1.3
+KP 1.3
+KD 0.6

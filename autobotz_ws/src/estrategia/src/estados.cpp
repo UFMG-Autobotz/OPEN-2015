@@ -14,6 +14,7 @@ Descrição do arquivo
 
 
 #include <stdio.h>
+#include <geometry_msgs/Pose2D.h>
 
 // ---------------- ARQUIVOS INCLUSOS ------------------
 
@@ -26,11 +27,35 @@ Descrição do arquivo
 #include "pegarBloco.h"
 
 
+#include "estrategia/velocidade.h"
+#include "./Funcoes/auxiliares.hpp"
+
+
 #endif
 
 // -------------------- CONSTANTES --------------------
 
-#define ANG_RECOLHIMENTO 60.0
+#define ANG_RECOLHIMENTO -120
+
+
+// -------------------- CONSTANTES CONTROLE --------------------
+
+#define TELA_LIN 480
+#define TELA_COL 640
+#define VEL_LIN_MAX 180
+#define VEL_LIN_MIN -180
+#define VEL_ANG_MAX 150
+#define VEL_ANG_MIN -150
+#define VEL_MAX 255
+#define VEL_MIN -255
+#define VEL_NOR 80 // intervalo de -255 a 255
+#define VEL_RET 100
+//#define angular_kp 1.2
+//#define angular_kd 1.6
+#define VEL_P_DIST 1.4
+#define DIST_P 5.0
+#define DIST_MIN 12.0
+#define ERRO_ANG_OK 45
 
 // ----------------- VARIÁVEIS GLOBAIS ------------------
 
@@ -192,7 +217,7 @@ int colocarBloco(int *estado_atual, Robo *barco){
 
 ----------------------------------------------------------*/
 
-int transportarBloco(int *estado_atual, Robo *barco){
+int transportarBloco(int *estado_atual, Robo *barco, geometry_msgs::Pose2D *posicao_objetivo){
 
 	
 
@@ -201,7 +226,7 @@ int transportarBloco(int *estado_atual, Robo *barco){
 
     	case 20: // estado DESATRACAR
     		
-            if (desatracar(barco))
+            if (desatracar(barco, posicao_objetivo))
                *estado_atual = 21;
 
     		break;
@@ -214,20 +239,20 @@ int transportarBloco(int *estado_atual, Robo *barco){
 
     	case 22: // estado DECIDE ONDE GUARDAR
 
-    		defineObjetivo(barco);
+    		//defineObjetivo(barco);
             *estado_atual = 23; 
     		break;
 
         case 23: // estado DECIDE ONDE GUARDAR
 
-            if (fazTrajetoria(barco))
+            if (fazTrajetoria(barco, posicao_objetivo))
                 *estado_atual = 24; 
             break;
 
 
     	case 24: // estado ATRACAR
 
-    		if (atracar(barco))
+    		if (atracar(barco, posicao_objetivo))
                return 1; // processo concluído
     		break;
 
@@ -242,3 +267,6 @@ int transportarBloco(int *estado_atual, Robo *barco){
     return 0; // processo ainda em andamento
 
 }
+
+
+

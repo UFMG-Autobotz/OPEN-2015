@@ -14,6 +14,7 @@ Descrição do arquivo
 
 #include <stdio.h>
 #include <ros/ros.h>
+#include <geometry_msgs/Pose2D.h>
 
 // ---------------- ARQUIVOS INCLUSOS ------------------
 
@@ -29,4 +30,6 @@ int pegarBloco(int *estado_atual, Robo *barco, int tem_bloco[2]);
 
 //int colocarBloco(int *estado_atual, Robo *barco);
 
-int transportarBloco(int *estado_atual, Robo *barco);
+int transportarBloco(int *estado_atual, Robo *barco, geometry_msgs::Pose2D *posicao_objetivo);
+
+

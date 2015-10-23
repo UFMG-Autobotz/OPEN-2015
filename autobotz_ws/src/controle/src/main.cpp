@@ -18,6 +18,7 @@ Código principal do pacote de controle
 #include <geometry_msgs/Point.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 
 
 // ---------------- ARQUIVOS INCLUSOS ------------------
@@ -30,30 +31,32 @@ Código principal do pacote de controle
 
 #define TELA_LIN 480
 #define TELA_COL 640
+
 #define VEL_LIN_MAX 180
 #define VEL_LIN_MIN -180
 #define VEL_ANG_MAX 150
 #define VEL_ANG_MIN -150
-#define VEL_MAX 255
-#define VEL_MIN -255
-#define VEL_NOR 80 // intervalo de -255 a 255
+#define VEL_MAX 50
+#define VEL_MIN -50
+#define VEL_NOR 12 // intervalo de -255 a 255
 #define VEL_RET 100
-//#define angular_kp 1.2
-//#define angular_kd 1.6
 #define VEL_P_DIST 1.4
+
 #define DIST_P 5.0
-#define DIST_MIN 12.0
+#define DIST_MIN 5.0
+#define DIST_FREIO 8.0
+
+#define ERRO_ANG_MORTO 1
 #define ERRO_ANG_OK 45
 
 
 
 
-//#define MODO 2
-//#define ANG -20.3 // intervalo considerado de -180 a 180
-
 // ----------------- VARIÁVEIS GLOBAIS ------------------
 
+
 bool start;
+int id_controlador;
 float distL, distR, distF, distB;
 float yaw;
 geometry_msgs::Point centerSquare;
@@ -108,6 +111,14 @@ void velocidadeBarco(controle::velocidade msg){
 
 }
 
+void idControlador(std_msgs::Int32 msg){
+
+    id_controlador = msg.data;
+
+}
+
+
+// tem que refazer isso para o novo tipo de mensagem do Blanc
  void cubosAmarelos(const controle::squareCenters::ConstPtr& msg)
 {
     //a menssagem contem apenas um campo que se chama centers e é do tipo vector
@@ -134,44 +145,41 @@ int main(int argc, char **argv){
 
 
     // ------------ VARIAVEIS ------------
+    
     start = false;
-    geometry_msgs::Point objetivo;
+  
     float erro_ang;
     float ang_anterior;
     float linear_kp, linear_kd, angular_kp, angular_kd;
 
+    // para calcular tempo
+    //clock_t time1 = 0.0;
+
+    geometry_msgs::Point objetivo;
     std::string const_dir("/home/gustavo/open-2015/autobotz_ws/src/controle/src/constantes.txt");
 
-    //if(!argv[0] || !argv[1] || !argv[2] || !argv[3]){
-    //    ROS_INFO("\n\nUse: rosrun controle control [Angulo desejado] [KP = constante proporcional do angulo] [KD = constante derivativa do angulo]\n\n");
-    //    return -1;
-    //}
 
-    if(!argv[0] || !argv[1] ){
-        ROS_INFO("\n\nUse: rosrun controle control [MODO] [Angulo desejado]\n\n");
+    if(argc < 2){
+        ROS_INFO("\n\nUse: rosrun controle control [Angulo desejado]\n\n");
         return -1;
     }
 
+    // parametros recebidos na chamada do nó
+    float ANG = atof(argv[1]);
+
+
+    // carrega as cosntantes KP e KD, linear e angular, atraves de um arquivo (com nome armazenado em const_dir)
     leConstantesArquivo(const_dir, &linear_kp, &linear_kd, &angular_kp, &angular_kd);
 
+
+    // exibe as variaveis lidas
     printf ("\n------------ COSNTANTES ---------------\n\n");
     printf ("LINEAR: kp = %.2f kd = %.2f\n", linear_kp, linear_kd);
     printf ("ANGULAR: kp = %.2f kd = %.2f\n", angular_kp, angular_kd);
-    printf ("\n---------------------------------------\n");
-    
-
-    // parametros recebidos na chamada do nó
-    //float ANG = atof(argv[0]);
-    //float angular_kp = atof(argv[1]);
-    //float angular_kd = atof(argv[2]);
-
-    
-
-    int MODO = atoi(argv[0]);
-    float ANG = atof(argv[1]);
-    
-
-
+    printf ("\n---------------------------------------\n\n");
+    printf("id_controlador = %d\n", id_controlador);
+    printf("ANG = %f\n", ANG);
+    printf ("\n---------------------------------------\n\n");
 
 
 	// init ROS stuff
@@ -188,128 +196,159 @@ int main(int argc, char **argv){
     ros::Subscriber subF = nh.subscribe("eletronica/ultrassom/F", 1000, ultrassomF);
     ros::Subscriber subB = nh.subscribe("eletronica/ultrassom/B", 1000, ultrassomB);
 
+    // no codigo oficial vai ler de um topico da estrategia que publica o bloco a pegar
     ros::Subscriber sub = nh.subscribe("visao/squares/centers", 1000, cubosAmarelos);
 
     ros::Subscriber subIMU = nh.subscribe("eletronica/imu/yaw", 1000, imu);
 
     ros::Subscriber subVel = nh.subscribe("estrategia/velocidade", 1000, velocidadeBarco);
 
+    ros::Subscriber subControlador = nh.subscribe("estrategia/id_controlador", 1000, idControlador);
+
 
     // --------------------------- PUBLISHERS ---------------------------
 
     ros::Publisher pubR = nh.advertise <std_msgs::Int32>("eletronica/propulsor/R", 1000);
     ros::Publisher pubL = nh.advertise <std_msgs::Int32>("eletronica/propulsor/L", 1000);
+    ros::Publisher pubAtracado = nh.advertise <std_msgs::Bool>("controle/barco/atracado ", 1000);
+
+
+
     ros::Rate rate(2); // Hz
 
     std_msgs::Int32 msg_propulsorR, msg_propulsorL;
+    std_msgs::Bool msg_atracado;
+
 
     while (ros::ok()){
 
-		 if (MODO == 1){  // segue a direcao do bloco
-
-            // calcula quao desalinhado o bloco esta do robo
-            erro_ang = TELA_COL/2 - centerSquare.x;
-
-        }
-
-        else if(MODO == 2){ // segue um angulo desejado
-
-            // calcula quao desalinhado o bloco esta do robo
-            erro_ang = ANG - yaw; // calcula diferenca entre angulo desejado e real
-           
-        }
-
-        
-
-
-        // proporcional para distancia
-        //msg_propulsorR.data = VEL_NOR;
-        //msg_propulsorL.data = VEL_NOR;
+        // zera propulsores
         msg_propulsorR.data = 0;
         msg_propulsorL.data = 0;
+		
+        msg_atracado.data = false;
+
+        switch(id_controlador){
+
+            case 0:
+                    break;
+            case 1:
+                    // calcula quao desalinhado o bloco esta do robo
+                    erro_ang = TELA_COL/2 - centerSquare.x;
+
+                    break;
+            case 2:
+                    // calcula quao desalinhado o bloco esta do robo
+                    erro_ang = ANG - yaw; // calcula diferenca entre angulo desejado e real
 
 
-        if (MODO == 1 || MODO == 2){
 
-            if (erro_ang <= ERRO_ANG_OK){
-                // acrescenta velocidade linear
-                msg_propulsorR.data += VEL_NOR * (ERRO_ANG_OK - erro_ang) * linear_kp;
-                msg_propulsorL.data += VEL_NOR * (ERRO_ANG_OK - erro_ang) * linear_kp;
+                    if (abs(erro_ang) <= ERRO_ANG_OK){
+                        // acrescenta velocidade linear
+                        //msg_propulsorR.data += VEL_NOR * abs(ERRO_ANG_OK - erro_ang) * linear_kp ;
+                        //msg_propulsorL.data += VEL_NOR * abs(ERRO_ANG_OK - erro_ang) * linear_kp ;
 
-            }
-
-            // proporcional para angulo
-            msg_propulsorR.data += erro_ang * angular_kp;
-            msg_propulsorL.data -= erro_ang * angular_kp;
-
-            // derivativo para angulo
-            msg_propulsorR.data += (yaw - ang_anterior) * angular_kd;
-            msg_propulsorL.data -= (yaw - ang_anterior) * angular_kd;
-
-            printf ("GANHO: %.2f\n", erro_ang *angular_kp);
-
-            /*
-            // manter longe das bordas
-            if (distL < DIST_MIN){ // distancia esquerda
-                // proporcional
-                msg_propulsorL.data += distL * DIST_P;
-                msg_propulsorR.data -= distR * DIST_P;
-            }
-
-            else if (distR < DIST_MIN){
-                // proporcional
-                msg_propulsorL.data -= (DIST_MIN - distL) * DIST_P;
-                msg_propulsorR.data += (DIST_MIN - distR) * DIST_P;
-            }        
-
-             if (distF < DIST_MIN){ // distancia frente
-                // proporcional
-                msg_propulsorL.data -= distF * DIST_P;
-                msg_propulsorR.data -= distB * DIST_P;
-            }
-
-            else if (distB < DIST_MIN){
-                // proporcional
-                msg_propulsorL.data += (DIST_MIN - distR) * DIST_P;
-                msg_propulsorR.data += (DIST_MIN - distR) * DIST_P;
-            }    
-            */
+                    }
 
 
-    
-            // se esta chegando perto de um obstaculo, freia
-            if (distF < DIST_MIN){
+                    if (abs(erro_ang) >= ERRO_ANG_MORTO){
+                        // proporcional para angulo
+                        msg_propulsorR.data -= erro_ang * angular_kp;
+                        msg_propulsorL.data += erro_ang * angular_kp;
 
-            	msg_propulsorR.data = VEL_NOR * (distF/DIST_MIN);
+                        // derivativo para angulo
+                        msg_propulsorR.data += (yaw - ang_anterior) * angular_kd;
+                        msg_propulsorL.data -= (yaw - ang_anterior) * angular_kd;
 
-            }
-    
+                    }
 
-        }
+                    printf ("GANHO: %.2f\n", erro_ang *angular_kp);
 
-        else if (MODO ==4){
-            // linear
-            if (velBarco.linear.data > VEL_LIN_MAX)
-                velBarco.linear.data = VEL_LIN_MAX;
-            else if (velBarco.linear.data < VEL_LIN_MIN)
-                velBarco.linear.data = VEL_LIN_MIN;
-            // angular
-            if (velBarco.angular.data > VEL_ANG_MAX)
-                velBarco.angular.data = VEL_ANG_MAX;
-            else if (velBarco.angular.data < VEL_ANG_MIN)
-                velBarco.angular.data = VEL_ANG_MIN;
+                    /*
+                    // MANTEM LONGE DAS BORDAS
+                    if (distL < DIST_MIN){ // distancia esquerda
+                        // proporcional
+                        msg_propulsorL.data += distL * DIST_P;
+                        msg_propulsorR.data -= distR * DIST_P;
+                    }
+
+                    else if (distR < DIST_MIN){
+                        // proporcional
+                        msg_propulsorL.data -= (DIST_MIN - distL) * DIST_P;
+                        msg_propulsorR.data += (DIST_MIN - distR) * DIST_P;
+                    }        
+
+                     if (distF < DIST_MIN){ // distancia frente
+                        // proporcional
+                        msg_propulsorL.data -= distF * DIST_P;
+                        msg_propulsorR.data -= distB * DIST_P;
+                    }
+
+                    else if (distB < DIST_MIN){
+                        // proporcional
+                        msg_propulsorL.data += (DIST_MIN - distR) * DIST_P;
+                        msg_propulsorR.data += (DIST_MIN - distR) * DIST_P;
+                    }    
+                    */
 
 
-            msg_propulsorR.data += (velBarco.linear.data + velBarco.angular.data) * angular_kp;
-            msg_propulsorL.data += (velBarco.linear.data - velBarco.angular.data) * angular_kp;
+            
+                    // se esta chegando perto de um obstaculo, freia
+                    if (distF < DIST_MIN && distF > DIST_FREIO){
 
-            // derivativo 
-            msg_propulsorR.data += (velBarco.linear.data - velBarco_anterior.linear.data) * angular_kd;
-            msg_propulsorL.data += (velBarco.linear.data - velBarco_anterior.linear.data) * angular_kd;
-            msg_propulsorR.data -= (velBarco.angular.data - velBarco_anterior.angular.data) * angular_kd;
-            msg_propulsorL.data -= (velBarco.angular.data - velBarco_anterior.angular.data) * angular_kd;
+                        msg_propulsorR.data = VEL_NOR * (distF/DIST_MIN);
+                        msg_propulsorL.data = VEL_NOR * (distF/DIST_MIN);
 
-            printf ("GANHO: %.2f\n", erro_ang *angular_kp);
+                    }
+                    else if ((distF <= DIST_FREIO && distF >= 0) && erro_ang <= ERRO_ANG_MORTO){
+
+                        
+                        msg_atracado.data = true;
+
+                        msg_propulsorR.data = 0.0;
+                        msg_propulsorL.data = 0.0;
+
+
+                    }
+               
+
+                    break;
+
+            case 3:
+
+                    // linear
+                    if (velBarco.linear.data > VEL_LIN_MAX)
+                        velBarco.linear.data = VEL_LIN_MAX;
+                    else if (velBarco.linear.data < VEL_LIN_MIN)
+                        velBarco.linear.data = VEL_LIN_MIN;
+                    // angular
+                    if (velBarco.angular.data > VEL_ANG_MAX)
+                        velBarco.angular.data = VEL_ANG_MAX;
+                    else if (velBarco.angular.data < VEL_ANG_MIN)
+                        velBarco.angular.data = VEL_ANG_MIN;
+
+
+                    msg_propulsorR.data += (velBarco.linear.data + velBarco.angular.data) * angular_kp;
+                    msg_propulsorL.data += (velBarco.linear.data - velBarco.angular.data) * angular_kp;
+
+                    // derivativo 
+                    msg_propulsorR.data += (velBarco.linear.data - velBarco_anterior.linear.data) * angular_kd;
+                    msg_propulsorL.data += (velBarco.linear.data - velBarco_anterior.linear.data) * angular_kd;
+                    msg_propulsorR.data -= (velBarco.angular.data - velBarco_anterior.angular.data) * angular_kd;
+                    msg_propulsorL.data -= (velBarco.angular.data - velBarco_anterior.angular.data) * angular_kd;
+
+                    printf ("GANHO: %.2f\n", erro_ang *angular_kp);
+
+
+
+                    break;
+
+
+
+            default:
+
+                    break;
+
 
 
         }
@@ -326,17 +365,24 @@ int main(int argc, char **argv){
         else if (msg_propulsorR.data < VEL_MIN)
             msg_propulsorR.data = VEL_MIN;
        
+        // provisorio
+        msg_propulsorL.data *= -1;
 
-
-		 // Pub lish the message .
-		 pubR.publish(msg_propulsorR);
-         pubL.publish(msg_propulsorL);   
+		// Pub lish the message .
+		pubR.publish(msg_propulsorR);
+        pubL.publish(msg_propulsorL);   
+        pubAtracado.publish(msg_atracado);
 
 
         // pega o valor anterior do angulo para uso do controle derivativo do angulo
         ang_anterior =  yaw;
         velBarco_anterior = velBarco;
 
+        /* Como calcular tempo em C++
+        printf ("\n\nDelta t: %f\n\n", float(std::clock() - time1)/CLOCKS_PER_SEC);
+        time1 = std::clock();
+        sleep(100); // em milesegundos
+        */
 		 // Wait until it's time for another iteration .
 		 rate.sleep();
 		 ros::spinOnce();

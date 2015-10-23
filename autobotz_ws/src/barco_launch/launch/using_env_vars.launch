@@ -9,7 +9,7 @@
 	
 	<!-- rosserial_arduino -->
 		<!-- ultrassom e base giratoria -->
-		<node name="ardusom" pkg="rosserial_python" type="serial_node.py" args="$(env BARCO_LAUNCH_ARDUSOM)"   />
+		<node name="ardusom" pkg="rosserial_python" type="serial_node.py" args="$(env BARCO_LAUNCH_ARDUSOM)" />
 		<!-- ponte H e radio -->
 		<node name="turbino" pkg="rosserial_python" type="serial_node.py" args="$(env BARCO_LAUNCH_TURBINO)" />
 		<!-- caracol e garra -->
@@ -17,8 +17,7 @@
 
 	
 	<!-- IMU -->
-	<!-- <node name="IMU" pkg="rosserial_python" type="arducom" args="arducom 24" />
-	-->
+	<node name="arduIMU" pkg="imu" type="arducom" args="$(env BARCO_LAUNCH_ARDUIMU" />
 	<!-- estrategia -->
 	<node name="estrategia" pkg="estrategia" type="strategy" />
 

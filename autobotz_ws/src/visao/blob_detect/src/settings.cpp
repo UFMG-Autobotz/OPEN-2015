@@ -55,7 +55,9 @@ void settingsServer_T::updatePaletteFromFile(string fileName)
 	file.open(fileName.c_str());
 	if(!file.good())
 	{
-		ROS_ERROR("settingsServer: Error opening palette file!\n");
+		ROS_ERROR(       "settingsServer: Error opening palette file!");
+		string err_msg = "                Tried to open file: " + fileName + "\n";
+		ROS_ERROR("%s", err_msg.c_str());
 		return;
 	}
 

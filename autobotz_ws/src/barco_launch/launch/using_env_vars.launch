@@ -2,26 +2,35 @@
      para saber em que porta esta cada arduino             -->
 <launch>
 	<!-- start kinect server -->
-	<include file="$(find freenect_launch)/launch/freenect.launch" />
+		<include file="$(find freenect_launch)/launch/freenect.launch" />
 	
 	<!-- launch vision code -->
-	<node name="blob_detect" pkg="blob_detect" type="blob_detect" />
+		<node name="blob_detect" pkg="blob_detect" type="blob_detect" launch-prefix="gnome-terminal -t Visao -x "/>
 	
 	<!-- rosserial_arduino -->
-		<!-- ultrassom e base giratoria -->
-		<node name="ardusom" pkg="rosserial_python" type="serial_node.py" args="$(env BARCO_LAUNCH_ARDUSOM)" />
-		<!-- ponte H e radio -->
-		<node name="turbino" pkg="rosserial_python" type="serial_node.py" args="$(env BARCO_LAUNCH_TURBINO)" />
-		<!-- caracol e garra -->
-		<node name="arducol" pkg="rosserial_python" type="serial_node.py" args="$(env BARCO_LAUNCH_ARDUCOL)" />
 
-	
+		<!-- ultrassom e base giratoria -->
+		<group if="$(env BARCO_LAUNCH_USE_ARDUSOM)">
+			<node name="ardusom" pkg="rosserial_python" type="serial_node.py" args="$(env BARCO_LAUNCH_ARDUSOM)" launch-prefix="gnome-terminal -t arduSom -x " />
+		</group>
+		
+			<!-- ponte H e radio -->
+		<group if="$(env BARCO_LAUNCH_USE_TURBINO)">
+			<node name="turbino" pkg="rosserial_python" type="serial_node.py" args="$(env BARCO_LAUNCH_TURBINO)" launch-prefix="gnome-terminal -t turbINO -x " />
+		</group>
+		
+			<!-- caracol e garra -->
+		<group if="$(env BARCO_LAUNCH_USE_ARDUCOL)">
+			<node name="arducol" pkg="rosserial_python" type="serial_node.py" args="$(env BARCO_LAUNCH_ARDUCOL)" launch-prefix="gnome-terminal -t arduCol -x " />
+		</group>
+
+		
 	<!-- IMU -->
-	<node name="arduIMU" pkg="imu" type="arducom" args="$(env BARCO_LAUNCH_ARDUIMU" />
+		<node name="arduIMU" pkg="imu" type="arducom" args="$(env BARCO_LAUNCH_ARDUIMU)" launch-prefix="gnome-terminal -t arduIMU -x " />
 	<!-- estrategia -->
-	<node name="estrategia" pkg="estrategia" type="strategy" />
+		<node name="estrategia" pkg="estrategia" type="strategy" launch-prefix="gnome-terminal -t estrategia -x " />
 
 	<!-- controle -->
-	<node name="controle" pkg="controle" type="control" />
+		<node name="controle" pkg="controle" type="control" launch-prefix="gnome-terminal -t controle -x " />
 </launch>
 

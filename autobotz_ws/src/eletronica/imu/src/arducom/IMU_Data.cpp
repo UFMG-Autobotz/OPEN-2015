@@ -8,7 +8,7 @@
 #include <math.h>
 #include <stdio.h>
 #include <cstdlib>
-#include <string.h>
+#include <cstring>
 
 //variaveis
 int bdrate = 115200, debug = 1;
@@ -25,7 +25,8 @@ using namespace std;
 int main(int argc, char **argv){
  
   int size = 7;   //tamanho da string enviada pelo arduino
-  unsigned char tx[20];
+  const int TX_SIZE = 20;
+  unsigned char tx[TX_SIZE];
 
   //conferir se tem argv[1]
   if(argc < 2){
@@ -77,7 +78,7 @@ int main(int argc, char **argv){
   ros::init(argc, argv, "IMUSerial"); 
   ros::NodeHandle n;
   ros::Publisher chatter_pub = n.advertise<std_msgs::Float32>("/eletronica/imu/yaw", 1000);
-  ros::Rate loop_rate(10);
+  ros::Rate loop_rate(3);
   float yaw;
 
   int tam = RS232_PollComport(serialPort,tx,size);
@@ -93,9 +94,13 @@ int main(int argc, char **argv){
 
     int n;
     std_msgs::Float32 msg;
-    RS232_PollComport(serialPort,tx,size);
+
+    //ler menssagem da porta serial
+    memset(tx, '\0', sizeof(char)*TX_SIZE);  //enche tx de '\0'
+    RS232_PollComport(serialPort,tx,size);   //le da porta serial
+
     char* texto = reinterpret_cast<char*>(tx);
-    s = strlen (texto);
+    s = strlen(texto);
 
     if(s == 7){
 	yaw = atof(texto);
@@ -105,13 +110,14 @@ int main(int argc, char **argv){
     }
     else
     {
-	cout<<"Erro!\n";
-	cout<<"Menssagem: " << tx << endl;
+	cout<<"Erro! Recebeu menssagem de tamanho " << s << endl;
+	//cout<<"Menssagem: " << tx << endl;
     } 
     
+    //dormir para manter a frequencia do loop
     ros::spinOnce();
     loop_rate.sleep();
-    usleep(200 * 1000);
+    //usleep(200 * 1000);
   }
 
   ros::spin();

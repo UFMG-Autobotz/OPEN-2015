@@ -192,6 +192,8 @@ estrategia::velocidade Robo::getVelocidadeBraco(){
    return this->velocidade_braco;
 
 }
+
+
 estrategia::velocidade Robo::getVelocidadeGarra(){
 
    return this->velocidade_garra;

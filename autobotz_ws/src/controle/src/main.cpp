@@ -41,6 +41,10 @@ Código principal do pacote de controle
 #define VEL_NOR 12 // intervalo de -255 a 255
 #define VEL_RET 100
 #define VEL_P_DIST 1.4
+#define VEL_ANG_BRACO_KP 1.5
+#define VEL_ANG_BRACO 80
+#define VEL_LIN_BRACO 100
+#define VEL_GARRA 70.0
 
 #define DIST_P 5.0
 #define DIST_MIN 5.0
@@ -49,14 +53,17 @@ Código principal do pacote de controle
 #define ERRO_ANG_MORTO 1
 #define ERRO_ANG_OK 45
 
+#define TEMPO_ALCANCA_BLOCO 1000 // ms
+#define TEMPO_AGARRA_BLOCO 3000 // ms
+
+#define ANG_BRACO_GUARDADO 110 // em graus
 
 
 
 // ----------------- VARIÁVEIS GLOBAIS ------------------
 
-
-bool start;
 int id_controlador;
+bool start;
 float distL, distR, distF, distB;
 float yaw;
 geometry_msgs::Point centerSquare;
@@ -148,7 +155,7 @@ int main(int argc, char **argv){
     
     start = false;
   
-    float erro_ang;
+    float erro_ang, vel_ang_braco, vel_lin_braco, vel_garra;
     float ang_anterior;
     float linear_kp, linear_kd, angular_kp, angular_kd;
 
@@ -159,13 +166,14 @@ int main(int argc, char **argv){
     std::string const_dir("/home/gustavo/open-2015/autobotz_ws/src/controle/src/constantes.txt");
 
 
-    if(argc < 2){
-        ROS_INFO("\n\nUse: rosrun controle control [Angulo desejado]\n\n");
+    if(argc < 3){
+        ROS_INFO("\n\nUse: rosrun controle control [Angulo do barco desejado] [Angulo do braco desejado]\n\n");
         return -1;
     }
 
     // parametros recebidos na chamada do nó
-    float ANG = atof(argv[1]);
+    float ANG_BARCO = atof(argv[1]);
+    float ANG_BRACO = atof(argv[2]);
 
 
     // carrega as cosntantes KP e KD, linear e angular, atraves de um arquivo (com nome armazenado em const_dir)
@@ -178,7 +186,8 @@ int main(int argc, char **argv){
     printf ("ANGULAR: kp = %.2f kd = %.2f\n", angular_kp, angular_kd);
     printf ("\n---------------------------------------\n\n");
     printf("id_controlador = %d\n", id_controlador);
-    printf("ANG = %f\n", ANG);
+    printf("ANG BARCO= %f\n", ANG_BARCO);
+    printf("ANG BRACO= %f\n", ANG_BRACO);
     printf ("\n---------------------------------------\n\n");
 
 
@@ -203,21 +212,26 @@ int main(int argc, char **argv){
 
     ros::Subscriber subVel = nh.subscribe("estrategia/velocidade", 1000, velocidadeBarco);
 
-    ros::Subscriber subControlador = nh.subscribe("estrategia/id_controlador", 1000, idControlador);
+    ros::Subscriber subControlador = nh.subscribe("estrategia/estado_atual", 1000, idControlador);
+
 
 
     // --------------------------- PUBLISHERS ---------------------------
 
     ros::Publisher pubR = nh.advertise <std_msgs::Int32>("eletronica/propulsor/R", 1000);
     ros::Publisher pubL = nh.advertise <std_msgs::Int32>("eletronica/propulsor/L", 1000);
+    ros::Publisher pubBaseStepper = nh.advertise <std_msgs::Int32>("/controle/base/stepper", 1000);
+    ros::Publisher pubBracoMotor = nh.advertise <std_msgs::Int32>("/controle/braco/motor", 1000); 
+    ros::Publisher pubGarraMotor = nh.advertise <std_msgs::Int32>("/controle/garra/motor", 1000);   
     ros::Publisher pubAtracado = nh.advertise <std_msgs::Bool>("controle/barco/atracado ", 1000);
+    ros::Publisher pubAgarrado = nh.advertise <std_msgs::Bool>("controle/garra/agarrado ", 1000);
 
 
 
     ros::Rate rate(2); // Hz
 
-    std_msgs::Int32 msg_propulsorR, msg_propulsorL;
-    std_msgs::Bool msg_atracado;
+    std_msgs::Int32 msg_propulsorR, msg_propulsorL, msg_baseStepper, msg_bracoMotor, msg_garraMotor;
+    std_msgs::Bool msg_atracado, msg_agarrado;
 
 
     while (ros::ok()){
@@ -225,21 +239,87 @@ int main(int argc, char **argv){
         // zera propulsores
         msg_propulsorR.data = 0;
         msg_propulsorL.data = 0;
-		
+        msg_baseStepper.data = 0;
+        msg_bracoMotor.data = 0;
+        msg_garraMotor.data = 0;
+
         msg_atracado.data = false;
+        msg_agarrado.data = false;
+
+        vel_ang_braco = 0.0;
+		
+        
 
         switch(id_controlador){
 
             case 0:
                     break;
-            case 1:
-                    // calcula quao desalinhado o bloco esta do robo
-                    erro_ang = TELA_COL/2 - centerSquare.x;
 
-                    break;
-            case 2:
-                    // calcula quao desalinhado o bloco esta do robo
-                    erro_ang = ANG - yaw; // calcula diferenca entre angulo desejado e real
+            case 12: // estado ESTENDER BRACO
+
+                
+                // se o sensor ainda não está lendo bloco dentro da garra, estende o braço com velocidade constante
+                
+                // o braco vai reto e faz ajuste angular ao mesmo tempo
+                vel_ang_braco = ANG_BRACO * VEL_ANG_BRACO_KP;
+                vel_lin_braco = VEL_LIN_BRACO;
+        
+                msg_baseStepper.data = vel_ang_braco;
+                msg_bracoMotor.data = vel_lin_braco;
+
+                break;
+
+            case 13: // estado AGARRAR
+                                    
+                // espera um tempo para a garra alcançar melhor o bloco
+                sleep(TEMPO_ALCANCA_BLOCO);
+                // para de mexer o braco, ja que alcançou o bloco
+                vel_ang_braco = 0;
+                vel_lin_braco = 0;
+                vel_garra = VEL_GARRA;
+
+                msg_agarrado.data = true;
+ 
+                msg_baseStepper.data = vel_ang_braco;
+                msg_bracoMotor.data = vel_lin_braco;
+                msg_garraMotor.data = vel_garra;
+
+                break;
+
+            case 14: // estado RECOLHER
+                                    
+                // espera um tempo para a garra pegar melhor o bloco
+                sleep(TEMPO_AGARRA_BLOCO);
+                         
+                // o braco vai reto e faz ajuste angular ao mesmo tempo
+                vel_ang_braco = ANG_BRACO * VEL_ANG_BRACO_KP;
+                vel_lin_braco = (-1) * VEL_LIN_BRACO;
+                vel_garra = 0.0;
+        
+                msg_baseStepper.data = vel_ang_braco;
+                msg_bracoMotor.data = vel_lin_braco;
+                msg_garraMotor.data = vel_garra;
+
+                break;
+
+            case 15: // estado GUARDAR
+                                    
+                          
+                // o braco vai reto e faz ajuste angular ao mesmo tempo
+                vel_ang_braco = VEL_ANG_BRACO;
+                vel_lin_braco = 0;
+        
+                msg_baseStepper.data = vel_ang_braco;
+                msg_bracoMotor.data = vel_lin_braco;
+
+                break;
+
+
+
+
+            case 20:
+                    
+                    erro_ang = ANG_BARCO - yaw; // calcula diferenca entre angulo desejado e real
 
 
 
@@ -314,35 +394,7 @@ int main(int argc, char **argv){
 
                     break;
 
-            case 3:
-
-                    // linear
-                    if (velBarco.linear.data > VEL_LIN_MAX)
-                        velBarco.linear.data = VEL_LIN_MAX;
-                    else if (velBarco.linear.data < VEL_LIN_MIN)
-                        velBarco.linear.data = VEL_LIN_MIN;
-                    // angular
-                    if (velBarco.angular.data > VEL_ANG_MAX)
-                        velBarco.angular.data = VEL_ANG_MAX;
-                    else if (velBarco.angular.data < VEL_ANG_MIN)
-                        velBarco.angular.data = VEL_ANG_MIN;
-
-
-                    msg_propulsorR.data += (velBarco.linear.data + velBarco.angular.data) * angular_kp;
-                    msg_propulsorL.data += (velBarco.linear.data - velBarco.angular.data) * angular_kp;
-
-                    // derivativo 
-                    msg_propulsorR.data += (velBarco.linear.data - velBarco_anterior.linear.data) * angular_kd;
-                    msg_propulsorL.data += (velBarco.linear.data - velBarco_anterior.linear.data) * angular_kd;
-                    msg_propulsorR.data -= (velBarco.angular.data - velBarco_anterior.angular.data) * angular_kd;
-                    msg_propulsorL.data -= (velBarco.angular.data - velBarco_anterior.angular.data) * angular_kd;
-
-                    printf ("GANHO: %.2f\n", erro_ang *angular_kp);
-
-
-
-                    break;
-
+          
 
 
             default:
@@ -353,7 +405,8 @@ int main(int argc, char **argv){
 
         }
 
-        // limita as velocidades
+        // --------------- LIMITA AS VELOCIDADES ----------------
+
         // motor ESQUERDO
         if (msg_propulsorL.data > VEL_MAX)
             msg_propulsorL.data = VEL_MAX;
@@ -364,19 +417,42 @@ int main(int argc, char **argv){
             msg_propulsorR.data = VEL_MAX;
         else if (msg_propulsorR.data < VEL_MIN)
             msg_propulsorR.data = VEL_MIN;
-       
-        // provisorio
-        msg_propulsorL.data *= -1;
 
-		// Pub lish the message .
+        // Stepper da base
+        if (msg_baseStepper.data > VEL_MAX)
+            msg_baseStepper.data = VEL_MAX;
+        else if (msg_baseStepper.data < VEL_MIN)
+            msg_baseStepper.data = VEL_MIN;
+
+        // Motor do braço
+        if (msg_bracoMotor.data > VEL_MAX)
+            msg_bracoMotor.data = VEL_MAX;
+        else if (msg_bracoMotor.data < VEL_MIN)
+            msg_bracoMotor.data = VEL_MIN;
+        
+
+        // Motor da garra
+        if (msg_garraMotor.data > VEL_MAX)
+            msg_garraMotor.data = VEL_MAX;
+        else if (msg_garraMotor.data < VEL_MIN)
+            msg_garraMotor.data = VEL_MIN;
+
+
+        // ------------------------------------------------------
+
+		// Publish the message .
 		pubR.publish(msg_propulsorR);
         pubL.publish(msg_propulsorL);   
+        pubBaseStepper.publish(msg_baseStepper);
+        pubBracoMotor.publish(msg_bracoMotor);
+        pubGarraMotor.publish(msg_garraMotor);
+
         pubAtracado.publish(msg_atracado);
+        pubAgarrado.publish(msg_agarrado);
 
 
         // pega o valor anterior do angulo para uso do controle derivativo do angulo
         ang_anterior =  yaw;
-        velBarco_anterior = velBarco;
 
         /* Como calcular tempo em C++
         printf ("\n\nDelta t: %f\n\n", float(std::clock() - time1)/CLOCKS_PER_SEC);

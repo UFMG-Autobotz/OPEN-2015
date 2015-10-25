@@ -77,7 +77,7 @@ Descrição do arquivo
 
 ----------------------------------------------------------*/
 
-int pegarBloco(int *estado_atual, Robo *barco, int tem_bloco[2]){
+int pegarBloco(int *estado_atual, Robo *barco, bool tem_bloco, bool agarrado){
 
 	
 
@@ -101,28 +101,27 @@ int pegarBloco(int *estado_atual, Robo *barco, int tem_bloco[2]){
 
     	case 12: // estado ESTENDER BRACO
 
-    		if (estenderBraco(barco, tem_bloco))
+    		if (tem_bloco)
                 *estado_atual = 13;
     		break;
 
     	case 13: // estado AGARRAR
 
             // tem que fazer alguma coisa pra manter o motor funcionando o tempo necessario
-            if (agarrarBloco(barco))
+            if (agarrado)
                 *estado_atual = 14;
     		break;
 
     	case 14: // estado RECOLHER
 
-    		if (recolherBraco(barco)) // precisa saber de onde vira informacao da hora de parar
+    		//if (braco_retornou) // provavel que isso seja fornecido pela visao, quando a garra estiver a uma certa distancia
                 *estado_atual = 15;
             break;
 
     	case 15: // estado GUARDAR
 
-    		if (guardarBraco(barco, ANG_RECOLHIMENTO)) 
+    		//if (braco_guardado) // sera fornecido por um sensor fim de curso
                 *estado_atual = 16;
-            break;
     		break;
 
     	case 16: // estado CONTAR

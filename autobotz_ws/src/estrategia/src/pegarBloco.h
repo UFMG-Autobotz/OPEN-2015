@@ -22,7 +22,7 @@ gustdomar@gmail.com
 
 // -------------------- CABEÇALHOS --------------------
 
-int estenderBraco(Robo *barco, int tem_bloco[2]);
+int estenderBraco(Robo *barco, bool tem_bloco, float referencia_ang);
 
 int agarrarBloco(Robo *barco);
 

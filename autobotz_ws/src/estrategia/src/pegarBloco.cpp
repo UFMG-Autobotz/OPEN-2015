@@ -22,7 +22,7 @@ Código principal do pacote de estratéiga
 #define INCLUIR
 
 
-#include "pegarBloco.h"
+#include "pegarBloco.h"// estado AGARRAR
 
 
 #endif
@@ -36,8 +36,10 @@ Código principal do pacote de estratéiga
 #define VEL_GARRA 70.0
 #define VEL_LIN_BRACO 100
 #define VEL_LIN_BRACO_DEVAGAR 50 
-#define VEL_ANG_BRACO 60
+#define VEL_ANG_BRACO_KP 1.5
 #define ERRO_ANG_OK 5
+
+#define TEMPO_PEGA_BLOCO 1000 // ms
 
 // ----------------- VARIÁVEIS GLOBAIS ------------------
 
@@ -58,26 +60,24 @@ Código principal do pacote de estratéiga
 ------------------------------------------------------------*/
 
 
-int estenderBraco(Robo *barco, int tem_sensor[2]){
+int estenderBraco(Robo *barco, bool tem_bloco, float referencia_ang){
 
 
-	// se ainda nenhum dos sensores está lendo bloco dentro da garra, estende o braço com velocidade constante e continua nesse estado
-	if (!tem_sensor[0] && !tem_sensor[1]){
+	float vel_ang = 0.0;
+
+	// se o sensor ainda não está lendo bloco dentro da garra, estende o braço com velocidade constante e continua nesse estado
+	if (!tem_bloco){
+
+		vel_ang = referencia_ang * VEL_ANG_BRACO_KP;
 
 		// seta velocidade linear e deixa velocidade angular em zero
-		barco->setVelocidadeBraco(VEL_LIN_BRACO, 0);
+		barco->setVelocidadeBraco(VEL_LIN_BRACO, vel_ang);
 		return 0;
 	}
 
-	else if (tem_sensor[0] && !tem_sensor[1]){
-
-		// seta velocidade linear e deixa velocidade angular em zero
-		barco->setVelocidadeBraco(VEL_LIN_BRACO_DEVAGAR, 0);
-		return 0;
-	}
-
-	else if (tem_sensor)
+	else if (tem_bloco)
 	{
+		sleep(TEMPO_PEGA_BLOCO);
 		// para de mexer o braco, ja que alcançou o bloco
 		barco->setVelocidadeBraco(0, 0);
 		return 1;
@@ -139,7 +139,7 @@ int guardarBraco(Robo *barco, float ang_recolhimento){
 
 
 	// foi setado velocidade angular constante, mas é possivel fazer um proporcional, talvez seja melhor
-	barco->setVelocidadeGarra(0, VEL_ANG_BRACO);
+	//barco->setVelocidadeGarra(0, VEL_ANG_BRACO);
 
 	// para e retorna sucesso quando o erro eh aceitavel
 	if (barco->getPosicao().theta - ang_recolhimento <= ERRO_ANG_OK){

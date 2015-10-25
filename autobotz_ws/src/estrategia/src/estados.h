@@ -26,7 +26,7 @@ Descrição do arquivo
 // -------------------- CABEÇALHOS --------------------
 
 
-int pegarBloco(int *estado_atual, Robo *barco, int tem_bloco[2]);
+int pegarBloco(int *estado_atual, Robo *barco, bool tem_bloco, bool agarrado);
 
 //int colocarBloco(int *estado_atual, Robo *barco);
 

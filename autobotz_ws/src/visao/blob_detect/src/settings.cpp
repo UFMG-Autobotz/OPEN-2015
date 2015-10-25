@@ -24,7 +24,13 @@ settingsServer_T::settingsServer_T()
 	//used on the getEdges function 
 	getEdges_low_threshold  = 100;
 	getEdges_high_threshold = 3*getEdges_low_threshold;
-	getEdges_kernel_size    = 5;
+	getEdges_kernel_size    = 3;
+
+	//used on main
+	MAIN_autoresize = true;   //specifies if the program sould resize the image to keep loop rate
+	MAIN_resize_factor = 1;
+	MAIN_max_resize_factor = 1;
+	MAIN_min_resize_factor = 0.2;
 
 	//palette to which colors are clipped before sending to ROS
 	float maxDistance = 100;

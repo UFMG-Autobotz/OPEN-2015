@@ -52,7 +52,11 @@ int main(int argc, char** argv)
 
 	//create a Rate object to control the execution rate
 	//of our main loop
-	ros::Rate loop_rate(20);
+	ros::Rate loop_rate(50);
+
+
+	int c = 1;
+	unsigned long avg = 0;
 
 	while(ros::ok())
 	{
@@ -65,11 +69,35 @@ int main(int argc, char** argv)
 
 		//spin ROS
 		ros::spinOnce();
-		// ROS_INFO("Period: got: %ims,   ideal: %ims\n", 
-		//           loop_rate.cycleTime().nsec/1000000, loop_rate.expectedCycleTime().nsec/1000000);
 
 		//wait
 		loop_rate.sleep();
+
+		//if enabled, auto-resize the image to keep frame rate
+		if(settingsServer.MAIN_autoresize)
+		{
+			unsigned long minDiff = 10*1000*1000;
+			unsigned long delta   = loop_rate.cycleTime().nsec - loop_rate.expectedCycleTime().nsec;
+
+			if(delta > minDiff)  //too slow
+			{
+				settingsServer.MAIN_resize_factor = settingsServer.MAIN_resize_factor - 5.0/img.rows;
+				if(settingsServer.MAIN_resize_factor < settingsServer.MAIN_min_resize_factor)
+					settingsServer.MAIN_resize_factor = settingsServer.MAIN_min_resize_factor;
+			}
+			if(delta < -minDiff)  //fast enough
+			{
+				settingsServer.MAIN_resize_factor = settingsServer.MAIN_resize_factor + 5.0/img.rows;
+				if(settingsServer.MAIN_resize_factor > settingsServer.MAIN_max_resize_factor)
+					settingsServer.MAIN_resize_factor = settingsServer.MAIN_max_resize_factor;
+			}
+		}
+
+		//report loop rate
+		avg = (c*avg + loop_rate.cycleTime().nsec)/(c+1);
+		c++;
+		ROS_INFO("Period: cur: %ims,   avg: %ims,   ideal: %ims,   f: %f\n", 
+		           loop_rate.cycleTime().nsec/1000000, int(avg/1000000), loop_rate.expectedCycleTime().nsec/1000000, settingsServer.MAIN_resize_factor);
 	}
 
 	//deallocate and close any relevant stuff
@@ -309,7 +337,7 @@ void visionCode5(Mat& img, vector< feature >& features)
 	getEdges(edges_img, edges_img);
 
 		//DEBUG
-		//cv::namedWindow("edge map"); cv::imshow("edge map", edges_img); cv::waitKey(1);
+		cv::namedWindow("edge map"); cv::imshow("edge map", edges_img); cv::waitKey(1);
 
 	// find contours
 	std::vector<std::vector<cv::Point> > contours;  //stores the contours

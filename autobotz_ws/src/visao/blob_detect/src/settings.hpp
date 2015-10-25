@@ -57,6 +57,12 @@ class settingsServer_T
 			double getEdges_high_threshold;
 			int    getEdges_kernel_size   ;
 
+		//used on main
+			bool  MAIN_autoresize;   //specifies if the program sould resize the image to keep loop rate
+			float MAIN_resize_factor;
+			float MAIN_max_resize_factor;
+			float MAIN_min_resize_factor;
+
 		//paltte used in clipping colors to send to ROS
 			palette targetPalette;
 

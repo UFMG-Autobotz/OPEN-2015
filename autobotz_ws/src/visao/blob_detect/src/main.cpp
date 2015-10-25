@@ -52,7 +52,7 @@ int main(int argc, char** argv)
 
 	//create a Rate object to control the execution rate
 	//of our main loop
-	ros::Rate loop_rate(50);
+	ros::Rate loop_rate(10);
 
 
 	int c = 1;
@@ -76,18 +76,18 @@ int main(int argc, char** argv)
 		//if enabled, auto-resize the image to keep frame rate
 		if(settingsServer.MAIN_autoresize)
 		{
-			unsigned long minDiff = 10*1000*1000;
-			unsigned long delta   = loop_rate.cycleTime().nsec - loop_rate.expectedCycleTime().nsec;
-
-			if(delta > minDiff)  //too slow
+			long minDiff = 10 * long(1000) * 1000;
+			long delta   = loop_rate.cycleTime().nsec - loop_rate.expectedCycleTime().nsec;
+			ROS_INFO("Delta: %i", int(delta/1000000));
+			if(loop_rate.cycleTime().nsec - loop_rate.expectedCycleTime().nsec > minDiff)  //too slow
 			{
-				settingsServer.MAIN_resize_factor = settingsServer.MAIN_resize_factor - 5.0/img.rows;
+				settingsServer.MAIN_resize_factor = settingsServer.MAIN_resize_factor - 3.0/img.rows;
 				if(settingsServer.MAIN_resize_factor < settingsServer.MAIN_min_resize_factor)
 					settingsServer.MAIN_resize_factor = settingsServer.MAIN_min_resize_factor;
 			}
-			if(delta < -minDiff)  //fast enough
+			if(loop_rate.cycleTime().nsec - loop_rate.expectedCycleTime().nsec < -minDiff)  //fast enough
 			{
-				settingsServer.MAIN_resize_factor = settingsServer.MAIN_resize_factor + 5.0/img.rows;
+				settingsServer.MAIN_resize_factor = settingsServer.MAIN_resize_factor + 3.0/img.rows;
 				if(settingsServer.MAIN_resize_factor > settingsServer.MAIN_max_resize_factor)
 					settingsServer.MAIN_resize_factor = settingsServer.MAIN_max_resize_factor;
 			}

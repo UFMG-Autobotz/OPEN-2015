@@ -28,6 +28,10 @@
 
 #include <ros/ros.h>
 
+//for getting home dir
+#include <unistd.h>
+#include <pwd.h>
+
 #include "tinydir.h"  //biblioteca para acessar diretorios
 using namespace std;
 
@@ -35,8 +39,10 @@ using namespace std;
 const char* devDir            = "/dev/";  //diretorio de dispositivos do linux
 const char* arduino_substring = "ACM"; //substring que difere um arduino dos outros tty
 
-const char* arquivo_conf_arduino = "config/arduinos.conf";  //arquivo que guarda em qual porta 
-                                                            //esta cada arduino
+char* homedir; //home do usuario
+string arquivo_conf_arduino = "open-2015/autobotz_ws/config/arduinos.conf";  //arquivo que guarda em qual porta 
+                                                                                  //esta cada arduino. Relativo a home
+
 
 ////////////////////////////////////////////
 
@@ -59,6 +65,13 @@ int main(int argc, char** argv)
 {
 	//init ROS in order to be able to check if master is up
 	ros::init(argc, argv, "barco_launch");
+
+	//pegar home do usuario
+	if ((homedir = getenv("HOME")) == NULL)
+	{
+	    homedir = getpwuid(getuid())->pw_dir;
+	}
+	arquivo_conf_arduino = homedir + ("/" + arquivo_conf_arduino);
 
 	//////// tratar os argumentos passados ao programa
 	char arg_rec    [] = "rec"; 	//strings de argumentos correspondentes aos modos
@@ -129,11 +142,11 @@ void arduinos()
 	cout << "\nGravando no arquivo " << arquivo_conf_arduino << endl;
 
 	ofstream fout;
-	fout.open(arquivo_conf_arduino);
+	fout.open(arquivo_conf_arduino.c_str());
 	if(!fout.is_open() || !fout.good())
 	{
-		cout << "ERRO: gravar arquivo de saida falhou.\n Working dir is:" << endl;
-		system("pwd");
+		cout << "ERRO: gravar arquivo de saida falhou.\n Working dir is: " << flush;
+		system("pwd");	cout << endl;
 	}
 
 	fout << ardu_prop << endl;
@@ -143,7 +156,7 @@ void arduinos()
 
 	fout.close();
 
-	cout << "Pronto!\n" << endl;
+	cout << "\nPronto!\n" << endl;
 }
 
 void launch(bool rec)
@@ -151,12 +164,12 @@ void launch(bool rec)
 	////////////////     carregar endereco de cada ultrassom a partir    /////////////////////
 	////////////////            do arquivo de configuracao               /////////////////////
 	ifstream fin;
-	fin.open(arquivo_conf_arduino);
+	fin.open(arquivo_conf_arduino.c_str());
 	if(!fin.is_open() || !fin.good())
 	{
 		cout << "ERRO: leitura do arquivo de configuracao dos arduinos falhou!" << endl;
-		cout << "      working dir: "; system("pwd");
-		cout << "      tentou ler " << arquivo_conf_arduino << endl;
+		cout <<   "      working dir: "; system("pwd");
+		cout << "\n      tentou ler: " << arquivo_conf_arduino << endl;
 		return;
 	}
 
@@ -173,7 +186,12 @@ void launch(bool rec)
 	getline(fin, ardu_col);
 	getline(fin, ardu_imu);
 
-	//TODO: do some checking on the values read from the file
+	//uma linha escrito NULL indica que a ultima tentativa de calibracao falhou
+	if(ardu_prop == "NULL" || ardu_som == "NULL" ||
+	   ardu_col == "NULL"  || ardu_imu == "NULL" )
+	{
+		cout << "Aviso: Ha arduinos sem porta especificada..." << endl;
+	}
 
 	fin.close();
 
@@ -186,18 +204,27 @@ void launch(bool rec)
 
 
 	/////////////////      iniciar coisas do barco com roslaunch    //////////////////
-
-	string cmd("");
-	cmd += "export BARCO_LAUNCH_TURBINO && ";
-	cmd += "export BARCO_LAUNCH_ARDUSOM && ";
-	cmd += "export BARCO_LAUNCH_ARDUCOL && ";
-	cmd += "export BARCO_LAUNCH_ARDUIMU && ";
-	cmd += "roslaunch barco_launch using_env_vars.launch";
 	//set environment variables (export) and launch
-	//all the nodes with the appropriate launch file
+	//all the nodes using the launch file
+	string cmd("");
+	cmd += "export BARCO_LAUNCH_TURBINO=" + ardu_prop + " && ";
+	cmd += "export BARCO_LAUNCH_ARDUSOM=" + ardu_som  + " && ";
+	cmd += "export BARCO_LAUNCH_ARDUCOL=" + ardu_col  + " && ";
+	cmd += "export BARCO_LAUNCH_ARDUIMU=" + ardu_imu  + " && ";
+	if(ardu_prop == "NULL") cmd += "export BARCO_LAUNCH_USE_TURBINO=0 && ";
+	else                    cmd += "export BARCO_LAUNCH_USE_TURBINO=1 && ";
+
+	if(ardu_som == "NULL")  cmd += "export BARCO_LAUNCH_USE_ARDUSOM=0 && ";
+	else                    cmd += "export BARCO_LAUNCH_USE_ARDUSOM=1 && ";
+
+	if(ardu_col == "NULL")  cmd += "export BARCO_LAUNCH_USE_ARDUCOL=0 && ";
+	else                    cmd += "export BARCO_LAUNCH_USE_ARDUCOL=1 && ";
+
+	if(ardu_imu == "NULL")  cmd += "export BARCO_LAUNCH_USE_ARDUIMU=0 && ";
+	else                    cmd += "export BARCO_LAUNCH_USE_ARDUIMU=1 && ";
+
+	cmd += "roslaunch barco_launch using_env_vars.launch";
 	runOnNewTerminal(cmd);
-
-
 }
 
 void calibra_us()
@@ -311,12 +338,12 @@ string conectaArduino(const char* nome_legivel)
 	if(dif.size() == 0)
 	{
 		cout << "ERRO: Nenhum dispositivo novo detectado" << endl;
-		return std::string("");
+		return std::string("NULL");
 	}
 	else if(dif.size() > 1)
 	{
 		cout << "ERRO: Mais de um arduino novo detectado" << endl;
-		return std::string("");
+		return std::string("NULL");
 	}
 
 	return devDir + dif[0];
@@ -330,6 +357,6 @@ void runOnNewTerminal(string command, bool keepOpen)
 {
 	string s;
 
-	s = "gnome-terminal -x \" bash -e \" " + command + "\"\"";
+	s = "gnome-terminal -x bash -c '" + command + "; bash'";
 	system(s.c_str());
 }

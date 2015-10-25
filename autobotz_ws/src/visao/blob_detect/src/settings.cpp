@@ -24,7 +24,13 @@ settingsServer_T::settingsServer_T()
 	//used on the getEdges function 
 	getEdges_low_threshold  = 100;
 	getEdges_high_threshold = 3*getEdges_low_threshold;
-	getEdges_kernel_size    = 5;
+	getEdges_kernel_size    = 3;
+
+	//used on main
+	MAIN_autoresize = true;   //specifies if the program sould resize the image to keep loop rate
+	MAIN_resize_factor = 0.5;
+	MAIN_max_resize_factor = 1;
+	MAIN_min_resize_factor = 0.2;
 
 	//palette to which colors are clipped before sending to ROS
 	float maxDistance = 100;
@@ -48,12 +54,16 @@ void settingsServer_T::updateSettingsFromFile(string fileName)
 
 void settingsServer_T::updatePaletteFromFile(string fileName)
 {
+	targetPalette.clear();  //get rid of old contents
+
 	//open file
 	std::ifstream file;
 	file.open(fileName.c_str());
 	if(!file.good())
 	{
-		ROS_ERROR("settingsServer: Error opening palette file!\n");
+		ROS_ERROR(       "settingsServer: Error opening palette file!");
+		string err_msg = "                Tried to open file: " + fileName + "\n";
+		ROS_ERROR("%s", err_msg.c_str());
 		return;
 	}
 

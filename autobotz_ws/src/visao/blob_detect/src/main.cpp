@@ -20,6 +20,9 @@
 #include <opencv2/core/core.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 #include <opencv2/features2d/features2d.hpp> //blob detector
+//needed to find out home directory
+#include <unistd.h>
+#include <pwd.h>
 
 using namespace std;
 using cv::Mat;
@@ -34,15 +37,27 @@ void visionCode5(Mat& img, vector< feature >& features);
 //main function
 int main(int argc, char** argv)
 {
+	//get user home directory
+	char* homedir;
+	if ((homedir = getenv("HOME")) == NULL)
+	{
+	    homedir = getpwuid(getuid())->pw_dir;
+	}
+
 	//read program settings from files
-	settingsServer.updatePaletteFromFile("visao/palette.conf");
+	settingsServer.updatePaletteFromFile(std::string(homedir) + "/open-2015/autobotz_ws/config/palette.conf");
 
 	//init ROS
 	initROS(argc, argv);
 
 	//create a Rate object to control the execution rate
 	//of our main loop
-	ros::Rate loop_rate(20);
+	ros::Rate loop_rate(5);
+
+
+	int c = 1;
+	unsigned long avg = 0;
+	
 
 	while(ros::ok())
 	{
@@ -55,11 +70,37 @@ int main(int argc, char** argv)
 
 		//spin ROS
 		ros::spinOnce();
-		// ROS_INFO("Period: got: %ims,   ideal: %ims\n", 
-		//           loop_rate.cycleTime().nsec/1000000, loop_rate.expectedCycleTime().nsec/1000000);
 
 		//wait
 		loop_rate.sleep();
+
+		//if enabled, auto-resize the image to keep frame rate
+		if(settingsServer.MAIN_autoresize)
+		{
+			long minDiff = 10 * long(1000) * 1000;
+			long delta   = loop_rate.cycleTime().nsec - loop_rate.expectedCycleTime().nsec;
+			
+			if(delta > minDiff)  //too slow
+			{
+				settingsServer.MAIN_resize_factor = settingsServer.MAIN_resize_factor - 0.5/img.rows;
+				if(settingsServer.MAIN_resize_factor < settingsServer.MAIN_min_resize_factor)
+					settingsServer.MAIN_resize_factor = settingsServer.MAIN_min_resize_factor;
+			}
+			if(delta < -minDiff)  //fast enough
+			{
+				settingsServer.MAIN_resize_factor = settingsServer.MAIN_resize_factor + 0.5/img.rows;
+				if(settingsServer.MAIN_resize_factor > settingsServer.MAIN_max_resize_factor)
+					settingsServer.MAIN_resize_factor = settingsServer.MAIN_max_resize_factor;
+			}
+			//report image size
+			ROS_INFO("Delta: %ims,   f:%f,   dim:%ix%i", int(delta/1000000), settingsServer.MAIN_resize_factor
+                                               , img.cols, img.rows);
+		}
+
+		//report loop rate
+		avg = (c*avg + loop_rate.cycleTime().nsec)/(c+1);  c++;
+		ROS_INFO("Period: cur: %ims,   avg: %ims,   ideal: %ims", 
+		           loop_rate.cycleTime().nsec/1000000, int(avg/1000000), loop_rate.expectedCycleTime().nsec/1000000);
 	}
 
 	//deallocate and close any relevant stuff
@@ -322,7 +363,7 @@ void visionCode5(Mat& img, vector< feature >& features)
 			tmpCont.push_back(features[i].contour);
 			drawContours(tmp, tmpCont, -1, cv::Scalar(features[i].avgColor), CV_FILLED);
 		}
-		cv::namedWindow("features - pre filter"); cv::imshow("features - pre filter", tmp);	
+		//cv::namedWindow("features - pre filter"); cv::imshow("features - pre filter", tmp);	
 
 	//filter only relevant features
 	filterFeatures(features, features, settingsServer.targetPalette);
@@ -334,7 +375,7 @@ void visionCode5(Mat& img, vector< feature >& features)
 			tmpCont.push_back(features[i].contour);
 			drawContours(tmp, tmpCont, -1, cv::Scalar(features[i].avgColor), CV_FILLED);
 		}
-		cv::namedWindow("features - post filter"); cv::imshow("features - post filter", tmp);	
+		//cv::namedWindow("features - post filter"); cv::imshow("features - post filter", tmp);	
 
 		cv::waitKey(1); //needed to make imshow work
 }

@@ -1,7 +1,9 @@
 #include "blob_detect_ROS.hpp"
+#include "settings.hpp"
 //openCV imports
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
+#include <opencv2/imgproc/imgproc.hpp>
 //ROS imports
 #include <ros/ros.h>
 #include <cv_bridge/cv_bridge.h>
@@ -82,7 +84,10 @@ void rgbImgCallback(const sensor_msgs::ImageConstPtr& image)
 	}
 
 	//set the frame data and update counter
-	ROSvars.lastFrame = cv_ptr->image;
+	cv::Mat tmp = cv_ptr->image;
+	float c = settingsServer.MAIN_resize_factor;
+	cv::resize(tmp, tmp, cv::Size(c * tmp.cols, c * tmp.rows));
+	ROSvars.lastFrame = tmp;
 	ROSvars.frameCnt++; //increment frame count
 }
 

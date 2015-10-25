@@ -69,6 +69,7 @@ void RTMath::displayRollPitchYaw(const char *label, RTVector3& vec)
       for (int i=s; i<7; i++){       
         strcat(charBuf, sobreBuf1);
       }
+      charBuf[8] = '\0';
     }
    // Serial.println(s);
    // Serial.println(yaw);

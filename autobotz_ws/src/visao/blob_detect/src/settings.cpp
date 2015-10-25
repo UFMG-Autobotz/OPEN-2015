@@ -28,7 +28,7 @@ settingsServer_T::settingsServer_T()
 
 	//used on main
 	MAIN_autoresize = true;   //specifies if the program sould resize the image to keep loop rate
-	MAIN_resize_factor = 1;
+	MAIN_resize_factor = 0.5;
 	MAIN_max_resize_factor = 1;
 	MAIN_min_resize_factor = 0.2;
 

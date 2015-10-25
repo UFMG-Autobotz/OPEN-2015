@@ -52,11 +52,12 @@ int main(int argc, char** argv)
 
 	//create a Rate object to control the execution rate
 	//of our main loop
-	ros::Rate loop_rate(10);
+	ros::Rate loop_rate(5);
 
 
 	int c = 1;
 	unsigned long avg = 0;
+	
 
 	while(ros::ok())
 	{
@@ -78,26 +79,28 @@ int main(int argc, char** argv)
 		{
 			long minDiff = 10 * long(1000) * 1000;
 			long delta   = loop_rate.cycleTime().nsec - loop_rate.expectedCycleTime().nsec;
-			ROS_INFO("Delta: %i", int(delta/1000000));
-			if(loop_rate.cycleTime().nsec - loop_rate.expectedCycleTime().nsec > minDiff)  //too slow
+			
+			if(delta > minDiff)  //too slow
 			{
-				settingsServer.MAIN_resize_factor = settingsServer.MAIN_resize_factor - 3.0/img.rows;
+				settingsServer.MAIN_resize_factor = settingsServer.MAIN_resize_factor - 0.5/img.rows;
 				if(settingsServer.MAIN_resize_factor < settingsServer.MAIN_min_resize_factor)
 					settingsServer.MAIN_resize_factor = settingsServer.MAIN_min_resize_factor;
 			}
-			if(loop_rate.cycleTime().nsec - loop_rate.expectedCycleTime().nsec < -minDiff)  //fast enough
+			if(delta < -minDiff)  //fast enough
 			{
-				settingsServer.MAIN_resize_factor = settingsServer.MAIN_resize_factor + 3.0/img.rows;
+				settingsServer.MAIN_resize_factor = settingsServer.MAIN_resize_factor + 0.5/img.rows;
 				if(settingsServer.MAIN_resize_factor > settingsServer.MAIN_max_resize_factor)
 					settingsServer.MAIN_resize_factor = settingsServer.MAIN_max_resize_factor;
 			}
+			//report image size
+			ROS_INFO("Delta: %ims,   f:%f,   dim:%ix%i", int(delta/1000000), settingsServer.MAIN_resize_factor
+                                               , img.cols, img.rows);
 		}
 
 		//report loop rate
-		avg = (c*avg + loop_rate.cycleTime().nsec)/(c+1);
-		c++;
-		ROS_INFO("Period: cur: %ims,   avg: %ims,   ideal: %ims,   f: %f\n", 
-		           loop_rate.cycleTime().nsec/1000000, int(avg/1000000), loop_rate.expectedCycleTime().nsec/1000000, settingsServer.MAIN_resize_factor);
+		avg = (c*avg + loop_rate.cycleTime().nsec)/(c+1);  c++;
+		ROS_INFO("Period: cur: %ims,   avg: %ims,   ideal: %ims", 
+		           loop_rate.cycleTime().nsec/1000000, int(avg/1000000), loop_rate.expectedCycleTime().nsec/1000000);
 	}
 
 	//deallocate and close any relevant stuff
@@ -337,7 +340,7 @@ void visionCode5(Mat& img, vector< feature >& features)
 	getEdges(edges_img, edges_img);
 
 		//DEBUG
-		cv::namedWindow("edge map"); cv::imshow("edge map", edges_img); cv::waitKey(1);
+		//cv::namedWindow("edge map"); cv::imshow("edge map", edges_img); cv::waitKey(1);
 
 	// find contours
 	std::vector<std::vector<cv::Point> > contours;  //stores the contours
@@ -360,7 +363,7 @@ void visionCode5(Mat& img, vector< feature >& features)
 			tmpCont.push_back(features[i].contour);
 			drawContours(tmp, tmpCont, -1, cv::Scalar(features[i].avgColor), CV_FILLED);
 		}
-		cv::namedWindow("features - pre filter"); cv::imshow("features - pre filter", tmp);	
+		//cv::namedWindow("features - pre filter"); cv::imshow("features - pre filter", tmp);	
 
 	//filter only relevant features
 	filterFeatures(features, features, settingsServer.targetPalette);
@@ -372,7 +375,7 @@ void visionCode5(Mat& img, vector< feature >& features)
 			tmpCont.push_back(features[i].contour);
 			drawContours(tmp, tmpCont, -1, cv::Scalar(features[i].avgColor), CV_FILLED);
 		}
-		cv::namedWindow("features - post filter"); cv::imshow("features - post filter", tmp);	
+		//cv::namedWindow("features - post filter"); cv::imshow("features - post filter", tmp);	
 
 		cv::waitKey(1); //needed to make imshow work
 }

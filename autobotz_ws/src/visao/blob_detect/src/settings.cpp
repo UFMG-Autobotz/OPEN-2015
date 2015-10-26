@@ -1,11 +1,13 @@
 //implement the settings server
 
-//
 #include "settings.hpp"
 //cpp
 #include <string>
 #include <fstream>
 #include <sstream>
+//needed to find out home directory
+#include <unistd.h>
+#include <pwd.h>
 //open CV
 #include <opencv2/core/core.hpp>
 //ROS
@@ -40,10 +42,16 @@ settingsServer_T::settingsServer_T()
 	targetPalette.addColor(cv::Scalar(50 , 255, 255), maxDistance, "yellow");  
 	targetPalette.addColor(cv::Scalar(100, 255, 255), maxDistance, "yellow2");
 
-	///////////////// read custom values from some file ////////////
-	//TODO, use updateFromFile here
-	//
-	//Also, load targetPalette from a file
+	///////////////// read custom palette from default file ////////////
+	//get user home directory
+	char* homedir;
+	if ((homedir = getenv("HOME")) == NULL)
+	{
+	    homedir = getpwuid(getuid())->pw_dir;
+	}
+
+	//read from file
+	settingsServer.updatePaletteFromFile(std::string(homedir) + "/open-2015/autobotz_ws/config/palette.conf");
 }
 
 //update class variables from file
@@ -54,8 +62,6 @@ void settingsServer_T::updateSettingsFromFile(string fileName)
 
 void settingsServer_T::updatePaletteFromFile(string fileName)
 {
-	targetPalette.clear();  //get rid of old contents
-
 	//open file
 	std::ifstream file;
 	file.open(fileName.c_str());
@@ -66,6 +72,8 @@ void settingsServer_T::updatePaletteFromFile(string fileName)
 		ROS_ERROR("%s", err_msg.c_str());
 		return;
 	}
+
+	targetPalette.clear();  //get rid of old contents
 
 	//read every line
 	int i = 0;
@@ -99,6 +107,9 @@ void settingsServer_T::updatePaletteFromFile(string fileName)
 
 	//close file
 	file.close();
+
+	ROS_INFO("Got pallette from file: %s", fileName.c_str());
+	ROS_INFO("Palette has %i colors", targetPalette.size());
 }
 
 //parse a line from the palette file

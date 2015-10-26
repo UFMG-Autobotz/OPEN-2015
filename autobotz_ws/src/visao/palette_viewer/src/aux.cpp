@@ -108,8 +108,8 @@ void drawPalette(cv::Mat& canvas, const palette& P, int b)
 		//making  dr = dg = 0, we get db = md and db = -md
 		//
 		//thus, we can get a range of valid blue values:
-		int minB = curColor[2] - curDist;
-		int maxB = curColor[2] + curDist; 
+		int minB = curColor[0] - curDist;
+		int maxB = curColor[0] + curDist; 
 
 		//only draw if b is within the range for this color
 		if( minB < b && b < maxB)
@@ -120,11 +120,11 @@ void drawPalette(cv::Mat& canvas, const palette& P, int b)
 			//
 			//radius² = dr² + dg² = md² - db²
 			int radius = sqrt( pow(curDist      , 2)
-			                 - pow(curColor[2]-b, 2) );
+			                 - pow(curColor[0]-b, 2) );
 
 			//lets get a min/max value for r in this circle
-			int minR = curColor[0] - radius;
-			int maxR = curColor[0] + radius; 
+			int minR = curColor[2] - radius;
+			int maxR = curColor[2] + radius; 
 
 			//two fors make a circle around the color
 			for(int r = minR; r < maxR; r++)
@@ -137,8 +137,8 @@ void drawPalette(cv::Mat& canvas, const palette& P, int b)
 				//
 				//dg² = md² - db² - dg²
 				int dg = sqrt( pow(curDist      , 2)
-				              -pow(curColor[2]-b, 2)
-				              -pow(curColor[0]-r, 2) );
+				              -pow(curColor[0]-b, 2)
+				              -pow(curColor[2]-r, 2) );
 				
 				int minG = curColor[1] - dg;
 				int maxG = curColor[1] + dg;
@@ -150,7 +150,7 @@ void drawPalette(cv::Mat& canvas, const palette& P, int b)
 					// cerr << "r:" << r << endl;
 					// cerr << "g:" << g << endl;
 					
-					cv::Vec3b newColor(r, g, b);
+					cv::Vec3b newColor(b, g, r);
 					//only draw if (r,g) is a valid coordinate in the matrix
 					if(r >= 0 && g >= 0 && r < canvas.rows && g < canvas.cols)
 						canvas.at<cv::Vec3b>(cv::Point(r, g)) = newColor;

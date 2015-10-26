@@ -1,24 +1,22 @@
 /******************** ARDUCOL ************ ARDUCOL ******************
 Motores do caracol:
-  - Motor 1
-     -enable: 3
-     -in1: Pino 8
-     -in2: Pino 9
-  - Motor 2
-     -enable: 4
-     -in1: Pino 6
-     -in2: Pino 7
+  - IA: PWM 
+     -Motor A: Pino 10
+     -Motor B: Pino 9
+     -Garra: Pino 6
+  - IB: Direcao
+     -Motor A: Pino 11
+     -Motor B: Pino 8
+     -Garra: Pino 7
   - VCC: 7V de uma bateria (No alimentar com o arduino)
   - GND: 0V, Lembre-se de conectar o TERRA da Bateria ao TERRA do Arduino
-GARRA:
-  -IB: 10
-  -IA: 11
-  
-BOTÃO
-  -pino: 12
-  
+
 Comandos para rodar no ROS:
   ~$ rosrun rosserial_python serial_node.py /dev/ttyACM0
+  ~$ rostopic echo /eletronica/garra/temBloco
+  ~$ rostopic echo /controle/braco/motor/R
+  ~$ rostopic echo /controle/braco/motor/L
+  ~$ rostopic echo /controle/garra/motor
 
 *******************************************************************/
 

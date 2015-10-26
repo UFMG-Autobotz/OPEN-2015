@@ -1,0 +1,27 @@
+            COMANDOS PARA RODAR CARACOL/ GARRA / MOTOR DE PASSO
+
+MOTOR DE PASSO:
+Para utilizar a base giratória passe o programa "motor_passo.ino" que está dentro da pasta de códigos do arduino.
+Alimentação da placa: 12V (ver indicação de onde é o terra)
+
+Para rodar no ROS
+    ~$ rosrun rosserial_python serial_node.py /dev/ttyACM0
+    
+Em caso de teste, use o programa controle_seta para enviar o PWM/direcao para o motor
+
+    ~$ rosrun controle_seta seta
+    
+CARACOL:
+Para acionar os motores que giram o caracol alimente a ponte H, lembrando de curto circuitar os terras (arduino e o da fonte).
+O programa que deve ser passado é o "arducol.ino"
+
+Para rodar no ROS
+    ~$ rosrun rosserial_python serial_node.py /dev/ttyACM0
+    
+Em caso de teste, use o programa controle_seta para enviar o PWM/direcao para o motor
+    ~$ rosrun controle_seta seta
+
+ULTRASSOM
+Código no arduino: "ardussom.ino"
+Para rodar no ROS
+    ~$ rosrun rosserial_python serial_node.py /dev/ttyACM0

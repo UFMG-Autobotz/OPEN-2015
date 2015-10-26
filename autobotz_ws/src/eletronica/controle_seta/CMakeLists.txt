@@ -1,6 +1,6 @@
 
 cmake_minimum_required(VERSION 2.8.3)
-project(beginner_tutorials)
+project(controle_seta)
 
 find_package(catkin REQUIRED)
 find_package(catkin REQUIRED COMPONENTS
@@ -17,7 +17,7 @@ find_package(catkin REQUIRED COMPONENTS
  
 find_package(OpenCV REQUIRED)
 
-add_message_files(FILES Num.msg)
+add_message_files(FILES)
  
 generate_messages(
    DEPENDENCIES

@@ -163,7 +163,7 @@ int main(int argc, char **argv){
     //clock_t time1 = 0.0;
 
     geometry_msgs::Point objetivo;
-    std::string const_dir("/home/gustavo/open-2015/autobotz_ws/src/controle/src/constantes.txt");
+    std::string const_dir("/home/constantes.txt");
 
 
     if(argc < 3){

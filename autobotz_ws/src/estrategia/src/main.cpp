@@ -62,7 +62,7 @@ void posicaoMsgRecieved (const geometry_msgs::Pose2D& msg){
 
  }
 
- void atracadoMsgRecieved (const std_msgs::Int32 msg){
+ void atracadoMsgRecieved (const std_msgs::Bool msg){
 
     atracado = msg.data;
 
@@ -131,11 +131,11 @@ int main(int argc, char **argv){
     // PROVISORIO
 //    std_msgs::Int32 msg_propulsorR, msg_propulsorL;
 
-
+	estado_atual = 0;
     while (ros::ok()){
 
 
-    	
+    		printf ("Estado: %d\n", estado_atual);
 
 		    // troca entre estados de mais alto nivel
 		    switch(estado_atual){
@@ -143,7 +143,6 @@ int main(int argc, char **argv){
 		    	case 0: // estado INCIAL
 		    		
 
-		    		estado_atual = 0;
 					start = false;
 
  
@@ -151,7 +150,7 @@ int main(int argc, char **argv){
 
 					//if (start){
 
-							estado_atual = 10;
+					estado_atual = 10;
 					//}
 
 		    		break;
@@ -220,11 +219,11 @@ int main(int argc, char **argv){
 
 		
 		// tem que apertar o botao desligar para o barco começar de novo
-		if (!start) {
+		/*if (!start) {
 			
 		   	barco.zeraAtributos();
 		   	estado_atual = 0;
-		}
+		}*/
 
 
     	// preenchendo o que sera publicado

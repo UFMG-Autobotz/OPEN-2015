@@ -36,8 +36,8 @@ Código principal do pacote de controle
 #define VEL_LIN_MIN -180
 #define VEL_ANG_MAX 150
 #define VEL_ANG_MIN -150
-#define VEL_MAX 50
-#define VEL_MIN -50
+#define VEL_MAX 255
+#define VEL_MIN -255
 #define VEL_NOR 12 // intervalo de -255 a 255
 #define VEL_RET 100
 #define VEL_P_DIST 1.4
@@ -107,7 +107,7 @@ void ultrassomR (const std_msgs::Float32& msg){
  void imu(const std_msgs::Float32& msg){
 
     yaw = msg.data;
-    printf ("YAW: %.2f\n", yaw);
+    //printf ("YAW: %.2f\n", yaw);
  }
 
 
@@ -223,8 +223,8 @@ int main(int argc, char **argv){
     ros::Publisher pubBaseStepper = nh.advertise <std_msgs::Int32>("/controle/base/stepper", 1000);
     ros::Publisher pubBracoMotor = nh.advertise <std_msgs::Int32>("/controle/braco/motor", 1000); 
     ros::Publisher pubGarraMotor = nh.advertise <std_msgs::Int32>("/controle/garra/motor", 1000);   
-    ros::Publisher pubAtracado = nh.advertise <std_msgs::Bool>("controle/barco/atracado ", 1000);
-    ros::Publisher pubAgarrado = nh.advertise <std_msgs::Bool>("controle/garra/agarrado ", 1000);
+    ros::Publisher pubAtracado = nh.advertise <std_msgs::Bool>("controle/barco/atracado", 1000);
+    ros::Publisher pubAgarrado = nh.advertise <std_msgs::Bool>("controle/garra/agarrado", 1000);
 
 
 
@@ -374,7 +374,7 @@ int main(int argc, char **argv){
 
             
                     // se esta chegando perto de um obstaculo, freia
-                    if (distF < DIST_MIN && distF > DIST_FREIO){
+            /* if (distF < DIST_MIN && distF > DIST_FREIO){
 
                         msg_propulsorR.data = VEL_NOR * (distF/DIST_MIN);
                         msg_propulsorL.data = VEL_NOR * (distF/DIST_MIN);
@@ -390,7 +390,7 @@ int main(int argc, char **argv){
 
 
                     }
-               
+               */
 
                     break;
 

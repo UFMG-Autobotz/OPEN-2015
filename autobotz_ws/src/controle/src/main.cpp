@@ -38,7 +38,7 @@ Código principal do pacote de controle
 #define VEL_ANG_MIN -150
 #define VEL_MAX 255
 #define VEL_MIN -255
-#define VEL_NOR 12 // intervalo de -255 a 255
+#define VEL_NOR 140 // intervalo de -255 a 255
 #define VEL_RET 100
 #define VEL_P_DIST 1.4
 #define VEL_ANG_BRACO_KP 1.5
@@ -51,7 +51,7 @@ Código principal do pacote de controle
 #define DIST_FREIO 8.0
 
 #define ERRO_ANG_MORTO 1
-#define ERRO_ANG_OK 45
+#define ERRO_ANG_OK 15
 
 #define TEMPO_ALCANCA_BLOCO 1000 // ms
 #define TEMPO_AGARRA_BLOCO 3000 // ms
@@ -325,9 +325,10 @@ int main(int argc, char **argv){
 
                     if (abs(erro_ang) <= ERRO_ANG_OK){
                         // acrescenta velocidade linear
-                        //msg_propulsorR.data += VEL_NOR * abs(ERRO_ANG_OK - erro_ang) * linear_kp ;
-                        //msg_propulsorL.data += VEL_NOR * abs(ERRO_ANG_OK - erro_ang) * linear_kp ;
-
+                        //msg_propulsorR.data += VEL_NOR * abs(ERRO_ANG_OK - erro_ang);
+                        //msg_propulsorL.data += VEL_NOR * abs(ERRO_ANG_OK - erro_ang);
+                        msg_propulsorR.data += VEL_NOR * (1.0 - erro_ang / ERRO_ANG_OK);
+                        msg_propulsorL.data += VEL_NOR * (1.0 - erro_ang / ERRO_ANG_OK);
                     }
 
 

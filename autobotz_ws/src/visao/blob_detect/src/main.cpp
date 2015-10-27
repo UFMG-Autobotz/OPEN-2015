@@ -20,9 +20,6 @@
 #include <opencv2/core/core.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 #include <opencv2/features2d/features2d.hpp> //blob detector
-//needed to find out home directory
-#include <unistd.h>
-#include <pwd.h>
 
 using namespace std;
 using cv::Mat;
@@ -37,16 +34,6 @@ void visionCode5(Mat& img, vector< feature >& features);
 //main function
 int main(int argc, char** argv)
 {
-	//get user home directory
-	char* homedir;
-	if ((homedir = getenv("HOME")) == NULL)
-	{
-	    homedir = getpwuid(getuid())->pw_dir;
-	}
-
-	//read program settings from files
-	settingsServer.updatePaletteFromFile(std::string(homedir) + "/open-2015/autobotz_ws/config/palette.conf");
-
 	//init ROS
 	initROS(argc, argv);
 

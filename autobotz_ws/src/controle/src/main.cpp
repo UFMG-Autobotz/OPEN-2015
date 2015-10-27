@@ -23,7 +23,6 @@ Código principal do pacote de controle
 
 // ---------------- ARQUIVOS INCLUSOS ------------------
 
-#include "controle/squareCenters.h" //custom message
 #include "controle/velocidade.h"
 #include "./Funcoes/auxiliares.hpp"
 
@@ -125,26 +124,7 @@ void idControlador(std_msgs::Int32 msg){
 }
 
 
-// tem que refazer isso para o novo tipo de mensagem do Blanc
- void cubosAmarelos(const controle::squareCenters::ConstPtr& msg)
-{
-    //a menssagem contem apenas um campo que se chama centers e é do tipo vector
-    //ao acessar msg->centers, pode-se tratar centers como se fosse um
-    //vector declarado com a sintaxe:
-    // 
-    //std::vector < geometry_msgs::Point > centers; 
 
-    //system("clear");
-    //ROS_INFO("Got array of size %i", int(msg->centers.size()));
-    //ROS_INFO("Content:");
-    //for(int i = 0; i < msg->centers.size(); i++)
-    //{
-        //ROS_INFO("point %i", i);
-        //ROS_INFO("\tx: %i,y: %i", int(msg->centers[i].x), int(msg->centers[i].y));
-    //}
-    centerSquare = msg->centers[0];
-    //ROS_INFO(" ");
-}
 
 // ------------------ MAIN FUNCTION-------------------
 
@@ -205,8 +185,6 @@ int main(int argc, char **argv){
     ros::Subscriber subF = nh.subscribe("eletronica/ultrassom/F", 1000, ultrassomF);
     ros::Subscriber subB = nh.subscribe("eletronica/ultrassom/B", 1000, ultrassomB);
 
-    // no codigo oficial vai ler de um topico da estrategia que publica o bloco a pegar
-    ros::Subscriber sub = nh.subscribe("visao/squares/centers", 1000, cubosAmarelos);
 
     ros::Subscriber subIMU = nh.subscribe("eletronica/imu/yaw", 1000, imu);
 

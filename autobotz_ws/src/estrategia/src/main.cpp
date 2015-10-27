@@ -17,14 +17,12 @@ Código principal do pacote de estratéiga
 #include <geometry_msgs/Pose2D.h>
 #include <stdio.h>
 #include <stdlib.h>
-
+#include <vector>
 
 // ---------------- ARQUIVOS INCLUSOS ------------------
 
 
 #include "robo.h"
-#include "estados.h"
-#include "estrategia/trajetoria.h"
 #include "estrategia/velocidade.h"
 #include "estrategia/feature.h"
 #include "estrategia/featureVec.h"
@@ -43,7 +41,11 @@ Código principal do pacote de estratéiga
 #define VEL_MAX 255
 #define VEL_MIN -255
 
+#define TEMPO_ALCANCA_BLOCO 1000 // ms
+#define TEMPO_AGARRA_BLOCO 3000 // ms
+
 #define TEMPO_ATRACAR 1000 // em ms
+#define DIST_ATRACAR 15 // em cm
 
 #define ERRO_ANG_MORTO 3
 
@@ -52,6 +54,7 @@ Código principal do pacote de estratéiga
 bool start;
 bool atracado, agarrado, tem_bloco;
 int blocos_vermelhos, blocos_amarelos;
+float distL, distR, distF, distB;
 
 
 Robo barco; // assim não chama o construtor
@@ -73,11 +76,7 @@ void posicaoMsgRecieved (const geometry_msgs::Pose2D& msg){
 
  }
 
- void atracadoMsgRecieved (const std_msgs::Bool msg){
-
-    atracado = msg.data;
-
- }
+ 
 
   void temBlocoMsgRecieved (const std_msgs::Bool msg){
 
@@ -85,18 +84,37 @@ void posicaoMsgRecieved (const geometry_msgs::Pose2D& msg){
 
  }
 
- void agarradoMsgRecieved (const std_msgs::Int32 msg){
 
-    agarrado = msg.data;
+void ultrassomL (const std_msgs::Float32& msg){
+
+    distL = msg.data;
 
  }
 
+void ultrassomR (const std_msgs::Float32& msg){
+
+    distR = msg.data;
+
+ }
+
+ void ultrassomF (const std_msgs::Float32& msg){
+
+    distF = msg.data;
+
+ }
+
+ void ultrassomB (const std_msgs::Float32& msg){
+
+    distB = msg.data;
+
+ }
 
  void blocosMsgRecieved (const estrategia::featureVec msg){
 
- 	int i;
+
     blocos = msg;
 
+    int i;
     printf ("\n\n-------------- LENDO VISAO ---------------\n\n");
     printf ("Numero de blobs: %li\n", blocos.features.size());
     for (i=0; i<blocos.features.size(); i++)
@@ -119,6 +137,9 @@ int main(int argc, char **argv){
 	int estado_atual;
 	int lado_arena;
 	float angulo_saida, destino_x;
+	bool atracado;
+
+	std::vector<float> blocos_anteriores;
 
 
 	// init ROS stuff
@@ -131,9 +152,13 @@ int main(int argc, char **argv){
     // ------------------------- SUBSCRIBERS -------------------------
     ros::Subscriber subInicio = nh.subscribe("eletronica/start", 1000, &inicioMsgRecieved);
     ros::Subscriber subPosicao = nh.subscribe("estrategia/barco/posicao", 1000, &posicaoMsgRecieved);
-    ros::Subscriber subAtracado = nh.subscribe("controle/barco/atracado", 1000, &atracadoMsgRecieved);
     ros::Subscriber subTemBloco = nh.subscribe("eletronica/garra/temBloco", 1000, &temBlocoMsgRecieved);
-    ros::Subscriber subAgarrado = nh.subscribe("controle/barco/agarrado", 1000, &agarradoMsgRecieved);
+  
+
+    ros::Subscriber subR = nh.subscribe("eletronica/ultrassom/R", 1000, ultrassomR);
+    ros::Subscriber subL = nh.subscribe("eletronica/ultrassom/L", 1000, ultrassomL);
+    ros::Subscriber subF = nh.subscribe("eletronica/ultrassom/F", 1000, ultrassomF);
+    ros::Subscriber subB = nh.subscribe("eletronica/ultrassom/B", 1000, ultrassomB);
  
     ros::Subscriber subBlocos = nh.subscribe("/visao/features", 1000, &blocosMsgRecieved);
 
@@ -163,6 +188,7 @@ int main(int argc, char **argv){
 
 	estado_atual = 0;
 	lado_arena = -1; // -1 indica porto e 1 indica plataforma
+	atracado = false;
 
 	// ------------------------------------------------------
 
@@ -191,10 +217,19 @@ int main(int argc, char **argv){
 		    		break;
 
 		    	case 10: // estado PEGAR BLOCO
-		    	case 11:
+		    	case 11: // estado ESCOLHER 
 		    	case 12:
-		    	case 13:
-		    	case 14:
+		    	case 13: // estado AGARRAR
+		    		    // espera um tempo para a garra alcançar melhor o bloco
+                		//sleep(TEMPO_ALCANCA_BLOCO);
+                		//estado_atual = 14;
+                		//break;
+
+		    	case 14: // estado RECOLHER
+		                // espera um tempo para a garra pegar melhor o bloco
+		                //sleep(TEMPO_AGARRA_BLOCO);
+		                //estado_atual = 15;
+		    			//break;
 		    	case 15:
 		    	case 16:
 
@@ -209,8 +244,6 @@ int main(int argc, char **argv){
 		    			else // porto
 		    				lado_arena = -1;
 
-		    		// velocidade angular zero e linear o suficiente para manter o barco atracado
-		    		//barco.setVelocidadeBarco(VEL_ATRACAR, 0);
 		    		break;
 
 		    	// estado TRANSPORTE
@@ -226,23 +259,23 @@ int main(int argc, char **argv){
 		    			estado_atual = 21;
 
 
-		    		estado_atual = 21;
+		    		estado_atual = 21; // so pra teste
 		    		break;
 
 		    	case 21: // LOCALIZA destino
 
-		    		destino_x = localizaDestino(blocos);
+		    		destino_x = localizaDestino(blocos, blocos_anteriores);
 		    		
-		    		if (destino_x > 0)
+		    		if (destino_x > 0.0) // tem que melhorar essa condicao
 		    			estado_atual = 22;
+
 		    	case 22: // NAVEGAR
 
 		    		//transportarBloco(&estado_atual, lado_arena, &barco, blocos);
-		    		if (atracado){
+		    		/*if (atracado){
 		    			estado_atual = 30;
 		    			sleep(TEMPO_ATRACAR);
-		    		}
-
+		    		}*/
 		    		
 
 		    		break;
@@ -275,6 +308,9 @@ int main(int argc, char **argv){
 		    }
 
 
+
+		 if (distF < DIST_ATRACAR)
+		 	atracado = true;
 
 		
 		// tem que apertar o botao desligar para o barco começar de novo

@@ -23,7 +23,6 @@ Código principal do pacote de controle
 
 // ---------------- ARQUIVOS INCLUSOS ------------------
 
-#include "controle/squareCenters.h" //custom message
 #include "controle/velocidade.h"
 #include "./Funcoes/auxiliares.hpp"
 
@@ -125,26 +124,6 @@ void idControlador(std_msgs::Int32 msg){
 }
 
 
-// tem que refazer isso para o novo tipo de mensagem do Blanc
- void cubosAmarelos(const controle::squareCenters::ConstPtr& msg)
-{
-    //a menssagem contem apenas um campo que se chama centers e é do tipo vector
-    //ao acessar msg->centers, pode-se tratar centers como se fosse um
-    //vector declarado com a sintaxe:
-    // 
-    //std::vector < geometry_msgs::Point > centers; 
-
-    //system("clear");
-    //ROS_INFO("Got array of size %i", int(msg->centers.size()));
-    //ROS_INFO("Content:");
-    //for(int i = 0; i < msg->centers.size(); i++)
-    //{
-        //ROS_INFO("point %i", i);
-        //ROS_INFO("\tx: %i,y: %i", int(msg->centers[i].x), int(msg->centers[i].y));
-    //}
-    centerSquare = msg->centers[0];
-    //ROS_INFO(" ");
-}
 
 // ------------------ MAIN FUNCTION-------------------
 
@@ -205,8 +184,7 @@ int main(int argc, char **argv){
     ros::Subscriber subF = nh.subscribe("eletronica/ultrassom/F", 1000, ultrassomF);
     ros::Subscriber subB = nh.subscribe("eletronica/ultrassom/B", 1000, ultrassomB);
 
-    // no codigo oficial vai ler de um topico da estrategia que publica o bloco a pegar
-    ros::Subscriber sub = nh.subscribe("visao/squares/centers", 1000, cubosAmarelos);
+
 
     ros::Subscriber subIMU = nh.subscribe("eletronica/imu/yaw", 1000, imu);
 
@@ -223,15 +201,13 @@ int main(int argc, char **argv){
     ros::Publisher pubBaseStepper = nh.advertise <std_msgs::Int32>("/controle/base/stepper", 1000);
     ros::Publisher pubBracoMotor = nh.advertise <std_msgs::Int32>("/controle/braco/motor", 1000); 
     ros::Publisher pubGarraMotor = nh.advertise <std_msgs::Int32>("/controle/garra/motor", 1000);   
-    ros::Publisher pubAtracado = nh.advertise <std_msgs::Bool>("controle/barco/atracado", 1000);
-    ros::Publisher pubAgarrado = nh.advertise <std_msgs::Bool>("controle/garra/agarrado", 1000);
+
 
 
 
     ros::Rate rate(2); // Hz
 
     std_msgs::Int32 msg_propulsorR, msg_propulsorL, msg_baseStepper, msg_bracoMotor, msg_garraMotor;
-    std_msgs::Bool msg_atracado, msg_agarrado;
 
 
     while (ros::ok()){
@@ -243,8 +219,6 @@ int main(int argc, char **argv){
         msg_bracoMotor.data = 0;
         msg_garraMotor.data = 0;
 
-        msg_atracado.data = false;
-        msg_agarrado.data = false;
 
         vel_ang_braco = 0.0;
         
@@ -271,14 +245,11 @@ int main(int argc, char **argv){
 
             case 13: // estado AGARRAR
                                     
-                // espera um tempo para a garra alcançar melhor o bloco
-                sleep(TEMPO_ALCANCA_BLOCO);
+
                 // para de mexer o braco, ja que alcançou o bloco
                 vel_ang_braco = 0;
                 vel_lin_braco = 0;
                 vel_garra = VEL_GARRA;
-
-                msg_agarrado.data = true;
  
                 msg_baseStepper.data = vel_ang_braco;
                 msg_bracoMotor.data = vel_lin_braco;
@@ -288,8 +259,6 @@ int main(int argc, char **argv){
 
             case 14: // estado RECOLHER
                                     
-                // espera um tempo para a garra pegar melhor o bloco
-                sleep(TEMPO_AGARRA_BLOCO);
                          
                 // o braco vai reto e faz ajuste angular ao mesmo tempo
                 vel_ang_braco = ANG_BRACO * VEL_ANG_BRACO_KP;
@@ -338,7 +307,7 @@ int main(int argc, char **argv){
 
 
                     break;
-                    
+
             case 22:
                     
                     erro_ang = ANG_BARCO - yaw; // calcula diferenca entre angulo desejado e real
@@ -397,7 +366,7 @@ int main(int argc, char **argv){
 
             
                     // se esta chegando perto de um obstaculo, freia
-            /* if (distF < DIST_MIN && distF > DIST_FREIO){
+                    /* if (distF < DIST_MIN && distF > DIST_FREIO){
 
                         msg_propulsorR.data = VEL_NOR * (distF/DIST_MIN);
                         msg_propulsorL.data = VEL_NOR * (distF/DIST_MIN);
@@ -418,7 +387,10 @@ int main(int argc, char **argv){
                     break;
 
           
+            case 30:
 
+                msg_propulsorR.data = VEL_MAX;
+                msg_propulsorL.data = VEL_MAX;                
 
             default:
 
@@ -470,8 +442,6 @@ int main(int argc, char **argv){
         pubBracoMotor.publish(msg_bracoMotor);
         pubGarraMotor.publish(msg_garraMotor);
 
-        pubAtracado.publish(msg_atracado);
-        pubAgarrado.publish(msg_agarrado);
 
 
         // pega o valor anterior do angulo para uso do controle derivativo do angulo

@@ -2,10 +2,16 @@
 #include <stdlib.h>
 #include <string.h>
 
+
 #include "auxiliares.hpp"
 
 #define TELA_X 640.0
 #define TELA_Y 480.0
+
+#define LIM_BLOCO_CIMA 480
+#define LIM_BLOCO_BAIXO 0
+
+#define MEDIDAS_LEMBRADAS 5
 
 
 /* ---------------------- FUNCAO LECONSTANTESARQUIVO ---------------------
@@ -71,29 +77,65 @@ int leConstantesArquivo(std::string diretorio, float *linear_kp, float *linear_k
 
 ----------------------------------------------------------*/
 
-float localizaDestino(estrategia::featureVec blocos){
+float localizaDestino(estrategia::featureVec blocos, std::vector<float> blocos_anteriores){
 
 
-	float menor=TELA_X;
-	float maior=0.0;
-	float temp;
+	float media_atual=0.0, media_final=0.0;
+	float tempY, tempX;
+	int i, cont=0;
 
-	int i;
 
- printf ("\n\n-------------- funcao---------------\n\n");
+
+
+	// 
 	for (i=0; i<blocos.features.size(); i++){
 
 
-    	temp =  (float)blocos.features[i].centroid.x;
+    	tempX =  (float)blocos.features[i].centroid.x;
+    	tempY =  (float)blocos.features[i].centroid.y;
 
-		if ((temp < menor) && (temp >= 0))
-			menor = temp;
-		
+    	// ignora faixa para cima e para baixo onde nao deveria ter bloco
+    	if ((tempY < LIM_BLOCO_CIMA) && (tempY > LIM_BLOCO_BAIXO)){
 
-		if ((temp > maior) && (temp <= TELA_X))
-			maior = temp;
+    		// media das posições X de todos os blobs visiveis
+    		media_atual += tempX;
+    		cont++;
+
+		}
+
 	}
-	printf ("\nRETORNO: %f - Maior: %f, Menor: %f\n", (maior + menor)/2.0, maior, menor);
-	return ((float)(maior - menor)/2.0); // retorna centro da massa de blocos
+	
+	if (cont != 0)
+		media_atual /= cont;
+
+	printf ("\n\n################  MEDIA ATUAL: %f  CONT: %d ################\n\n", media_final, cont);
+
+	if (cont != 0){
+		// adiciona no vetor de medidas lembradas. Isso server para eliminar as medidas falsas 
+		if (blocos_anteriores.size() >= MEDIDAS_LEMBRADAS){
+
+			// mantem o vetor de medidas anteriores no limite, apagando medidas mais antigas e adicionando recentes
+			blocos_anteriores.erase(blocos_anteriores.begin());
+			blocos_anteriores.push_back(media_atual);
+
+		}
+		else 
+			blocos_anteriores.push_back(media_atual);
+	}
+
+
+
+
+	for (i=0; i<blocos_anteriores.size(); i++){
+
+		media_final += blocos_anteriores.at(i);
+
+	}
+
+	media_final /= blocos_anteriores.size();
+
+	printf ("\n\n################  MEDIA FINAL: %f ################\n\n", media_final);
+
+	return media_final; // retorna media das ultimas medidas de destino
 
 }

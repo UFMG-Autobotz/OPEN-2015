@@ -87,9 +87,9 @@ void filterContours(std::vector< std::vector<cv::Point> >   in  ,
 {
 	out.clear();
 
-	int   min_contour_area = 500;
-	float max_PA_rate = 0.2;   //perimeter/area  
-	float cont_approx_error = 0.02;  //factor in determinig precision of contour approximation
+	int   min_contour_area = settingsServer.FCONT_min_contour_area;
+	float max_PA_rate = settingsServer.FCONT_max_PA_rate;              //perimeter/area rate  
+	float cont_approx_error = settingsServer.FCONT_cont_approx_error;  //factor in determinig precision of contour approximation
 
 	//iterate through each contour
 	for (int i = 0; i < in.size(); i++)

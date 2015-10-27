@@ -57,6 +57,13 @@ class settingsServer_T
 			double getEdges_high_threshold;
 			int    getEdges_kernel_size   ;
 
+		//used in filterContours function
+			//criteria for eliminating contours:
+			float FCONT_min_contour_area;
+			float FCONT_max_PA_rate;         //perimeter/area rate
+			float FCONT_cont_approx_error;  //factor in determinig precision of contour approximation
+
+
 		//used on main
 			bool  MAIN_autoresize;   //specifies if the program sould resize the image to keep loop rate
 			float MAIN_resize_factor;

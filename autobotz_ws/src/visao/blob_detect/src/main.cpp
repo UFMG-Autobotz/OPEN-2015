@@ -309,17 +309,20 @@ void visionCode5(Mat& img, vector< feature >& features)
 
 	//erode and dilate image
 	Mat erodeK  = cv::getStructuringElement(cv::MORPH_RECT, cv::Size(3,3)); 	//Create kernels	
-	Mat dilateK = cv::getStructuringElement(cv::MORPH_RECT, cv::Size(8,8)); 
+	Mat dilateK = cv::getStructuringElement(cv::MORPH_RECT, cv::Size(7,7)); 
 
 	cv::erode (img, img, erodeK );   //apply operations
 	cv::dilate(img, img, dilateK);
-	
+		//DEBUG
+		//cv::namedWindow("pre-canny img"); cv::imshow("pre-canny img", img);
 
 	//find edges map (bw image with "highlighted" borders)
 	getEdges(img, edges_img);
+		//DEBUG
+		//cv::namedWindow("edges"); cv::imshow("edges", edges_img);
 
 	//dilate edge map to close open contours where there is a small gap on the border
-	erodeK = cv::getStructuringElement(cv::MORPH_RECT, cv::Size(1,1));
+	dilateK = cv::getStructuringElement(cv::MORPH_ELLIPSE, cv::Size(4,4));
 	cv::dilate (edges_img, edges_img, dilateK );
 
 	//find edges on the new map
@@ -327,7 +330,7 @@ void visionCode5(Mat& img, vector< feature >& features)
 	getEdges(edges_img, edges_img);
 
 		//DEBUG
-		//cv::namedWindow("edge map"); cv::imshow("edge map", edges_img); cv::waitKey(1);
+		//cv::namedWindow("dilated edge map"); cv::imshow("dilated edge map", edges_img); cv::waitKey(1);
 
 	// find contours
 	std::vector<std::vector<cv::Point> > contours;  //stores the contours

@@ -24,15 +24,20 @@ settingsServer_T::settingsServer_T()
 	/////////////  set some hard-coded default values  /////////////
 
 	//used on the getEdges function 
-	getEdges_low_threshold  = 100;
-	getEdges_high_threshold = 3*getEdges_low_threshold;
-	getEdges_kernel_size    = 3;
+	getEdges_low_threshold  = 40;
+	getEdges_high_threshold = 700;//3*getEdges_low_threshold;
+	getEdges_kernel_size    = 5;
 
 	//used on main
 	MAIN_autoresize = true;   //specifies if the program sould resize the image to keep loop rate
-	MAIN_resize_factor = 0.5;
+	MAIN_resize_factor     = 0.7;
 	MAIN_max_resize_factor = 1;
 	MAIN_min_resize_factor = 0.2;
+
+	//used on findContours
+	FCONT_min_contour_area  = 100;
+	FCONT_max_PA_rate       = 0.4;         //perimeter/area rate
+	FCONT_cont_approx_error = 0.02;  //factor in determinig precision of contour approximation
 
 	//palette to which colors are clipped before sending to ROS
 	float maxDistance = 100;

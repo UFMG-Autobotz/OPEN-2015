@@ -102,6 +102,10 @@ int main(int argc, char **argv){
 		msg_estado.data = 360.0 + yaw - ang_plataforma;
 		msg_estado.data %= 360;
 
+		if (msg_estado.data > 180)
+			msg_estado.data -= 360;
+
+
 		 // Publish the message 
 		 pubYawNormalizado.publish(msg_yawNormalizado);
 

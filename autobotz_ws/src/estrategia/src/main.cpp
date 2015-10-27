@@ -140,6 +140,8 @@ int main(int argc, char **argv){
 	bool atracado;
 
 	std::vector<float> blocos_anteriores;
+	estrategia::feature bloco_objetivo;
+
 
 
 	// init ROS stuff
@@ -178,7 +180,6 @@ int main(int argc, char **argv){
 
     // variaveis auxiliar para guardar o que sera publicado
     std_msgs::Int32 msg_estado; 
-    estrategia::trajetoria msg_trajetoria;
     estrategia::velocidade msg_velocidade;
     std_msgs::Float32 msg_destino, msg_anguloSaida;
 
@@ -216,9 +217,27 @@ int main(int argc, char **argv){
 
 		    		break;
 
-		    	case 10: // estado PEGAR BLOCO
+
+		    	// estado PEGAR BLOCO
+		    	case 10: // estado IDENTIFICAR BLOCOS
+
+		    			
+
+		    			//break;
 		    	case 11: // estado ESCOLHER 
-		    	case 12:
+
+		    			//bloco_objetivo = escolherBloco(blocos);
+		    			//estado_atual = 12;
+		    			//break;
+		    	case 12: // estado ESTENDER BRAÇO
+
+		    			//blocoObjetivo = trackBloco(blocos, blocoObjetivo)
+
+		    			//if (tem_bloco)
+		    			//	estado_atual = 13;
+
+		    			//break;
+
 		    	case 13: // estado AGARRAR
 		    		    // espera um tempo para a garra alcançar melhor o bloco
                 		//sleep(TEMPO_ALCANCA_BLOCO);

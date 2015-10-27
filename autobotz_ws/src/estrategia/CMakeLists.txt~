@@ -18,6 +18,8 @@ add_message_files(
    FILES
    velocidade.msg
    trajetoria.msg
+   feature.msg
+   featureVec.msg
  )
 
 
@@ -28,7 +30,7 @@ generate_messages(
 )
 
 catkin_package(
- CATKIN_DEPENDS message_runtime 
+ #CATKIN_DEPENDS message_runtime 
 )
 
 
@@ -39,8 +41,10 @@ include_directories(include ${catkin_INCLUDE_DIRS})
 #----------------------- ESTRATEGIA  ------------------------ #
 
 
-add_executable(strategy src/robo.cpp src/pegarBloco.cpp src/transportarBloco.cpp src/estados.cpp src/main.cpp) 
+add_executable(strategy src/robo.cpp src/pegarBloco.cpp src/transportarBloco.cpp src/estados.cpp src/Funcoes/auxiliares.cpp
+src/main.cpp) 
 target_link_libraries(strategy ${catkin_LIBRARIES}) 
+
 
 add_dependencies(strategy ${estrategia_EXPORTED_TARGETS})
 

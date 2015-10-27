@@ -31,6 +31,7 @@ Descrição do arquivo
 #include "./Funcoes/auxiliares.hpp"
 
 
+
 #endif
 
 // -------------------- CONSTANTES --------------------
@@ -56,6 +57,11 @@ Descrição do arquivo
 #define DIST_P 5.0
 #define DIST_MIN 12.0
 #define ERRO_ANG_OK 45
+
+#define DIRECAO_PLATAFORMA 0.0
+#define DIRECAO_PORTO 180.0
+
+
 
 // ----------------- VARIÁVEIS GLOBAIS ------------------
 
@@ -126,10 +132,10 @@ int pegarBloco(int *estado_atual, Robo *barco, bool tem_bloco, bool agarrado){
 
     	case 16: // estado CONTAR
 
-            if (barco->getLadoArena())
+            /*if (barco->getLadoArena())
     		    barco->addBlocoAmarelo();
             else
-                barco->addBlocoVermelho();
+                barco->addBlocoVermelho();*/
 
             return 1;
 
@@ -181,10 +187,10 @@ int colocarBloco(int *estado_atual, Robo *barco){
     	case 33: // estado CONTAR
 
 
-            if (barco->getLadoArena() == 1) // plataforma
+            /*if (barco->getLadoArena() == 1) // plataforma
                 barco->addBlocoAmarelo();
             else if (barco->getLadoArena() == -1) // porto
-                barco->addBlocoVermelho();
+                barco->addBlocoVermelho();*/
     		
     		break;
 
@@ -216,16 +222,24 @@ int colocarBloco(int *estado_atual, Robo *barco){
 
 ----------------------------------------------------------*/
 
-int transportarBloco(int *estado_atual, Robo *barco, geometry_msgs::Pose2D *posicao_objetivo){
+int transportarBloco(int *estado_atual, int lado_arena, Robo *barco, estrategia::featureVec blocos){
 
 	
+    float erro_ang;
+
+    if (lado_arena == -1) // se barco esta na plataforma
+        erro_ang = DIRECAO_PORTO - barco->getPosicao().theta;// deve ir em direcao ao porto
+    else // se barco estao no porto
+        erro_ang = DIRECAO_PLATAFORMA - barco->getPosicao().theta; // deve ir em direcao a plataforma
 
 	    // troca entre estados de mais alto nivel
     switch(*estado_atual){
 
-    	case 20: // estado DESATRACAR
+    	case 20: // estado DESATRACAR do porto
     		
-            if (desatracar(barco, posicao_objetivo))
+            erro_ang = barco->getPosicao().theta;
+
+            if (barco->getPosicao().theta)
                *estado_atual = 21;
 
     		break;
@@ -244,15 +258,15 @@ int transportarBloco(int *estado_atual, Robo *barco, geometry_msgs::Pose2D *posi
 
         case 23: // estado DECIDE ONDE GUARDAR
 
-            if (fazTrajetoria(barco, posicao_objetivo))
-                *estado_atual = 24; 
+            //if (fazTrajetoria(barco, posicao_objetivo))
+            //    *estado_atual = 24; 
             break;
 
 
     	case 24: // estado ATRACAR
 
-    		if (atracar(barco, posicao_objetivo))
-               return 1; // processo concluído
+    		//if (atracar(barco, posicao_objetivo))
+            //   return 1; // processo concluído
     		break;
 
 

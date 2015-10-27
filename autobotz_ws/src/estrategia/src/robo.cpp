@@ -81,10 +81,6 @@ void Robo::setPosicao(float x, float y, float theta){
    this->posicao.y =  y;
    this->posicao.theta = theta;
 
-   if (this->posicao.x >= ARENA_X/2)
-      this->lado_arena = 1; // porto
-   else
-      this->lado_arena = -1; // plataforma
 
 }
 /*void Robo::setObjetivo(float x, float y, float theta){
@@ -167,11 +163,7 @@ int Robo::getBlocosAmarelos(){
 
 }
 
-int Robo::getLadoArena(){
 
-   return this->lado_arena;
-
-}
 geometry_msgs::Pose2D Robo::getPosicao(){
 
    return this->posicao;
@@ -218,7 +210,6 @@ void Robo::zeraAtributos(){
 
    this->blocos_vermelhos = 0;
    this->blocos_amarelos = 0;
-   this->lado_arena = -1;  // -1 indica porto, 1 indica plataforma
    this->trajetoria.pontos.clear();
    
    // TESTES

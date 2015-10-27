@@ -23,7 +23,7 @@ gustdomar@gmail.com
 
 // -------------------- CABEÇALHOS --------------------
 
-int desatracar(Robo *barco, geometry_msgs::Pose2D *posicao_objetivo);
+int desatracar(Robo *barco, int lado_arena);
 
 void defineObjetivo(Robo *barco);
 

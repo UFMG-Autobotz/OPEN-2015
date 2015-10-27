@@ -39,7 +39,6 @@ gustdomar@gmail.com
    private:
       int blocos_vermelhos;
       int blocos_amarelos;
-      int lado_arena; // -1 indica porto, 1 indica plataforma
       geometry_msgs::Pose2D posicao;
       geometry_msgs::Pose2D objetivo;
       estrategia::velocidade velocidade_braco; 
@@ -66,7 +65,6 @@ gustdomar@gmail.com
       // Get
       int getBlocosVermelhos();
       int getBlocosAmarelos();
-      int getLadoArena();
       geometry_msgs::Pose2D getPosicao();
       //geometry_msgs::Pose2D getObjetivo();
       estrategia::velocidade getVelocidade();

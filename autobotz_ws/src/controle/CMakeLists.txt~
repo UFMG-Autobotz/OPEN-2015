@@ -36,5 +36,9 @@ include_directories(include ${catkin_INCLUDE_DIRS})
 add_executable(control src/main.cpp src/Funcoes/auxiliares.cpp) 
 target_link_libraries(control ${catkin_LIBRARIES}) 
 
+add_executable(control_v2 src/main_v2.cpp src/Funcoes/auxiliares.cpp) 
+target_link_libraries(control_v2 ${catkin_LIBRARIES}) 
+
 add_dependencies(control ${controle_EXPORTED_TARGETS})
+add_dependencies(control_v2 ${controle_EXPORTED_TARGETS})
 

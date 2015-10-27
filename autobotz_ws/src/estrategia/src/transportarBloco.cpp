@@ -53,10 +53,13 @@ Código principal do pacote de estratéiga
 #define PLAT_OBJ_Y 150
 #define PLAT_OBJ_THETA 0
 
+#define DIRECAO_PORTO 180.0 // tem que fazer configuracao pra normalizar isso
+#define DIRECAO_PLATAFORMA 0.0
+
 // ----------------- VARIÁVEIS GLOBAIS ------------------
 
 float pos_x, pos_y;
-float angulo_saida;
+
 
 
 // ---------------- CALLBACK FUNCTIONs -----------------
@@ -73,16 +76,18 @@ void posicao (const geometry_msgs::Pose2D& msg){
 /* ------------------ FUNCAO DESATRACAR -------------------
 
 	Entrada: Objeto do tipo Robo (classe definida em robo.cpp)
+	e lado da arena em que o robo esta
 	Saida: 1 ou 0. 1 indica fim do processo
 	Finalidade: Rotacionar o robo e deixá-lo pronto para seguir
 	na direcao do proximo objetivo (porto/plataforma)
 
 ----------------------------------------------------------*/
 
-int desatracar(Robo *barco, geometry_msgs::Pose2D *posicao_objetivo){
+int desatracar(Robo *barco, int lado_arena){
 
 	int i, delta_x, delta_y;
 	float vel_linear, vel_angular;
+	float angulo_saida;
 
 	/*
 
@@ -98,18 +103,20 @@ int desatracar(Robo *barco, geometry_msgs::Pose2D *posicao_objetivo){
 	// velocidade linear igual a zero, o barco so vai rodar
 	vel_linear = 0.0;
 
+
+	if (lado_arena == -1) // se robo esta no porto
+		angulo_saida = DIRECAO_PLATAFORMA; // deve ir para a paltaforma
+	else // se robo esta na plataforma
+		angulo_saida = DIRECAO_PORTO; // deve ir para o porto
+
 	
-	// definindo angulo de saida
-	delta_y = posicao_objetivo->y - barco->getPosicao().y;
-	delta_x = posicao_objetivo->x - barco->getPosicao().x;
-	angulo_saida = atan(delta_y/delta_x) * 180 / PI;  // angulo em GRAUS
 	// velocidade angular proporcional ao erro. Velocidade em GRAUS/SEGUNDO
-	vel_angular = VEL_ANG_KP * (barco->getPosicao().theta - angulo_saida) * barco->getLadoArena(); // positivo: anti-horario; negativo: horario
+	vel_angular = VEL_ANG_KP * (barco->getPosicao().theta - angulo_saida) * lado_arena; // positivo: anti-horario; negativo: horario
 
 	barco->setVelocidadeBarco(vel_linear, vel_angular);
 
-	if ((barco->getPosicao().theta - posicao_objetivo->theta) <= ERRO_ANG_OK)
-		return 1;
+	//if ((barco->getPosicao().theta - posicao_objetivo->theta) <= ERRO_ANG_OK)
+	//	return 1;
 
 	return 0;
 
@@ -160,7 +167,7 @@ int fazTrajetoria(Robo *barco, geometry_msgs::Pose2D *posicao_objetivo){
 
 	
 	// velocidade linear proporcional ao erro. Velocidade em CENTIMETROS/SEGUNDO
-	vel_linear = VEL_LIN_KP * (1/delta_d) * barco->getLadoArena(); // positivo: anti-horario; negativo: horario
+	//vel_linear = VEL_LIN_KP * (1/delta_d) * barco->getLadoArena(); // positivo: anti-horario; negativo: horario
 
 	
 	barco->setVelocidadeBarco(vel_linear, vel_angular);
@@ -188,6 +195,7 @@ int atracar(Robo *barco, geometry_msgs::Pose2D *posicao_objetivo){
 	int i, delta_x, delta_y;
 	int lado; 
 	float vel_linear, vel_angular;
+	float angulo_saida;
 
 	/*
 
@@ -209,7 +217,7 @@ int atracar(Robo *barco, geometry_msgs::Pose2D *posicao_objetivo){
 	delta_x = posicao_objetivo->x - barco->getPosicao().x;
 	angulo_saida = atan(delta_y/delta_x) * 180 / PI;  // angulo em GRAUS
 	// velocidade angular proporcional ao erro. Velocidade em GRAUS/SEGUNDO
-	vel_angular = VEL_ANG_KP * (barco->getPosicao().theta - angulo_saida) * barco->getLadoArena(); // positivo: anti-horario; negativo: horario
+	//vel_angular = VEL_ANG_KP * (barco->getPosicao().theta - angulo_saida) * barco->getLadoArena(); // positivo: anti-horario; negativo: horario
 
 	barco->setVelocidadeBarco(vel_linear, vel_angular);
 

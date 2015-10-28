@@ -1,0 +1,99 @@
+#include "ros/ros.h"
+#include "std_msgs/Float32.h"
+#include <sstream>
+#include<iostream>
+using namespace std;
+
+float ultrassomR, ultrassomL, ultrassomB, ultrassomF;
+
+float calibracao(float &data){
+  float ultrassom;
+  ultrassom = data;
+  if(ultrassom<0)
+	ultrassom = -1.0;
+  if(ultrassom>= 0.00 && ultrassom <=1.70)
+	ultrassom =  data * 1.40;
+  
+  else if(ultrassom>1.70 && ultrassom <=2.80)
+	ultrassom =  data * 1.48;//42
+
+  else if(ultrassom>2.80 && ultrassom<=3.20)
+	ultrassom =  data * 1.52;//42
+
+  else if(ultrassom>3.20 && ultrassom <=7.50)
+	ultrassom =  data * 1.35;//35
+
+  else if(ultrassom> 7.50 && ultrassom <= 13.00)
+	ultrassom =  data*1.31;
+
+  else if(ultrassom> 13.00  && ultrassom<= 23.50)
+	ultrassom =  data*1.24;
+
+  else if(ultrassom> 23.50 && ultrassom <=39.00)
+	ultrassom =  data*1.16;//25
+
+  else if(ultrassom> 39.00 && ultrassom <=200.00)
+	ultrassom = data*1.14;//19
+  return ultrassom;
+}
+
+void CallbackR(const std_msgs::Float32& msg){
+	ultrassomR = msg.data;
+	ultrassomR = calibracao(ultrassomR);
+}
+
+void CallbackL(const std_msgs::Float32& msg){
+	ultrassomL = msg.data;
+	ultrassomL = calibracao(ultrassomL);
+}
+
+void CallbackF(const std_msgs::Float32& msg){
+	ultrassomF = msg.data;
+	ultrassomF = calibracao(ultrassomF);
+}
+
+void CallbackB(const std_msgs::Float32& msg){
+	ultrassomB = msg.data;
+	ultrassomB = calibracao(ultrassomB);
+}
+
+int main(int argc, char **argv)
+{
+  ros::init(argc, argv, "calibra_ultrassom");
+  ros::NodeHandle n;
+
+  ros::Publisher chatterR = n.advertise<std_msgs::Float32>("/eletronica/ultrassom/R", 1000);
+  ros::Publisher chatterL = n.advertise<std_msgs::Float32>("/eletronica/ultrassom/L", 1000);
+  ros::Publisher chatterF = n.advertise<std_msgs::Float32>("/eletronica/ultrassom/F", 1000);
+  ros::Publisher chatterB = n.advertise<std_msgs::Float32>("/eletronica/ultrassom/B", 1000);
+
+  ros::Subscriber subR = n.subscribe("/eletronica/ultrassom/raw/R", 1000, CallbackR);
+  ros::Subscriber subL = n.subscribe("/eletronica/ultrassom/raw/L", 1000, CallbackL);
+  ros::Subscriber subF = n.subscribe("/eletronica/ultrassom/raw/F", 1000, CallbackF);
+  ros::Subscriber subB = n.subscribe("/eletronica/ultrassom/raw/B", 1000, CallbackB);
+
+  ros::Rate loop_rate(4);
+  
+  std_msgs::Float32 msgR, msgL, msgB, msgF;
+  
+  while (ros::ok())
+  {
+    msgF.data = ultrassomF;
+    msgL.data = ultrassomL;
+    msgF.data = ultrassomF;
+    msgB.data = ultrassomB;
+
+    cout<<"Dir: "<<msgR.data<<"  Esq: "<<msgL.data<<"  Frente: "<<msgF.data<<"  Tras: "<<msgB.data<<endl;
+
+    chatterR.publish(msgR);
+    chatterL.publish(msgL);
+    chatterF.publish(msgF);
+    chatterB.publish(msgB);
+
+    ros::spinOnce();
+    loop_rate.sleep();
+  }
+
+  ros::spin();
+  return 0;
+}

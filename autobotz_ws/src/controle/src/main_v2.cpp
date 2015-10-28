@@ -42,8 +42,8 @@ Código principal do pacote de controle
 #define VEL_P_DIST 1.4
 #define VEL_ANG_BRACO_KP 1.5
 #define VEL_ANG_BRACO 80
-#define VEL_LIN_BRACO 100
-#define VEL_GARRA 70.0
+#define VEL_LIN_BRACO 170
+#define VEL_GARRA 255.0
 
 #define DIST_P 5.0
 #define DIST_MIN 5.0
@@ -54,6 +54,9 @@ Código principal do pacote de controle
 
 #define TEMPO_ALCANCA_BLOCO 1000 // ms
 #define TEMPO_AGARRA_BLOCO 3000 // ms
+#define TEMPO_ESTENDE_BLOCO 3000 // ms
+#define TEMPO_GUARDA_BRACO 5000 // ms
+#define TEMPO_GUARDA_BLOCO 5000 // ms
 
 #define ANG_BRACO_GUARDADO 110 // em graus
 
@@ -65,6 +68,7 @@ int id_controlador;
 bool start;
 float distL, distR, distF, distB;
 float yaw, destino;
+float bloco_objetivo_x;
 geometry_msgs::Point centerSquare;
 controle::velocidade velBarco, velBarco_anterior;
 
@@ -126,6 +130,12 @@ void idControlador(std_msgs::Int32 msg){
 void destinoMsgRecieved(std_msgs::Float32 msg){
 
     destino = msg.data;
+
+}
+
+void blocoObjetivoXMsgRecieved(std_msgs::Float32 msg){
+
+    bloco_objetivo_x = msg.data;
 
 }
 
@@ -197,6 +207,8 @@ int main(int argc, char **argv){
 
     ros::Subscriber subDestino = nh.subscribe("estrategia/transporte/destino", 1000, destinoMsgRecieved);
 
+    ros::Subscriber subBlocoObjetivoX = nh.subscribe("estrategia/bloco/bloco_objetivo_x", 1000, blocoObjetivoXMsgRecieved);
+
 
 
     // --------------------------- PUBLISHERS ---------------------------
@@ -240,7 +252,7 @@ int main(int argc, char **argv){
                 // se o sensor ainda não está lendo bloco dentro da garra, estende o braço com velocidade constante
                 
                 // o braco vai reto e faz ajuste angular ao mesmo tempo
-                //vel_ang_braco = ANG_BRACO * VEL_ANG_BRACO_KP;
+                vel_ang_braco = (TELA_COL/2 - bloco_objetivo_x) * VEL_ANG_BRACO_KP;
                 vel_lin_braco = VEL_LIN_BRACO;
         
                 msg_baseStepper.data = vel_ang_braco;
@@ -304,6 +316,20 @@ int main(int argc, char **argv){
                 // mantem o barco atracado
                 msg_propulsorR.data = VEL_MAX;
                 msg_propulsorL.data = VEL_MAX; 
+
+
+            case 16: // estado CONTAR
+
+                sleep(TEMPO_GUARDA_BRACO);
+                // o braco vai reto e faz ajuste angular ao mesmo tempo
+                vel_ang_braco = 0;
+        
+                msg_baseStepper.data = vel_ang_braco;
+           
+                
+                // mantem o barco atracado
+                msg_propulsorR.data = VEL_MAX;
+                msg_propulsorL.data = VEL_MAX;                 
 
 
                 break;
@@ -420,6 +446,10 @@ int main(int argc, char **argv){
 
             case 30: // acha LUGAR DISPONIVEL 
 
+                    // mantem o barco atracado
+                    msg_propulsorR.data = VEL_MAX;
+                    msg_propulsorL.data = VEL_MAX; 
+
                     break;
 
             case 31: // estado ESTENDER BRACO
@@ -428,44 +458,58 @@ int main(int argc, char **argv){
                 // se o sensor ainda não está lendo bloco dentro da garra, estende o braço com velocidade constante
                 
                 // o braco vai reto e faz ajuste angular ao mesmo tempo
-                vel_ang_braco = ANG_BRACO * VEL_ANG_BRACO_KP;
+     //           vel_ang_braco = ANG_BRACO * VEL_ANG_BRACO_KP;
                 vel_lin_braco = VEL_LIN_BRACO;
         
+                // atualiza o que sera publicado
                 msg_baseStepper.data = vel_ang_braco;
                 msg_bracoMotor.data = vel_lin_braco;
+
+                // mantem o barco atracado
+                msg_propulsorR.data = VEL_MAX;
+                msg_propulsorL.data = VEL_MAX; 
 
                 break;
 
             case 32: // estado SOLTAR bloco
                                     
                 // espera um tempo para a garra alcançar melhor o bloco
-                sleep(TEMPO_ALCANCA_BLOCO);
+      //          sleep(TEMPO_ESTENDE_BLOCO);
                 // para de mexer o braco, ja que alcançou o bloco
                 vel_ang_braco = 0;
                 vel_lin_braco = 0;
-                vel_garra = VEL_GARRA;
-
-                msg_agarrado.data = true;
+                vel_garra = (-1) * VEL_GARRA;
  
+
+                // atualiza o que sera publicado
                 msg_baseStepper.data = vel_ang_braco;
                 msg_bracoMotor.data = vel_lin_braco;
                 msg_garraMotor.data = vel_garra;
+
+                // mantem o barco atracado
+                msg_propulsorR.data = VEL_MAX;
+                msg_propulsorL.data = VEL_MAX; 
 
                 break;
 
             case 33: // estado RECOLHER
                                     
                 // espera um tempo para a garra pegar melhor o bloco
-                sleep(TEMPO_AGARRA_BLOCO);
+        //        sleep(TEMPO_SOLTA_BLOCO);
                          
                 // o braco vai reto e faz ajuste angular ao mesmo tempo
-                vel_ang_braco = ANG_BRACO * VEL_ANG_BRACO_KP;
+                //vel_ang_braco = ANG_BRACO * VEL_ANG_BRACO_KP;
                 vel_lin_braco = (-1) * VEL_LIN_BRACO;
                 vel_garra = 0.0;
         
+                // atualiza o que sera publicado
                 msg_baseStepper.data = vel_ang_braco;
                 msg_bracoMotor.data = vel_lin_braco;
                 msg_garraMotor.data = vel_garra;
+
+                // mantem o barco atracado
+                msg_propulsorR.data = VEL_MAX;
+                msg_propulsorL.data = VEL_MAX; 
 
                 break;
 
@@ -475,12 +519,25 @@ int main(int argc, char **argv){
                 // o braco vai reto e faz ajuste angular ao mesmo tempo
                 vel_ang_braco = VEL_ANG_BRACO;
                 vel_lin_braco = 0;
-        
+
+                // atualiza o que sera publicado
                 msg_baseStepper.data = vel_ang_braco;
                 msg_bracoMotor.data = vel_lin_braco;
 
+                // mantem o barco atracado
+                msg_propulsorR.data = VEL_MAX;
+                msg_propulsorL.data = VEL_MAX; 
+
                 break;
 
+
+            default:
+                msg_garraMotor.data = 0;
+                msg_baseStepper.data = 0;
+                msg_bracoMotor.data = 0;          
+                msg_propulsorR.data = 0;
+                msg_propulsorL.data = 0;      
+                break;
 
 
         }

@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <string>
 
 
 #include "auxiliares.hpp"
@@ -95,7 +96,7 @@ float localizaDestino(estrategia::featureVec blocos, std::vector<float> *blocos_
     	tempY =  (float)blocos.features[i].centroid.y;
 
     	// ignora faixa para cima e para baixo onde nao deveria ter bloco
-    	if ((tempY < LIM_BLOCO_CIMA) && (tempY > LIM_BLOCO_BAIXO)){
+    	if ((tempY < LIM_BLOCO_CIMA) && (tempY > LIM_BLOCO_BAIXO) && blocos.features[i].colorName.data.compare("yellow")){
 
     		// media das posições X de todos os blobs visiveis
     		media_atual += tempX;

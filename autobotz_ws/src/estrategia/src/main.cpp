@@ -43,6 +43,11 @@ Código principal do pacote de estratéiga
 
 #define TEMPO_ALCANCA_BLOCO 1000 // ms
 #define TEMPO_AGARRA_BLOCO 3000 // ms
+#define TEMPO_ESTENDE_BRACO 3000 // ms
+#define TEMPO_SOLTAR_BLOCO 3000 // ms
+#define TEMPO_GUARDA_BRACO 5000 // ms
+#define TEMPO_GUARDA_BLOCO 5000 // ms
+
 
 #define TEMPO_ATRACAR 1000 // em ms
 #define DIST_ATRACAR 15 // em cm
@@ -141,7 +146,7 @@ int main(int argc, char **argv){
 	bool atracado;
 
 	std::vector<float> blocos_anteriores;
-	estrategia::feature bloco_objetivo;
+	float bloco_objetivo_X;
 
 
 
@@ -173,6 +178,8 @@ int main(int argc, char **argv){
 
     ros::Publisher pubTransporteDestino = nh.advertise <std_msgs::Float32>("estrategia/transporte/destino", 1000);
     ros::Publisher pubTransporteAnguloSaida = nh.advertise <std_msgs::Float32>("estrategia/transporte/angulo_saida", 1000);
+    ros::Publisher pubBlocoObjetivoX = nh.advertise <std_msgs::Float32>("estrategia/bloco/bloco_objetivo_x", 1000);
+    
     
 
 
@@ -183,6 +190,7 @@ int main(int argc, char **argv){
     std_msgs::Int32 msg_estado; 
     estrategia::velocidade msg_velocidade;
     std_msgs::Float32 msg_destino, msg_anguloSaida;
+    std_msgs::Float32 msg_blocoObjetivoX;
 
 
 
@@ -206,15 +214,12 @@ int main(int argc, char **argv){
 		    	case 0: // estado INCIAL
 		    		
 
-					start = false;
-
+					
  
 					barco.zeraAtributos();
 
-					//if (start){
-
 					estado_atual = 10;
-					//}
+					
 
 		    		break;
 
@@ -232,26 +237,32 @@ int main(int argc, char **argv){
 		    			//break;
 		    	case 12: // estado ESTENDER BRAÇO
 
-		    			//blocoObjetivo = trackBloco(blocos, blocoObjetivo)
+		    			bloco_objetivo_X = trackBloco(blocos);
 
-		    			//if (tem_bloco)
-		    			//	estado_atual = 13;
+		    			if (tem_bloco)
+		    				estado_atual = 13;
 
-		    			//break;
+
+		    			msg_blocoObjetivoX.data = destino_x;
+
+		    			break;
 
 		    	case 13: // estado AGARRAR
 		    		    // espera um tempo para a garra alcançar melhor o bloco
-                		//sleep(TEMPO_ALCANCA_BLOCO);
-                		//estado_atual = 14;
-                		//break;
+                		sleep(TEMPO_ALCANCA_BLOCO);
+                		estado_atual = 14;
+                		break;
 
 		    	case 14: // estado RECOLHER
 		                // espera um tempo para a garra pegar melhor o bloco
-		                //sleep(TEMPO_AGARRA_BLOCO);
-		                //estado_atual = 15;
-		    			//break;
+		                sleep(TEMPO_AGARRA_BLOCO);
+		                estado_atual = 15;
+		    			break;
 
 		    	case 15: //estado GUARDAR
+
+		    			sleep(TEMPO_GUARDA_BLOCO);
+		    			estado_atual = 16;
 
 		    	case 16: // estado CONTAR
 
@@ -285,21 +296,28 @@ int main(int argc, char **argv){
 		    			estado_atual = 21;
 
 
-		    		estado_atual = 21; // so pra teste
+		    		//estado_atual = 21; // so pra teste
 		    		break;
 
-		    	case 21: // LOCALIZA destino
+		    	case 21: // LOCALIZA destino e NAVEGA!!
 
 		    		destino_x = localizaDestino(blocos, &blocos_anteriores);
 		    		
-		    		
-
-		    		//transportarBloco(&estado_atual, lado_arena, &barco, blocos);
+		    	
 		    		if (atracado){
-		    			estado_atual = 30;
+		    			estado_atual = 22;
 		    			sleep(TEMPO_ATRACAR);
 		    		}
-		    		
+
+		    		break;
+
+		    	case 22:
+
+
+		    		if (lado_arena == -1) // atracou na plataforma
+		    			estado_atual = 30; // nao pega bloco e volta pro porto
+		    		else if (lado_arena = 1) // atracou no porto
+		    				estado_atual = 10; // pega novo bloco
 
 		    		break;
 
@@ -310,32 +328,36 @@ int main(int argc, char **argv){
 
 		    	case 30: // acha LUGAR DISPONIVEL 
 
-		    			// funcao que retorna quando o braco esta em um agulo bom para lancar o braco
+		    			// funcao que retorna um agulo bom para lancar o braco
 		    			//estado_atual = 31;
 		    			//break;
 
 		    	case 31: // estado ESTENDER BRAÇO
 
-		    			// seta velocidade do braco
-		    			
-		    			//	estado_atual = 32;
+		    						
+		    			estado_atual = 32;
 
-		    			//break;
+		    			break;
 
 		    	case 32: // estado SOLTAR bloco
 
 		    		    // espera um tempo para o braço estender o suficiente
-                		//sleep(TEMPO_ESTENDE_BRACO);
-                		//estado_atual = 33;
-                		//break;
+                		sleep(TEMPO_ESTENDE_BRACO);
+                		estado_atual = 33;
+                		break;
 
 		    	case 33: // estado RECOLHER
 		                // espera um tempo para a garra pegar melhor o bloco
-		                //sleep(TEMPO_AGARRA_BLOCO);
-		                //estado_atual = 15;
-		    			//break;
+		                sleep(TEMPO_SOLTAR_BLOCO);
+		                estado_atual = 34;
+		    			break;
 
 		    	case 34: //estado GUARDAR
+
+		    			// if (recolhido);
+		    			//	estado_atual = 35;
+		    			
+		    			break;
 
 		    	case 35: // estado CONTAR
 
@@ -357,9 +379,11 @@ int main(int argc, char **argv){
 
 		    			estado_atual = 40;
 
-		    		else
+		    		else{
 
-		    			estado_atual = 10;
+		    			estado_atual = 20; 
+
+		    		}
 		    		break;
 
 
@@ -399,7 +423,7 @@ int main(int argc, char **argv){
 
 		 // Publish the message 
 		 pubEstado.publish(msg_estado);
-		 
+		 pubBlocoObjetivoX.publish(msg_blocoObjetivoX);
 		 pubVelocidade.publish(msg_velocidade);
 		 pubTransporteDestino.publish(msg_destino);
 		 pubTransporteAnguloSaida.publish(msg_anguloSaida);

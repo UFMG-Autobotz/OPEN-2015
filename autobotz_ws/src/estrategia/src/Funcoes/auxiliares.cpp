@@ -11,7 +11,7 @@
 #define LIM_BLOCO_CIMA 480
 #define LIM_BLOCO_BAIXO 0
 
-#define MEDIDAS_LEMBRADAS 5
+#define MEDIDAS_LEMBRADAS 15
 
 
 /* ---------------------- FUNCAO LECONSTANTESARQUIVO ---------------------
@@ -77,7 +77,7 @@ int leConstantesArquivo(std::string diretorio, float *linear_kp, float *linear_k
 
 ----------------------------------------------------------*/
 
-float localizaDestino(estrategia::featureVec blocos, std::vector<float> blocos_anteriores){
+float localizaDestino(estrategia::featureVec blocos, std::vector<float> *blocos_anteriores){
 
 
 	float media_atual=0.0, media_final=0.0;
@@ -87,7 +87,7 @@ float localizaDestino(estrategia::featureVec blocos, std::vector<float> blocos_a
 
 
 
-	// 
+	// le todos os blocos que esta vendo no momento
 	for (i=0; i<blocos.features.size(); i++){
 
 
@@ -100,39 +100,51 @@ float localizaDestino(estrategia::featureVec blocos, std::vector<float> blocos_a
     		// media das posições X de todos os blobs visiveis
     		media_atual += tempX;
     		cont++;
-
+    	
 		}
 
 	}
 	
 	if (cont != 0)
-		media_atual /= cont;
+		media_atual = media_atual / (float)cont;
 
-	printf ("\n\n################  MEDIA ATUAL: %f  CONT: %d ################\n\n", media_final, cont);
+	printf ("\n\n################  MEDIA ATUAL: %f  CONT: %d ################\n\n", media_atual, cont);
 
 	if (cont != 0){
 		// adiciona no vetor de medidas lembradas. Isso server para eliminar as medidas falsas 
-		if (blocos_anteriores.size() >= MEDIDAS_LEMBRADAS){
+		if (blocos_anteriores->size() >= MEDIDAS_LEMBRADAS){
 
 			// mantem o vetor de medidas anteriores no limite, apagando medidas mais antigas e adicionando recentes
-			blocos_anteriores.erase(blocos_anteriores.begin());
-			blocos_anteriores.push_back(media_atual);
+			blocos_anteriores->erase(blocos_anteriores->begin());
+			blocos_anteriores->push_back(media_atual);
+			
 
 		}
-		else 
-			blocos_anteriores.push_back(media_atual);
+		else {
+			blocos_anteriores->push_back(media_atual);
+		
+		}
 	}
 
 
 
 
-	for (i=0; i<blocos_anteriores.size(); i++){
+	for (i=0; i<blocos_anteriores->size(); i++){
 
-		media_final += blocos_anteriores.at(i);
+		media_final += blocos_anteriores->at(i);
 
 	}
 
-	media_final /= blocos_anteriores.size();
+	if (blocos_anteriores->size() != 0)
+		media_final /= blocos_anteriores->size();
+
+printf("\nTAM=%li\n", blocos_anteriores->size());
+	for (i=0; i<blocos_anteriores->size(); i++){
+
+			
+			printf ("%.2f, ", blocos_anteriores->at(i));
+			
+	}
 
 	printf ("\n\n################  MEDIA FINAL: %f ################\n\n", media_final);
 

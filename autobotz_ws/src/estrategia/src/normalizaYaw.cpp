@@ -13,6 +13,9 @@ Código principal do pacote de estratéiga
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <std_msgs/Int32.h>
+#include <std_msgs/Float32.h>
+#include <ros/ros.h>
 
 
 // ---------------- ARQUIVOS INCLUSOS ------------------
@@ -70,7 +73,7 @@ int main(int argc, char **argv){
 
 
     // variaveis auxiliar para guardar o que sera publicado
-    std_msgs::Int32 msg_yawNormalizado;
+    std_msgs::Float32 msg_yawNormalizado;
 
 
 
@@ -84,8 +87,8 @@ int main(int argc, char **argv){
 
     
 
-    if(argc < 3){
-        ROS_INFO("\n\nUse: rosrun estrategia normalizaYaw [Angulo Plataforma]\n\n");
+    if(argc < 2){
+        ROS_INFO("\n\nUse: rosrun estrategia normalizaYaw [Angulo Plataforma] %d\n\n", argc);
         return -1;
     }
 
@@ -99,12 +102,14 @@ int main(int argc, char **argv){
     	
 
     	// preenchendo o que sera publicado
-		msg_estado.data = 360.0 + yaw - ang_plataforma;
-		msg_estado.data %= 360;
+		msg_yawNormalizado.data = 360.0 + yaw - ang_plataforma;
+		msg_yawNormalizado.data = (int)msg_yawNormalizado.data % 360;
 
-		if (msg_estado.data > 180)
-			msg_estado.data -= 360;
+		if (msg_yawNormalizado.data > 180)
+			msg_yawNormalizado.data -= 360;
 
+
+		printf ("\nYAW normalizado: %f\n", msg_yawNormalizado.data);
 
 		 // Publish the message 
 		 pubYawNormalizado.publish(msg_yawNormalizado);

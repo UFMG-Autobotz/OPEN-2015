@@ -64,7 +64,7 @@ Código principal do pacote de controle
 int id_controlador;
 bool start;
 float distL, distR, distF, distB;
-float yaw;
+float yaw, destino;
 geometry_msgs::Point centerSquare;
 controle::velocidade velBarco, velBarco_anterior;
 
@@ -103,7 +103,7 @@ void ultrassomR (const std_msgs::Float32& msg){
  }
 
 
- void imu(const std_msgs::Float32& msg){
+ void yawNormalizado(const std_msgs::Float32& msg){
 
     yaw = msg.data;
     //printf ("YAW: %.2f\n", yaw);
@@ -123,6 +123,11 @@ void idControlador(std_msgs::Int32 msg){
 
 }
 
+void destinoMsgRecieved(std_msgs::Float32 msg){
+
+    destino = msg.data;
+
+}
 
 
 // ------------------ MAIN FUNCTION-------------------
@@ -135,16 +140,14 @@ int main(int argc, char **argv){
     start = false;
   
     float erro_ang, vel_ang_braco, vel_lin_braco, vel_garra;
-    float ang_anterior;
+    float destino_anterior;
     float linear_kp, linear_kd, angular_kp, angular_kd;
 
-    // para calcular tempo
-    //clock_t time1 = 0.0;
 
     geometry_msgs::Point objetivo;
     std::string const_dir("/home/constantes.txt");
 
-
+/*
     if(argc < 3){
         ROS_INFO("\n\nUse: rosrun controle control [Angulo do barco desejado] [Angulo do braco desejado]\n\n");
         return -1;
@@ -154,11 +157,11 @@ int main(int argc, char **argv){
     float ANG_BARCO = atof(argv[1]);
     float ANG_BRACO = atof(argv[2]);
 
-
+*/
     // carrega as cosntantes KP e KD, linear e angular, atraves de um arquivo (com nome armazenado em const_dir)
     leConstantesArquivo(const_dir, &linear_kp, &linear_kd, &angular_kp, &angular_kd);
 
-
+/*
     // exibe as variaveis lidas
     printf ("\n------------ COSNTANTES ---------------\n\n");
     printf ("LINEAR: kp = %.2f kd = %.2f\n", linear_kp, linear_kd);
@@ -168,7 +171,7 @@ int main(int argc, char **argv){
     printf("ANG BARCO= %f\n", ANG_BARCO);
     printf("ANG BRACO= %f\n", ANG_BRACO);
     printf ("\n---------------------------------------\n\n");
-
+*/
 
     // init ROS stuff
     ros::init(argc, argv, "controle");
@@ -186,11 +189,13 @@ int main(int argc, char **argv){
 
 
 
-    ros::Subscriber subIMU = nh.subscribe("eletronica/imu/yaw", 1000, imu);
+    ros::Subscriber subIMU = nh.subscribe("estrategia/yawNormalizado", 1000, yawNormalizado);
 
     ros::Subscriber subVel = nh.subscribe("estrategia/velocidade", 1000, velocidadeBarco);
 
     ros::Subscriber subControlador = nh.subscribe("estrategia/estado_atual", 1000, idControlador);
+
+    ros::Subscriber subDestino = nh.subscribe("estrategia/transporte/destino", 1000, destinoMsgRecieved);
 
 
 
@@ -235,7 +240,7 @@ int main(int argc, char **argv){
                 // se o sensor ainda não está lendo bloco dentro da garra, estende o braço com velocidade constante
                 
                 // o braco vai reto e faz ajuste angular ao mesmo tempo
-                vel_ang_braco = ANG_BRACO * VEL_ANG_BRACO_KP;
+                //vel_ang_braco = ANG_BRACO * VEL_ANG_BRACO_KP;
                 vel_lin_braco = VEL_LIN_BRACO;
         
                 msg_baseStepper.data = vel_ang_braco;
@@ -261,7 +266,7 @@ int main(int argc, char **argv){
                                     
                          
                 // o braco vai reto e faz ajuste angular ao mesmo tempo
-                vel_ang_braco = ANG_BRACO * VEL_ANG_BRACO_KP;
+                //vel_ang_braco = ANG_BRACO * VEL_ANG_BRACO_KP;
                 vel_lin_braco = (-1) * VEL_LIN_BRACO;
                 vel_garra = 0.0;
         
@@ -286,9 +291,9 @@ int main(int argc, char **argv){
 
 
             case 20:  // DESATRACAR
-            case 21: // LOCALIZA OBJETIVO
+            
 
-                    erro_ang = ANG_BARCO - yaw; // calcula diferenca entre angulo desejado e real
+                    erro_ang = destino - TELA_COL/2; // calcula diferenca entre angulo desejado e real
 
 
                     if (abs(erro_ang) >= ERRO_ANG_MORTO){
@@ -297,8 +302,8 @@ int main(int argc, char **argv){
                         msg_propulsorL.data += erro_ang * angular_kp;
 
                         // derivativo para angulo
-                        msg_propulsorR.data += (yaw - ang_anterior) * angular_kd;
-                        msg_propulsorL.data -= (yaw - ang_anterior) * angular_kd;
+                        msg_propulsorR.data += (destino - destino_anterior) * angular_kd;
+                        msg_propulsorL.data -= (destino - destino_anterior) * angular_kd;
 
                     }
 
@@ -308,9 +313,10 @@ int main(int argc, char **argv){
 
                     break;
 
-            case 22:
+            case 21: // LOCALIZA OBJETIVO
+            case 22: // NAVEGA
                     
-                    erro_ang = ANG_BARCO - yaw; // calcula diferenca entre angulo desejado e real
+                    erro_ang = destino - TELA_COL/2; // calcula diferenca entre angulo desejado e real
 
 
 
@@ -329,8 +335,8 @@ int main(int argc, char **argv){
                         msg_propulsorL.data += erro_ang * angular_kp;
 
                         // derivativo para angulo
-                        msg_propulsorR.data += (yaw - ang_anterior) * angular_kd;
-                        msg_propulsorL.data -= (yaw - ang_anterior) * angular_kd;
+                        msg_propulsorR.data += (destino - destino_anterior) * angular_kd;
+                        msg_propulsorL.data -= (destino - destino_anterior) * angular_kd;
 
                     }
 
@@ -445,13 +451,8 @@ int main(int argc, char **argv){
 
 
         // pega o valor anterior do angulo para uso do controle derivativo do angulo
-        ang_anterior =  yaw;
+        destino_anterior =  destino;
 
-        /* Como calcular tempo em C++
-        printf ("\n\nDelta t: %f\n\n", float(std::clock() - time1)/CLOCKS_PER_SEC);
-        time1 = std::clock();
-        sleep(100); // em milesegundos
-        */
          // Wait until it's time for another iteration .
          rate.sleep();
          ros::spinOnce();

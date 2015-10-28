@@ -54,7 +54,7 @@ Código principal do pacote de estratéiga
 bool start;
 bool atracado, agarrado, tem_bloco;
 int blocos_vermelhos, blocos_amarelos;
-float distL, distR, distF, distB;
+float distL, distR, distF, distB, destino_x;
 
 
 Robo barco; // assim não chama o construtor
@@ -118,7 +118,8 @@ void ultrassomR (const std_msgs::Float32& msg){
     printf ("\n\n-------------- LENDO VISAO ---------------\n\n");
     printf ("Numero de blobs: %li\n", blocos.features.size());
     for (i=0; i<blocos.features.size(); i++)
-    	printf ("#%i - pos: %lf", i, blocos.features[i].centroid.x);
+    	printf ("#%i - pos: %lf ", i, blocos.features[i].centroid.x);
+    printf ("\nDestino: %.2f\n", destino_x);
     printf ("\n\n------------------- FIM ------------------\n\n");
 
  }
@@ -136,7 +137,7 @@ int main(int argc, char **argv){
 	// ------------ VARIAVEIS ------------
 	int estado_atual;
 	int lado_arena;
-	float angulo_saida, destino_x;
+	float angulo_saida;
 	bool atracado;
 
 	std::vector<float> blocos_anteriores;
@@ -283,12 +284,9 @@ int main(int argc, char **argv){
 
 		    	case 21: // LOCALIZA destino
 
-		    		destino_x = localizaDestino(blocos, blocos_anteriores);
+		    		destino_x = localizaDestino(blocos, &blocos_anteriores);
 		    		
-		    		if (destino_x > 0.0) // tem que melhorar essa condicao
-		    			estado_atual = 22;
-
-		    	case 22: // NAVEGAR
+		    		
 
 		    		//transportarBloco(&estado_atual, lado_arena, &barco, blocos);
 		    		/*if (atracado){
@@ -342,7 +340,7 @@ int main(int argc, char **argv){
 
     	// preenchendo o que sera publicado
 		msg_estado.data = estado_atual;
-		msg_trajetoria = barco.getTrajetoria();
+		
 		msg_velocidade = barco.getVelocidadeBarco();
 		msg_destino.data = destino_x;
 		msg_anguloSaida.data = angulo_saida;
@@ -350,7 +348,7 @@ int main(int argc, char **argv){
 
 		 // Publish the message 
 		 pubEstado.publish(msg_estado);
-		 pubTrajetoria.publish(msg_trajetoria);
+		 
 		 pubVelocidade.publish(msg_velocidade);
 		 pubTransporteDestino.publish(msg_destino);
 		 pubTransporteAnguloSaida.publish(msg_anguloSaida);

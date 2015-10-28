@@ -67,7 +67,7 @@ Código principal do pacote de controle
 int id_controlador;
 bool start;
 float distL, distR, distF, distB;
-float yaw, destino;
+float yaw, destino, angulo_saida;
 float bloco_objetivo_x;
 geometry_msgs::Point centerSquare;
 controle::velocidade velBarco, velBarco_anterior;
@@ -139,10 +139,16 @@ void blocoObjetivoXMsgRecieved(std_msgs::Float32 msg){
 
 }
 
+void anguloSaidaMsgRecieved(std_msgs::Float32 msg){
+
+    angulo_saida = msg.data;
+
+}
 
 // ------------------ MAIN FUNCTION-------------------
 
 int main(int argc, char **argv){
+
 
 
     // ------------ VARIAVEIS ------------
@@ -159,15 +165,15 @@ int main(int argc, char **argv){
 
 /*
     if(argc < 3){
-        ROS_INFO("\n\nUse: rosrun controle control [Angulo do barco desejado] [Angulo do braco desejado]\n\n");
+        ROS_INFO("\n\nUse: rosrun controle control_v2 [MODO] [ANG_BRACO]\n\n");
         return -1;
     }
-
-    // parametros recebidos na chamada do nó
-    float ANG_BARCO = atof(argv[1]);
-    float ANG_BRACO = atof(argv[2]);
-
 */
+    // parametros recebidos na chamada do nó
+//    float MODO = atof(argv[1]);
+ //   float ANG_BARCO = atof(argv[2]);
+    float MODO = 1;
+
     // carrega as cosntantes KP e KD, linear e angular, atraves de um arquivo (com nome armazenado em const_dir)
     leConstantesArquivo(const_dir, &linear_kp, &linear_kd, &angular_kp, &angular_kd);
 
@@ -208,6 +214,9 @@ int main(int argc, char **argv){
     ros::Subscriber subDestino = nh.subscribe("estrategia/transporte/destino", 1000, destinoMsgRecieved);
 
     ros::Subscriber subBlocoObjetivoX = nh.subscribe("estrategia/bloco/bloco_objetivo_x", 1000, blocoObjetivoXMsgRecieved);
+
+
+    ros::Subscriber subAnguloSaida = nh.subscribe("estrategia/transporte/angulo_saida", 1000, anguloSaidaMsgRecieved);
 
 
 
@@ -252,7 +261,7 @@ int main(int argc, char **argv){
                 // se o sensor ainda não está lendo bloco dentro da garra, estende o braço com velocidade constante
                 
                 // o braco vai reto e faz ajuste angular ao mesmo tempo
-                vel_ang_braco = (TELA_COL/2 - bloco_objetivo_x) * VEL_ANG_BRACO_KP;
+                vel_ang_braco = (bloco_objetivo_x - TELA_COL/2) * VEL_ANG_BRACO_KP;
                 vel_lin_braco = VEL_LIN_BRACO;
         
                 msg_baseStepper.data = vel_ang_braco;
@@ -339,7 +348,11 @@ int main(int argc, char **argv){
             case 20:  // DESATRACAR
             
 
-                    erro_ang = destino - TELA_COL/2; // calcula diferenca entre angulo desejado e real
+                    if (MODO == 1)
+                            erro_ang = angulo_saida - yaw; 
+                    else if (MODO = 2)
+                            erro_ang = destino - TELA_COL/2; // calcula diferenca entre angulo desejado e real
+
 
 
                     if (abs(erro_ang) >= ERRO_ANG_MORTO){
@@ -362,7 +375,10 @@ int main(int argc, char **argv){
             case 21: // LOCALIZA OBJETIVO
             case 22: // NAVEGA
                     
-                    erro_ang = destino - TELA_COL/2; // calcula diferenca entre angulo desejado e real
+                    if (MODO == 1)
+                            erro_ang = angulo_saida - yaw; 
+                    else if (MODO = 2)
+                            erro_ang = destino - TELA_COL/2; // calcula diferenca entre angulo desejado e real
 
 
 
@@ -386,16 +402,18 @@ int main(int argc, char **argv){
 
                     }
 
+
+
                     printf ("GANHO: %.2f\n", erro_ang *angular_kp);
 
-                    /*
+                    
                     // MANTEM LONGE DAS BORDAS
                     if (distL < DIST_MIN){ // distancia esquerda
                         // proporcional
                         msg_propulsorL.data += distL * DIST_P;
                         msg_propulsorR.data -= distR * DIST_P;
                     }
-
+                
                     else if (distR < DIST_MIN){
                         // proporcional
                         msg_propulsorL.data -= (DIST_MIN - distL) * DIST_P;
@@ -408,7 +426,7 @@ int main(int argc, char **argv){
                         msg_propulsorR.data -= distB * DIST_P;
                     }
 
-                    else if (distB < DIST_MIN){
+                /*    else if (distB < DIST_MIN){
                         // proporcional
                         msg_propulsorL.data += (DIST_MIN - distR) * DIST_P;
                         msg_propulsorR.data += (DIST_MIN - distR) * DIST_P;

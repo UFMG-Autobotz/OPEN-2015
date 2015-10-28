@@ -119,14 +119,14 @@ void ultrassomR (const std_msgs::Float32& msg){
 
     blocos = msg;
 
-    int i;
+  /*  int i;
     printf ("\n\n-------------- LENDO VISAO ---------------\n\n");
     printf ("Numero de blobs: %li\n", blocos.features.size());
     for (i=0; i<blocos.features.size(); i++)
     	printf ("#%i - pos: %lf ", i, blocos.features[i].centroid.x);
     printf ("\nDestino: %.2f\n", destino_x);
     printf ("\n\n------------------- FIM ------------------\n\n");
-
+*/
  }
 
  
@@ -237,33 +237,33 @@ int main(int argc, char **argv){
 		    			//break;
 		    	case 12: // estado ESTENDER BRAÇO
 
-		    			bloco_objetivo_X = trackBloco(blocos);
+		/*    			bloco_objetivo_X = trackBloco(blocos);
 
 		    			if (tem_bloco)
 		    				estado_atual = 13;
 
 
 		    			msg_blocoObjetivoX.data = destino_x;
-
+	
 		    			break;
-
+		*/
 		    	case 13: // estado AGARRAR
 		    		    // espera um tempo para a garra alcançar melhor o bloco
-                		sleep(TEMPO_ALCANCA_BLOCO);
+       /*         		sleep(TEMPO_ALCANCA_BLOCO);
                 		estado_atual = 14;
                 		break;
-
+		*/
 		    	case 14: // estado RECOLHER
 		                // espera um tempo para a garra pegar melhor o bloco
-		                sleep(TEMPO_AGARRA_BLOCO);
+		/*                sleep(TEMPO_AGARRA_BLOCO);
 		                estado_atual = 15;
-		    			break;
-
+		   			break;
+		*/ 
 		    	case 15: //estado GUARDAR
-
+/*
 		    			sleep(TEMPO_GUARDA_BLOCO);
 		    			estado_atual = 16;
-
+*/
 		    	case 16: // estado CONTAR
 
 		    		
@@ -301,12 +301,12 @@ int main(int argc, char **argv){
 
 		    	case 21: // LOCALIZA destino e NAVEGA!!
 
-		    		destino_x = localizaDestino(blocos, &blocos_anteriores);
+		    	//	destino_x = localizaDestino(blocos, &blocos_anteriores);
 		    		
 		    	
 		    		if (atracado){
 		    			estado_atual = 22;
-		    			sleep(TEMPO_ATRACAR);
+		    	//		sleep(TEMPO_ATRACAR);
 		    		}
 
 		    		break;
@@ -314,13 +314,13 @@ int main(int argc, char **argv){
 		    	case 22:
 
 
-		    		if (lado_arena == -1) // atracou na plataforma
+		    	/*	if (lado_arena == -1) // atracou na plataforma
 		    			estado_atual = 30; // nao pega bloco e volta pro porto
 		    		else if (lado_arena = 1) // atracou no porto
 		    				estado_atual = 10; // pega novo bloco
 
 		    		break;
-
+*/
 
 //##################################################################################################################
 
@@ -397,7 +397,7 @@ int main(int argc, char **argv){
 		    		break;
 
 
-		    }
+		 }
 
 
 
@@ -431,8 +431,10 @@ int main(int argc, char **argv){
 		 // Wait untilit's time for another iteration.
 		 rate.sleep();
 		 ros::spinOnce();
+ 	
+
  	}
 
-
+	
 
 }

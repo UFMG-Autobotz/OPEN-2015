@@ -250,8 +250,10 @@ int main(int argc, char **argv){
 		                //sleep(TEMPO_AGARRA_BLOCO);
 		                //estado_atual = 15;
 		    			//break;
-		    	case 15:
-		    	case 16:
+
+		    	case 15: //estado GUARDAR
+
+		    	case 16: // estado CONTAR
 
 		    		
 		    		//pegarBloco(estado_atual, array_de_blocos_visiveis, tem_bloco);
@@ -265,6 +267,10 @@ int main(int argc, char **argv){
 		    				lado_arena = -1;
 
 		    		break;
+
+
+
+//######################################################################################################################
 
 		    	// estado TRANSPORTE
 
@@ -289,15 +295,60 @@ int main(int argc, char **argv){
 		    		
 
 		    		//transportarBloco(&estado_atual, lado_arena, &barco, blocos);
-		    		/*if (atracado){
+		    		if (atracado){
 		    			estado_atual = 30;
 		    			sleep(TEMPO_ATRACAR);
-		    		}*/
+		    		}
 		    		
 
 		    		break;
 
-		    	case 30: // estado DEIXAR BLOCO
+
+//##################################################################################################################
+
+		    	// estado DEIXAR BLOCO
+
+		    	case 30: // acha LUGAR DISPONIVEL 
+
+		    			// funcao que retorna quando o braco esta em um agulo bom para lancar o braco
+		    			//estado_atual = 31;
+		    			//break;
+
+		    	case 31: // estado ESTENDER BRAÇO
+
+		    			// seta velocidade do braco
+		    			
+		    			//	estado_atual = 32;
+
+		    			//break;
+
+		    	case 32: // estado SOLTAR bloco
+
+		    		    // espera um tempo para o braço estender o suficiente
+                		//sleep(TEMPO_ESTENDE_BRACO);
+                		//estado_atual = 33;
+                		//break;
+
+		    	case 33: // estado RECOLHER
+		                // espera um tempo para a garra pegar melhor o bloco
+		                //sleep(TEMPO_AGARRA_BLOCO);
+		                //estado_atual = 15;
+		    			//break;
+
+		    	case 34: //estado GUARDAR
+
+		    	case 35: // estado CONTAR
+
+		    		
+		    		
+
+
+		    			if (abs(barco.getPosicao().theta) < 90.0) // se barco esta voltado para a plataforma
+		    				lado_arena = 1; // ele esta na plataforma
+		    			else // porto
+		    				lado_arena = -1;
+
+		    		break;
 
 		    		
 		    		//colocarBloco(estado_atual);

@@ -246,6 +246,11 @@ int main(int argc, char **argv){
                 msg_baseStepper.data = vel_ang_braco;
                 msg_bracoMotor.data = vel_lin_braco;
 
+
+                // mantem o barco atracado
+                msg_propulsorR.data = VEL_MAX;
+                msg_propulsorL.data = VEL_MAX; 
+
                 break;
 
             case 13: // estado AGARRAR
@@ -259,6 +264,11 @@ int main(int argc, char **argv){
                 msg_baseStepper.data = vel_ang_braco;
                 msg_bracoMotor.data = vel_lin_braco;
                 msg_garraMotor.data = vel_garra;
+
+
+                // mantem o barco atracado
+                msg_propulsorR.data = VEL_MAX;
+                msg_propulsorL.data = VEL_MAX; 
 
                 break;
 
@@ -274,6 +284,10 @@ int main(int argc, char **argv){
                 msg_bracoMotor.data = vel_lin_braco;
                 msg_garraMotor.data = vel_garra;
 
+                // mantem o barco atracado
+                msg_propulsorR.data = VEL_MAX;
+                msg_propulsorL.data = VEL_MAX; 
+
                 break;
 
             case 15: // estado GUARDAR
@@ -286,9 +300,15 @@ int main(int argc, char **argv){
                 msg_baseStepper.data = vel_ang_braco;
                 msg_bracoMotor.data = vel_lin_braco;
 
+                
+                // mantem o barco atracado
+                msg_propulsorR.data = VEL_MAX;
+                msg_propulsorL.data = VEL_MAX; 
+
+
                 break;
 
-
+//##########################################################################################################
 
             case 20:  // DESATRACAR
             
@@ -393,14 +413,73 @@ int main(int argc, char **argv){
                     break;
 
           
-            case 30:
+//#######################################################################################################
 
-                msg_propulsorR.data = VEL_MAX;
-                msg_propulsorL.data = VEL_MAX;                
+            // estado DEIXAR BLOCO
 
-            default:
+
+            case 30: // acha LUGAR DISPONIVEL 
 
                     break;
+
+            case 31: // estado ESTENDER BRACO
+
+                
+                // se o sensor ainda não está lendo bloco dentro da garra, estende o braço com velocidade constante
+                
+                // o braco vai reto e faz ajuste angular ao mesmo tempo
+                vel_ang_braco = ANG_BRACO * VEL_ANG_BRACO_KP;
+                vel_lin_braco = VEL_LIN_BRACO;
+        
+                msg_baseStepper.data = vel_ang_braco;
+                msg_bracoMotor.data = vel_lin_braco;
+
+                break;
+
+            case 32: // estado SOLTAR bloco
+                                    
+                // espera um tempo para a garra alcançar melhor o bloco
+                sleep(TEMPO_ALCANCA_BLOCO);
+                // para de mexer o braco, ja que alcançou o bloco
+                vel_ang_braco = 0;
+                vel_lin_braco = 0;
+                vel_garra = VEL_GARRA;
+
+                msg_agarrado.data = true;
+ 
+                msg_baseStepper.data = vel_ang_braco;
+                msg_bracoMotor.data = vel_lin_braco;
+                msg_garraMotor.data = vel_garra;
+
+                break;
+
+            case 33: // estado RECOLHER
+                                    
+                // espera um tempo para a garra pegar melhor o bloco
+                sleep(TEMPO_AGARRA_BLOCO);
+                         
+                // o braco vai reto e faz ajuste angular ao mesmo tempo
+                vel_ang_braco = ANG_BRACO * VEL_ANG_BRACO_KP;
+                vel_lin_braco = (-1) * VEL_LIN_BRACO;
+                vel_garra = 0.0;
+        
+                msg_baseStepper.data = vel_ang_braco;
+                msg_bracoMotor.data = vel_lin_braco;
+                msg_garraMotor.data = vel_garra;
+
+                break;
+
+            case 34: //estado GUARDAR
+                                    
+                          
+                // o braco vai reto e faz ajuste angular ao mesmo tempo
+                vel_ang_braco = VEL_ANG_BRACO;
+                vel_lin_braco = 0;
+        
+                msg_baseStepper.data = vel_ang_braco;
+                msg_bracoMotor.data = vel_lin_braco;
+
+                break;
 
 
 

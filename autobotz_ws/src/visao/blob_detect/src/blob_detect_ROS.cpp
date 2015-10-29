@@ -12,6 +12,7 @@
 #include "blob_detect/featureVec.h"
 #include "blob_detect/feature.h"
 #include "geometry_msgs/Point.h"
+#include "std_msgs/Float32.h"
 
 
 T_ROSvars ROSvars;
@@ -36,6 +37,8 @@ void initROS(int argc, char** argv)
 	char node_name[] = "blob_detect";
 	char rgb_topic[] = "/camera/rgb/image_raw";
 	char feature_topic[]= "/visao/features";
+	char screen_size_x_topic[] = "/visao/screenX";
+	char screen_size_y_topic[] = "/visao/screenY";
 
 	//init ROS
 	ros::init(argc, argv, node_name);
@@ -47,8 +50,13 @@ void initROS(int argc, char** argv)
 	//subscribe to kinect's color image
 	image_transport::ImageTransport img_trans(*ROSvars.nh); 
     ROSvars.color_sub = img_trans.subscribe(rgb_topic, 1, rgbImgCallback); 
+
+    const int buff_size = 5;
     //publish vector of features
-    ROSvars.features_pub = ROSvars.nh->advertise<blob_detect::featureVec>(feature_topic, 10);
+    ROSvars.features_pub = ROSvars.nh->advertise<blob_detect::featureVec>(feature_topic, buff_size);
+    //publish screen size 
+    ROSvars.screenX_pub = ROSvars.nh->advertise<std_msgs::Float32>(screen_size_x_topic, buff_size);
+    ROSvars.screenX_pub = ROSvars.nh->advertise<std_msgs::Float32>(screen_size_x_topic, buff_size);
 
     ros::start();
 }
@@ -92,7 +100,7 @@ void rgbImgCallback(const sensor_msgs::ImageConstPtr& image)
 }
 
 //publish a vector of features to ROS
-void pubFeatures(std::vector< feature > F)
+void pubFeatures(std::vector< feature > F, cv::Mat& screen)
 {
 	//create a message of type featureVec
 	blob_detect::featureVec FVec_msg;
@@ -127,6 +135,12 @@ void pubFeatures(std::vector< feature > F)
 		FVec_msg.features.push_back(F_msg);
 	}
 
-	//publish vector of features
+	//publish vector of features and screen size
 	ROSvars.features_pub.publish(FVec_msg);
+
+	std_msgs::Float32 x, y;
+	x.data = screen.cols;
+	y.data = screen.rows;
+	ROSvars.screenX_pub.publish(x);
+	ROSvars.screenY_pub.publish(y);
 }

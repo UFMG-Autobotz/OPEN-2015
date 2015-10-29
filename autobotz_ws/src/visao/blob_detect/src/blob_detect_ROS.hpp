@@ -24,10 +24,14 @@
 typedef struct {
  		ros::NodeHandle* nh;
  		image_transport::Subscriber color_sub;     //subscriber for kinects's color image topic
- 		ros::Publisher              features_pub;  //publishes vectors of features
+ 		ros::Publisher features_pub;  //publishes vectors of features
+
+ 		ros::Publisher screenX_pub; // publica tamanho da tela
+ 		ros::Publisher screenY_pub; //
 
  		cv::Mat lastFrame;        //stores the last frame received from ROS
  		unsigned long frameCnt;   //counter that is incremented each time a frame is received
+
 } T_ROSvars;
 
 //there is a global instance of the struct that stores the ROS info
@@ -47,7 +51,7 @@ cv::Mat getHSVImg(int* refCnt = NULL);
 //one may optionally pass an int pointer to the function to get the
 //count associated with the image being returned
 
-void pubFeatures(std::vector< feature > F);
+void pubFeatures(std::vector< feature > F, cv::Mat& screen);
 //Receives a vector of features (struct defined in vision.hpp)
 //and publish to the appropriate topic
 

@@ -23,6 +23,7 @@ typedef struct feature {
 	cv::Vec3b colorStdDev;  //std deviation by channel
 	string    colorName;    //color name given by clipping the average color to those
 	                        //specified in settingsServer.targetPalette
+
 } feature;
 
 //

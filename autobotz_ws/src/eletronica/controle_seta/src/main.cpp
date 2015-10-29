@@ -1,5 +1,7 @@
 #include <ros/ros.h>
 #include <std_msgs/Int32.h>
+#include <std_msgs/Float32.h>
+#include <std_msgs/Bool.h>
 #include <iostream>
 #include <string>
 #include <sstream>
@@ -33,6 +35,11 @@ ros::Publisher chatter_pubML = n.advertise<std_msgs::Int32>("/controle/braco/mot
 
 ros::Publisher chatter_pubG = n.advertise<std_msgs::Int32>("/controle/garra/motor", 1000);
 
+ros::Publisher ultrassomF = n.advertise<std_msgs::Float32>("/eletronica/ultrassom/raw/F", 1000);
+ros::Publisher ultrassomL = n.advertise<std_msgs::Float32>("/eletronica/ultrassom/raw/L", 1000);
+
+ros::Publisher Stp_ativo = n.advertise<std_msgs::Bool>("/eletronica/stepper/ativado", 1000);
+
 
   cout<<"RÁDIO CONTROLE - OPEN 2015"<<endl;
   while (ros::ok()){
@@ -40,7 +47,8 @@ ros::Publisher chatter_pubG = n.advertise<std_msgs::Int32>("/controle/garra/moto
     tcsetattr(STDIN_FILENO,TCSANOW,&new_tio);
 
     std_msgs::Int32 msg, msgM, msgG;
-
+    std_msgs::Float32 ultraL, ultraF, ultraR, ultraB;
+    std_msgs::Bool stepper;
     fflush(stdin);
     c = getchar();
     fflush(stdin);
@@ -52,12 +60,14 @@ ros::Publisher chatter_pubG = n.advertise<std_msgs::Int32>("/controle/garra/moto
 	pwm2+=incr;
 	if(pwm1 > 255) pwm1 = 255;
 	if(pwm2 > 255) pwm2 = 255;
+	stepper.data = true;
     } 
     else if (c == 's'){
 	pwm1= pwm1 - incr;
 	pwm2= pwm2 - incr;
 	if(pwm1 < -255) pwm1 = -255;
 	if(pwm2 < -255) pwm2 = -255;
+	stepper.data = true;
     }
 
     else if (c == 'd'){
@@ -97,9 +107,12 @@ ros::Publisher chatter_pubG = n.advertise<std_msgs::Int32>("/controle/garra/moto
 	pwm1-=incr;
         if(pwm1 < -255) pwm1 = -255;
     }
+
     else if(c == 'r'){
         pwm1 = pwm2 = 0;
 	 pwm3 = pwm4 = 0;
+        pwm5 = 0;
+	stepper.data = false;
     }
 
     //muda o robo que esta sendo controlado
@@ -149,16 +162,31 @@ ros::Publisher chatter_pubG = n.advertise<std_msgs::Int32>("/controle/garra/moto
     }
     cout<<"PWM 1:  "<< pwm1a;
     msg.data = pwm2a;
-    chatter_pub.publish(msg);
-
+    
+	
     cout<<"   Motores (caracol):  "<< pwm4a;
-    cout<<"   Garra: "<<pwm5<<endl;
+    cout<<"   Garra: "<<pwm5<<"  ";
+
+if(stepper.data == true)
+cout << "Estado_stepper: 1";
+if(stepper.data == false)
+cout << "Estado_stepper: 0";
 
     msgG.data = pwm5;
     msgM.data = pwm4a;
+    chatter_pub.publish(msg);
     chatter_pubG.publish(msgG);
     chatter_pubMR.publish(msgM);
     chatter_pubML.publish(msgM);
+    Stp_ativo.publish(stepper);
+
+//    ultraL.data = (float)pwm1a;
+//    ultraF.data = (float)pwm1a;
+
+//    ultrassomL.publish(ultraL);
+//    ultrassomF.publish(ultraF);
+//    cout<<"   UltrassomF "<<ultraF.data<<" UltrassomL "<<ultraL.data<<endl;
+
     ros::spinOnce();
     count ++;
     tcsetattr(STDIN_FILENO,TCSANOW,&old_tio); 

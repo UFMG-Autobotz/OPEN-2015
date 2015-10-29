@@ -78,7 +78,7 @@ int main(int argc, char **argv)
   
   while (ros::ok())
   {
-    msgF.data = ultrassomF;
+    msgR.data = ultrassomR;
     msgL.data = ultrassomL;
     msgF.data = ultrassomF;
     msgB.data = ultrassomB;

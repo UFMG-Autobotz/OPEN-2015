@@ -56,7 +56,10 @@ void initROS(int argc, char** argv)
     ROSvars.features_pub = ROSvars.nh->advertise<blob_detect::featureVec>(feature_topic, buff_size);
     //publish screen size 
     ROSvars.screenX_pub = ROSvars.nh->advertise<std_msgs::Float32>(screen_size_x_topic, buff_size);
-    ROSvars.screenX_pub = ROSvars.nh->advertise<std_msgs::Float32>(screen_size_x_topic, buff_size);
+    ROSvars.screenY_pub = ROSvars.nh->advertise<std_msgs::Float32>(screen_size_y_topic, buff_size);
+
+    if(!ROSvars.features_pub || !ROSvars.screenX_pub || !ROSvars.screenY_pub)
+    	ROS_ERROR("blob_detect: One of the publishers could not be initialized!");
 
     ros::start();
 }

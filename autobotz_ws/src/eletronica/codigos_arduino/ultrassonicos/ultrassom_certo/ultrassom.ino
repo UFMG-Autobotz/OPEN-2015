@@ -105,26 +105,24 @@ void loop()
  unsigned long now = millis();
  //sensor reads distance
  float duration, distance;
- int num_Ultrassonico=0;
+ //int num_Ultrassonico=0;
  
- for(num_Ultrassonico=0; num_Ultrassonico<3; num_Ultrassonico++){ 
+// for(num_Ultrassonico=0; num_Ultrassonico<3; num_Ultrassonico++){ 
  
- getDistance(&duration, &distance,num_Ultrassonico);
- 
- if(num_Ultrassonico == 0 ) 
-   distanciaD.data = distance;
-
- if(num_Ultrassonico == 1)
+ getDistance(&duration, &distance,0);
+ distanciaD.data = distance;
+delay(50);
+  getDistance(&duration, &distance,1);
    distanciaE.data = distance;
-
- if(num_Ultrassonico == 2) 
+delay(50);
+ getDistance(&duration, &distance,2);
    distanciaF.data = distance;
- 
+ delay(50);
 // if(num_Ultrassonico == 3){ 
 //   distanciaT.data = distance;
 // }
- delay(240);
- }
+ //delay(240);
+// }
 
  chatterD.publish( &distanciaD );
  chatterE.publish( &distanciaE );

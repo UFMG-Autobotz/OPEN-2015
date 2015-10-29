@@ -50,7 +50,7 @@ ros::Publisher chatter("/eletronica/garra/temBloco", &sensor_garra );
 int velocidadeG, direcaoG,auxiliarG;
 #define TRAS 0
 #define FRENTE 1
-int motor_garra[] = {10,11};
+int motor_garra[] = {5,6};
 
 void messageGarra( const std_msgs::Int32& msg){
  auxiliarG = msg.data;

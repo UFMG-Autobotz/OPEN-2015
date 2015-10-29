@@ -233,6 +233,8 @@ int main(int argc, char **argv){
             case 0:
                     break;
 
+            
+
             case 12: // estado ESTENDER BRACO
 
                 

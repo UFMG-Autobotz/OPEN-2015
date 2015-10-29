@@ -28,8 +28,8 @@ Código principal do pacote de controle
 
 // -------------------- CONSTANTES --------------------
 
-#define TELA_LIN 480
-#define TELA_COL 640
+//#define TELA_LIN 480
+//#define TELA_COL 640
 
 #define VEL_LIN_MAX 180
 #define VEL_LIN_MIN -180
@@ -69,6 +69,7 @@ bool start;
 float distL, distR, distF, distB;
 float yaw, destino, angulo_saida;
 float bloco_objetivo_x;
+float tela_x, tela_y;
 geometry_msgs::Point centerSquare;
 controle::velocidade velBarco, velBarco_anterior;
 
@@ -145,6 +146,19 @@ void anguloSaidaMsgRecieved(std_msgs::Float32 msg){
 
 }
 
+ void telaXMsgRecieved (std_msgs::Float32 msg){
+
+
+    tela_x = msg.data;
+
+ }
+
+ void telaYMsgRecieved (std_msgs::Float32 msg){
+
+    tela_y = msg.data;
+
+ }
+
 // ------------------ MAIN FUNCTION-------------------
 
 int main(int argc, char **argv){
@@ -172,7 +186,7 @@ int main(int argc, char **argv){
     // parametros recebidos na chamada do nó
 //    float MODO = atof(argv[1]);
  //   float ANG_BARCO = atof(argv[2]);
-    float MODO = 1;
+    float MODO = 2;
 
     // carrega as cosntantes KP e KD, linear e angular, atraves de um arquivo (com nome armazenado em const_dir)
     leConstantesArquivo(const_dir, &linear_kp, &linear_kd, &angular_kp, &angular_kd);
@@ -219,6 +233,9 @@ int main(int argc, char **argv){
     ros::Subscriber subAnguloSaida = nh.subscribe("estrategia/transporte/angulo_saida", 1000, anguloSaidaMsgRecieved);
 
 
+    ros::Subscriber subTelaX = nh.subscribe("/visao/screenX", 1000, &telaXMsgRecieved);
+    ros::Subscriber subTelaY = nh.subscribe("/visao/screenY", 1000, &telaYMsgRecieved);
+
 
     // --------------------------- PUBLISHERS ---------------------------
 
@@ -255,13 +272,41 @@ int main(int argc, char **argv){
             case 0:
                     break;
 
+            case 10: // estado ESCOLHER blocos
+            
+                // mantem o barco atracado
+                msg_propulsorR.data = VEL_MAX;
+                msg_propulsorL.data = VEL_MAX; 
+
+                break;
+
+
+            case 11: // estado AJUSTA base
+
+                // se o sensor ainda não está lendo bloco dentro da garra, estende o braço com velocidade constante
+                
+                // o braco vai reto e faz ajuste angular ao mesmo tempo
+                vel_ang_braco = (bloco_objetivo_x - tela_x/2) * VEL_ANG_BRACO_KP;
+                vel_lin_braco = 0;
+        
+                msg_baseStepper.data = vel_ang_braco;
+                msg_bracoMotor.data = vel_lin_braco;
+
+
+                // mantem o barco atracado
+                msg_propulsorR.data = VEL_MAX;
+                msg_propulsorL.data = VEL_MAX; 
+
+                break;
+
+
             case 12: // estado ESTENDER BRACO
 
                 
                 // se o sensor ainda não está lendo bloco dentro da garra, estende o braço com velocidade constante
                 
                 // o braco vai reto e faz ajuste angular ao mesmo tempo
-                vel_ang_braco = (bloco_objetivo_x - TELA_COL/2) * VEL_ANG_BRACO_KP;
+                vel_ang_braco = (bloco_objetivo_x - tela_x/2) * VEL_ANG_BRACO_KP;
                 vel_lin_braco = VEL_LIN_BRACO;
         
                 msg_baseStepper.data = vel_ang_braco;
@@ -351,7 +396,7 @@ int main(int argc, char **argv){
                     if (MODO == 1)
                             erro_ang = angulo_saida - yaw; 
                     else if (MODO = 2)
-                            erro_ang = destino - TELA_COL/2; // calcula diferenca entre angulo desejado e real
+                            erro_ang = destino - tela_x/2; // calcula diferenca entre angulo desejado e real
 
 
 
@@ -378,7 +423,7 @@ int main(int argc, char **argv){
                     if (MODO == 1)
                             erro_ang = angulo_saida - yaw; 
                     else if (MODO = 2)
-                            erro_ang = destino - TELA_COL/2; // calcula diferenca entre angulo desejado e real
+                            erro_ang = destino - tela_x/2; // calcula diferenca entre angulo desejado e real
 
 
 
@@ -410,8 +455,8 @@ int main(int argc, char **argv){
                     // MANTEM LONGE DAS BORDAS
                     if (distL < DIST_MIN){ // distancia esquerda
                         // proporcional
-                        msg_propulsorL.data += distL * DIST_P;
-                        msg_propulsorR.data -= distR * DIST_P;
+                        msg_propulsorL.data += (DIST_MIN - distL) * DIST_P;
+                        msg_propulsorR.data -= (DIST_MIN - distR) * DIST_P;
                     }
                 
                     else if (distR < DIST_MIN){
@@ -422,8 +467,8 @@ int main(int argc, char **argv){
 
                      if (distF < DIST_MIN){ // distancia frente
                         // proporcional
-                        msg_propulsorL.data -= distF * DIST_P;
-                        msg_propulsorR.data -= distB * DIST_P;
+                        msg_propulsorL.data -= (DIST_MIN - distF) * DIST_P;
+                        msg_propulsorR.data -= (DIST_MIN - distB) * DIST_P;
                     }
 
                 /*    else if (distB < DIST_MIN){

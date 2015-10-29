@@ -31,8 +31,8 @@ Código principal do pacote de estratéiga
 
 // -------------------- CONSTANTES --------------------
 
-#define TELA_X 640
-#define TELA_Y 480
+//#define TELA_X 640
+//#define TELA_Y 480
 
 #define TOTAL_BLOCOS_VERMELHOS 4 // informacao retirada do edital 
 #define TOTAL_BLOCOS_AMARELOS 10 // informacao retirada do edital 
@@ -53,6 +53,7 @@ Código principal do pacote de estratéiga
 #define DIST_ATRACAR 15 // em cm
 
 #define ERRO_ANG_MORTO 3
+#define ERRO_ANG_BASE_OK 5
 
 // ----------------- VARIÁVEIS GLOBAIS ------------------
 
@@ -60,6 +61,7 @@ bool start;
 bool atracado, agarrado, tem_bloco;
 int blocos_vermelhos, blocos_amarelos;
 float distL, distR, distF, distB, destino_x;
+float tela_x, tela_y;
 
 
 Robo barco; // assim não chama o construtor
@@ -111,6 +113,19 @@ void ultrassomR (const std_msgs::Float32& msg){
  void ultrassomB (const std_msgs::Float32& msg){
 
     distB = msg.data;
+
+ }
+
+ void telaXMsgRecieved (std_msgs::Float32 msg){
+
+
+ 	tela_x = msg.data;
+
+ }
+
+ void telaYMsgRecieved (std_msgs::Float32 msg){
+
+ 	tela_y = msg.data;
 
  }
 
@@ -170,6 +185,9 @@ int main(int argc, char **argv){
  
     ros::Subscriber subBlocos = nh.subscribe("/visao/features", 1000, &blocosMsgRecieved);
 
+    ros::Subscriber subTelaX = nh.subscribe("/visao/screenX", 1000, &telaXMsgRecieved);
+    ros::Subscriber subTelaY = nh.subscribe("/visao/screenY", 1000, &telaYMsgRecieved);
+
 
     // ------------------------- PUBLISHERS -------------------------
     ros::Publisher pubEstado = nh.advertise <std_msgs::Int32>("estrategia/estado_atual", 1000);
@@ -225,51 +243,50 @@ int main(int argc, char **argv){
 
 
 		    	// estado PEGAR BLOCO
-		    	case 10: // estado IDENTIFICAR BLOCOS
-
-		    			
-
+		    	case 10: // estado ESCOLHER BLOCOS
+						//bloco_objetivo = escolherBloco(blocos);
+		    			//estado_atual = 11;
 		    			//break;
-		    	case 11: // estado ESCOLHER 
-
-		    			//bloco_objetivo = escolherBloco(blocos);
-		    			//estado_atual = 12;
+		    	case 11: // estado AJUSTAR BASE 
+		    			//bloco_objetivo_X = trackBloco(blocos);
+		    			//if (abs(bloco_objetivo_X - tela_x/2) < ERRO_ANG_BASE_OK)
+		    			//	estado_atual = 12;		  
 		    			//break;
 		    	case 12: // estado ESTENDER BRAÇO
 
-		/*    			bloco_objetivo_X = trackBloco(blocos);
-
+		/*   			bloco_objetivo_X = trackBloco(blocos);
+		*/
 		    			if (tem_bloco)
 		    				estado_atual = 13;
 
 
-		    			msg_blocoObjetivoX.data = destino_x;
+		//    			msg_blocoObjetivoX.data = destino_x;
 	
 		    			break;
-		*/
+		
 		    	case 13: // estado AGARRAR
 		    		    // espera um tempo para a garra alcançar melhor o bloco
-       /*         		sleep(TEMPO_ALCANCA_BLOCO);
+                		sleep(TEMPO_ALCANCA_BLOCO);
                 		estado_atual = 14;
                 		break;
-		*/
+		
 		    	case 14: // estado RECOLHER
 		                // espera um tempo para a garra pegar melhor o bloco
-		/*                sleep(TEMPO_AGARRA_BLOCO);
+		                sleep(TEMPO_AGARRA_BLOCO);
 		                estado_atual = 15;
 		   			break;
-		*/ 
+		 
 		    	case 15: //estado GUARDAR
-/*
+
 		    			sleep(TEMPO_GUARDA_BLOCO);
 		    			estado_atual = 16;
-*/
+
 		    	case 16: // estado CONTAR
 
 		    		
 		    		//pegarBloco(estado_atual, array_de_blocos_visiveis, tem_bloco);
 		    		//if (pegarBloco(&estado_atual, &barco, tem_bloco, agarrado))		    		
-		    			estado_atual = 20;
+		    //			estado_atual = 20;
 
 
 		    			if (abs(barco.getPosicao().theta) < 90.0) // se barco esta voltado para a plataforma
@@ -285,7 +302,7 @@ int main(int argc, char **argv){
 
 		    	// estado TRANSPORTE
 
-		    	case 20: // DESATRACAR
+/*		    	case 20: // DESATRACAR
 
 		    		if (lado_arena == -1) // barco esta no porto
 		    			angulo_saida = 0.0; // considerando o angulo da imu normalizado e o 0 paralelo a borda da piscina
@@ -303,6 +320,9 @@ int main(int argc, char **argv){
 
 		    	//	destino_x = localizaDestino(blocos, &blocos_anteriores);
 		    		
+		    		if (distF < DIST_ATRACAR)
+		 				atracado = true;
+
 		    	
 		    		if (atracado){
 		    			estado_atual = 22;
@@ -362,8 +382,6 @@ int main(int argc, char **argv){
 		    	case 35: // estado CONTAR
 
 		    		
-		    		
-
 
 		    			if (abs(barco.getPosicao().theta) < 90.0) // se barco esta voltado para a plataforma
 		    				lado_arena = 1; // ele esta na plataforma
@@ -401,8 +419,7 @@ int main(int argc, char **argv){
 
 
 
-		 if (distF < DIST_ATRACAR)
-		 	atracado = true;
+
 
 		
 		// tem que apertar o botao desligar para o barco começar de novo

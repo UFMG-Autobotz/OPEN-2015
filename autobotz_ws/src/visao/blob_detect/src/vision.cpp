@@ -182,14 +182,30 @@ vector< feature > getFeaturesInfo(const cv::Mat& img, const vector< vector<cv::P
 	return out;
 }
 
+inline float distBetweenPoints(const cv::Point p1, const cv::Point p2)
+{
+	return sqrt(pow(p1.x-p2.x, 2) + pow(p1.y-p2.y, 2));
+}
+
 //discard features not relevant to robot operation
 //fill the "colorName" field of the selected features
+//eliminates blinking between frames
+enum status {IN_NEW, IN_TRACKED, IN_WAS_MISSING, TRACKED_FOUND, TRACKED_NOT_FOUND, MISSING_FOUND, MISSING_NOT_FOUND};
+
+
+
 void filterFeatures(vector< feature > in, vector< feature >& out,
 	                const palette& pal)
 {
 	out.clear();
 
-	//for each feature, find the closest color
+	//Each point in a vector corresponds to the position of a feature in
+	//the last frame
+	vector <cv::Point> last_positions;
+
+	///////////   filter features by color  //////
+	vector< feature > color_filtered;
+	//find closest color and only put it in color_filtered if it is within a distance
 	for(int i = 0; i < in.size(); i++)
 	{
 		//get current color
@@ -202,10 +218,119 @@ void filterFeatures(vector< feature > in, vector< feature >& out,
 		//filter by max distance
 		if(colorDistance(closest_color, cur_color) < pal.getMaxDistance(closest_color_index))
 		{
-			out.push_back(in[i]);      //only add feature to output if it is a color of interest
-			out.back().colorName = pal.getName(closest_color_index);  //give a name to the feature's avg color
+			color_filtered.push_back(in[i]);      //only add feature to output if it is a color of interest
+			color_filtered.back().colorName = pal.getName(closest_color_index);  //give a name to the feature's avg color
 		}
 	}
+
+	out = color_filtered;
+
+	// ///////////////   apply persistence filtering    ////////////////
+
+	// // consider 3 vecs of feature: input, tracked, missing
+	// vector <feature> tracked;
+	// vector <feature> missing;
+
+	// vector <int> missing_cnt;  //counts how many frames each element in missing is gone
+	// const int remove_at = 4;  //number of frames before removing
+
+	// const float r_max = 15;  //raio maximo para a feature ser associada ao ponto
+
+	// // 3 status vectors for in, tracked and missing
+	// //enum status {IN_NEW, IN_TRACKED, IN_WAS_MISSING, TRACKED_FOUND, TRACKED_NOT_FOUND, MISSING_FOUND, MISSING_NOT_FOUND};
+	// vector <status> in_status (color_filtered.size(), IN_NEW);
+	// vector <status> tracked_status (tracked.size(), TRACKED_NOT_FOUND);
+	// vector <status> missing_status (missing.size(), MISSING_NOT_FOUND);
+
+	// /////////////////   assign a status to each element  //////////////////////
+	// for(int i = 0; i < tracked.size(); i++)
+	// {
+	// 	bool found_any = false;
+
+	// 	//check if there is a feature near this point
+	// 	for(int j = 0; j < color_filtered.size() && false == found_any; j++)
+	// 	{
+	// 		float dist = distBetweenPoints(tracked[i].centroid, color_filtered[j].centroid);
+
+	// 		if(dist < r_max)  //feature is near point
+	// 		{
+	// 			in_status[j]      = IN_TRACKED;
+	// 			tracked_status[i] = TRACKED_FOUND;
+
+	// 			found_any = true;
+	// 		}
+	// 	}
+	// }
+	// //check missing list to try to find them on the input list
+	// for(int i = 0; i < missing.size(); i++)
+	// {
+	// 	bool found_any = false;
+
+	// 	//check if there is a feature near this point
+	// 	for(int j = 0; j < color_filtered.size() && false == found_any; j++)
+	// 	{
+	// 		float dist = distBetweenPoints(missing[i].centroid, color_filtered[j].centroid);
+
+	// 		if(dist < r_max)  //feature is near point
+	// 		{
+	// 			in_status[j] = IN_WAS_MISSING;
+	// 			missing_status[i] = MISSING_FOUND;
+
+	// 			found_any = true;
+	// 		}
+	// 	}
+	// }
+
+	// /////////////////   apply actions based on status  //////////////////////
+	// for(int i = 0; i < in_status.size(); i++) //input vector
+	// {
+	// 	if(in_status[i] == IN_NEW)                    //track newly found features
+	// 		tracked.push_back(color_filtered[i]);
+	// }
+	
+	// for(int i = 0; i < tracked_status.size(); i++) //tracked
+	// {
+	// 	if(tracked_status[i] == TRACKED_NOT_FOUND)  //move from tracked to missing
+	// 	{
+	// 		// ROS_INFO("ahsuadasda:  %i ", missing.size());
+	// 		// ROS_INFO("addr: %p", &missing);
+	// 		// missing.push_back(tracked[i]);
+	// 		// delete tmp;
+	// 		// teste.push_back(1);
+	// 		// ROS_INFO("size:  %i ", int(missing.size()));
+
+	// 		//missing.push_back(tracked[i]);
+	// 		//missing_cnt.push_back();
+
+	// 		tracked.erase(tracked.begin() + i);
+	// 	}
+	// }
+
+	// for(int i = 0; i < missing_status.size(); i++)  //move from missing to tracked
+	// {
+	// 	if(missing_status[i] == MISSING_FOUND)
+	// 	{
+	// 		tracked.push_back(missing[i]);
+
+	// 		missing.erase(missing.begin() + i);
+	// 		missing_cnt.erase(missing_cnt.begin() + i);
+	// 	}
+	// }
+
+	// for(int i = 0; i < missing_cnt.size(); i++)  //remove blobs missing for too long
+	// {
+	// 	if(missing_cnt[i] >= remove_at)
+	// 	{
+	// 		missing.erase(missing.begin() + i);
+	// 		missing_cnt.erase(missing_cnt.begin() + i);
+	// 	}
+	// 	else
+	// 		missing_cnt[i]++;
+	// }
+
+	// ///////////////////  build output from tracked and missing (but not deleted) blobs ///////////////////
+	// out = tracked;
+	// out.insert(tracked.end(), missing.begin(), missing.end());
 }
 
 //find the closest color to 'color' in a palette

@@ -53,7 +53,7 @@ int main(int argc, char** argv)
 		visionCode5(img, F);
 		
 		//publish to topics
-		pubFeatures(F);
+		pubFeatures(F, img);
 
 		//spin ROS
 		ros::spinOnce();
@@ -353,7 +353,7 @@ void visionCode5(Mat& img, vector< feature >& features)
 			tmpCont.push_back(features[i].contour);
 			drawContours(tmp, tmpCont, -1, cv::Scalar(features[i].avgColor), CV_FILLED);
 		}
-		//cv::namedWindow("features - pre filter"); cv::imshow("features - pre filter", tmp);	
+		cv::namedWindow("features - pre filter"); cv::imshow("features - pre filter", tmp);	
 
 	//filter only relevant features
 	filterFeatures(features, features, settingsServer.targetPalette);
@@ -365,7 +365,7 @@ void visionCode5(Mat& img, vector< feature >& features)
 			tmpCont.push_back(features[i].contour);
 			drawContours(tmp, tmpCont, -1, cv::Scalar(features[i].avgColor), CV_FILLED);
 		}
-		//cv::namedWindow("features - post filter"); cv::imshow("features - post filter", tmp);	
+		cv::namedWindow("features - post filter"); cv::imshow("features - post filter", tmp);	
 
 		cv::waitKey(1); //needed to make imshow work
 }

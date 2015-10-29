@@ -152,3 +152,50 @@ printf("\nTAM=%li\n", blocos_anteriores->size());
 	return media_final; // retorna media das ultimas medidas de destino
 
 }
+
+/* ------------------ FUNCAO TrackBloco -------------------
+
+    Entrada: array com informacoes dos blocos dada pela visao
+    Saida: posição x na tela onde o braco deve ir
+    Finalidade: acompanhar o bloco a ser pego pela garra apesar de variações na 
+                posição e "piscadas entre um frame e outro"
+
+----------------------------------------------------------*/
+float trackBloco(estrategia::featureVec blocos)
+{
+	static float POI_x = TELA_X/2; //current Point Of Interest for the boat
+	static float POI_y = TELA_Y/2;
+
+	static float radius = 10;  //radius of search for new blobs
+
+	float r_min = 10;     // radius resets to r_min if a blob is found inside search region
+	float r_max = TELA_X; // 
+	float inc   = 3;      // each time the function is called and there is no blob inside radius, radius += inc;
+
+	//search for blobs inside the radius around the cur POI
+	for(int i = 0; i < blocos.features.size(); i++)
+	{
+		//get distance
+		float x = blocos.features[i].centroid.x;
+		float y = blocos.features[i].centroid.y;
+
+		float dist = sqrt(x*x + y*y);
+
+		if(dist < radius)  //we still have a point inside our previous region of interest
+		{
+			POI_x = x;
+			POI_y = y;
+
+			radius = r_min;
+		}
+		else   //no blob, let's search wider
+		{
+			//keep last POI x and y
+
+			radius += inc;//and increment search radius
+			if(radius > r_max) radius = r_max;
+		}
+	}
+
+	return POI_x;
+}

@@ -15,4 +15,11 @@ float localizaDestino(estrategia::featureVec blocos, std::vector<float> *blocos_
 
 estrategia::feature escolherBloco(estrategia::featureVec blocos);
 
+/* ------------------ FUNCAO TrackBloco -------------------
+
+    Entrada: array com informacoes dos blocos dada pela visao
+    Saida: posição x na tela onde o braco deve ir
+    Finalidade: acompanhar o bloco a ser pego pela garra apesar de variações na 
+                posição e "piscadas" entre um frame e outro
+----------------------------------------------------------*/
 float trackBloco(estrategia::featureVec blocos);

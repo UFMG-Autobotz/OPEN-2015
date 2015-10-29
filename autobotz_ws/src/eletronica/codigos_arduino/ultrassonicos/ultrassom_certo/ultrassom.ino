@@ -88,15 +88,10 @@ void getDistance(float* duration, float* distanceCm, int num)
  //Calculate the distance (in cm) based on the speed of sound.
  *distanceCm = *duration/58.2;
  
- if (*distanceCm >= maximumRange || *distanceCm <= minimumRange){
- /* Send a negative number to computer and Turn LED ON 
- to indicate "out of range" */
- *distanceCm = -1;
- digitalWrite(LEDPin, HIGH);
- }
- else
- //turn LED OFF to indicate successful reading.
- digitalWrite(LEDPin, LOW);
+ if (*distanceCm >= maximumRange)
+   *distanceCm = -1;
+ if(*distanceCm <= minimumRange)
+   *distanceCm = -2;
 }
 
 

@@ -58,7 +58,7 @@ void messageGarra( const std_msgs::Int32& msg){
  if(auxiliarG == 0)
     velocidadeG = 0;
  else
-    velocidadeG = 255;
+    velocidadeG = 170;
     
   if (auxiliarG < 0)
     direcaoG = TRAS;

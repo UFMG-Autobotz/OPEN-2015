@@ -42,10 +42,10 @@ Código principal do pacote de controle
 #define VEL_P_DIST 1.4
 #define VEL_ANG_BRACO_KP 1.5
 #define VEL_ANG_BRACO 80
-#define VEL_LIN_BRACO 250
-#define VEL_GARRA 255.0
+#define VEL_LIN_BRACO 180
+#define VEL_GARRA 160.0
 
-#define DIST_P 5.0
+#define DIST_P 5.8
 #define DIST_MIN 5.0
 #define DIST_FREIO 8.0
 
@@ -242,7 +242,7 @@ int main(int argc, char **argv){
     ros::Publisher pubR = nh.advertise <std_msgs::Int32>("eletronica/propulsor/R", 1000);
     ros::Publisher pubL = nh.advertise <std_msgs::Int32>("eletronica/propulsor/L", 1000);
     ros::Publisher pubBaseStepper = nh.advertise <std_msgs::Int32>("/controle/base/stepper", 1000);
-    ros::Publisher pubBracoMotor = nh.advertise <std_msgs::Int32>("/controle/braco/motor", 1000); 
+    ros::Publisher pubBracoMotor = nh.advertise <std_msgs::Int32>("/controle/braco/motor/R", 1000); 
     ros::Publisher pubGarraMotor = nh.advertise <std_msgs::Int32>("/controle/garra/motor", 1000);   
 
 
@@ -293,6 +293,8 @@ int main(int argc, char **argv){
                 msg_bracoMotor.data = vel_lin_braco;
 
 
+                msg_garraMotor.data = VEL_GARRA;
+
                 // mantem o barco atracado
                 msg_propulsorR.data = VEL_MAX;
                 msg_propulsorL.data = VEL_MAX; 
@@ -320,12 +322,14 @@ int main(int argc, char **argv){
                 break;
 
             case 13: // estado AGARRAR
-                                    
+                           
+
 
                 // para de mexer o braco, ja que alcançou o bloco
                 vel_ang_braco = 0;
                 vel_lin_braco = 0;
-                vel_garra = VEL_GARRA;
+
+                vel_garra = (-1) * VEL_GARRA;
  
                 msg_baseStepper.data = vel_ang_braco;
                 msg_bracoMotor.data = vel_lin_braco;
@@ -343,7 +347,7 @@ int main(int argc, char **argv){
                          
                 // o braco vai reto e faz ajuste angular ao mesmo tempo
                 //vel_ang_braco = ANG_BRACO * VEL_ANG_BRACO_KP;
-                vel_lin_braco = (-1) * VEL_LIN_BRACO;
+                vel_lin_braco = (-1) * VEL_MAX;
                 vel_garra = 0.0;
         
      //           msg_baseStepper.data = vel_ang_braco;
@@ -547,7 +551,7 @@ int main(int argc, char **argv){
                 // para de mexer o braco, ja que alcançou o bloco
                 vel_ang_braco = 0;
                 vel_lin_braco = 0;
-                vel_garra = (-1) * VEL_GARRA;
+                vel_garra = VEL_GARRA;
  
 
                 // atualiza o que sera publicado

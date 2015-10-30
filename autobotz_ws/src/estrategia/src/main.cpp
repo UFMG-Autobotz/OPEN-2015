@@ -46,7 +46,7 @@ Código principal do pacote de estratéiga
 #define TEMPO_ESTENDE_BRACO 3000 // ms
 #define TEMPO_SOLTAR_BLOCO 3000 // ms
 #define TEMPO_GUARDA_BRACO 5000 // ms
-#define TEMPO_GUARDA_BLOCO 5000 // ms
+#define TEMPO_GUARDA_BLOCO 100000 // ms
 
 
 #define TEMPO_ATRACAR 1000 // em ms
@@ -144,7 +144,8 @@ void ultrassomR (const std_msgs::Float32& msg){
 
  }
 
- 
+       // atualiza o que sera publicado
+         
 
 
 
@@ -250,6 +251,9 @@ int main(int argc, char **argv){
 		    			estado_atual = 11;
 		    			break;
 		    	case 11: // estado AJUSTAR BASE 
+
+		    			usleep(1000*1000*4);
+
 		    //			bloco_objetivo_X = trackBloco(blocos, &procurando);
 		    //			if ( (abs(bloco_objetivo_X - (tela_x/2))) < ERRO_ANG_BASE_OK)
 		    				estado_atual = 12;		  
@@ -260,29 +264,37 @@ int main(int argc, char **argv){
 
 		   	//			bloco_objetivo_X = trackBloco(blocos. &procurando);
 		
+		    			
+		    		
 		    			if (tem_bloco)
 		    				estado_atual = 13;
 
 
-			   			msg_blocoObjetivoX.data = bloco_objetivo_X;
+			   //			msg_blocoObjetivoX.data = bloco_objetivo_X;
 	
 		    			break;
 		
 		    	case 13: // estado AGARRAR
 		    		    // espera um tempo para a garra alcançar melhor o bloco
-                		sleep(TEMPO_ALCANCA_BLOCO);
+                		usleep(1000*1000*3);
                 		estado_atual = 14;
                 		break;
 		
 		    	case 14: // estado RECOLHER
 		                // espera um tempo para a garra pegar melhor o bloco
-		                sleep(TEMPO_AGARRA_BLOCO);
+		                usleep(1000*1000*3);
+		                
 		                estado_atual = 15;
+
 		   			break;
 		 
 		    	case 15: //estado GUARDAR
 
-		    			sleep(TEMPO_GUARDA_BLOCO);
+		    			if (!tem_bloco)
+		                	estado_atual = 11;
+
+		    			usleep(1000 * 1000 * 4);
+		    			//usleep(TEMPO_GUARDA_BLOCO);
 		    			estado_atual = 16;
 
 		    	case 16: // estado CONTAR
@@ -293,7 +305,7 @@ int main(int argc, char **argv){
 		    			else // porto
 		    				lado_arena = -1;
 
-		    		//	estado_atual = 20;
+		    			estado_atual = 20;
 
 		    		break;
 
@@ -327,7 +339,7 @@ int main(int argc, char **argv){
 		    	
 		    		if (atracado){
 		    	//		estado_atual = 22;
-		    	//		sleep(TEMPO_ATRACAR);
+		    	//		usleep(TEMPO_ATRACAR);
 		    		}
 
 		    		break;
@@ -363,13 +375,13 @@ int main(int argc, char **argv){
 		    	case 32: // estado SOLTAR bloco
 
 		    		    // espera um tempo para o braço estender o suficiente
-                		sleep(TEMPO_ESTENDE_BRACO);
+                		usleep(TEMPO_ESTENDE_BRACO);
                 		estado_atual = 33;
                 		break;
 
 		    	case 33: // estado RECOLHER
 		                // espera um tempo para a garra pegar melhor o bloco
-		                sleep(TEMPO_SOLTAR_BLOCO);
+		                usleep(TEMPO_SOLTAR_BLOCO);
 		                estado_atual = 34;
 		    			break;
 
@@ -451,6 +463,5 @@ int main(int argc, char **argv){
 
  	}
 
-	
 
 }

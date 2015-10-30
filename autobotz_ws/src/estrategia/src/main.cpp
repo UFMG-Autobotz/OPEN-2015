@@ -52,7 +52,7 @@ Código principal do pacote de estratéiga
 #define TEMPO_ATRACAR 1000 // em ms
 #define DIST_ATRACAR 15 // em cm
 
-#define ERRO_ANG_MORTO 3
+#define ERRO_ANG_MORTO 10
 #define ERRO_ANG_BASE_OK 2
 
 // ----------------- VARIÁVEIS GLOBAIS ------------------
@@ -62,6 +62,7 @@ bool atracado, agarrado, tem_bloco;
 int blocos_vermelhos, blocos_amarelos;
 float distL, distR, distF, distB, destino_x;
 float tela_x, tela_y;
+float yaw;
 
 
 Robo barco; // assim não chama o construtor
@@ -129,6 +130,13 @@ void ultrassomR (const std_msgs::Float32& msg){
 
  }
 
+void yawNormalizado(const std_msgs::Float32& msg){
+
+    yaw = msg.data;
+    //printf ("YAW: %.2f\n", yaw);
+ }
+
+
  void blocosMsgRecieved (const estrategia::featureVec msg){
 
 
@@ -178,6 +186,7 @@ int main(int argc, char **argv){
     ros::Subscriber subInicio = nh.subscribe("eletronica/start", 1000, &inicioMsgRecieved);
     ros::Subscriber subPosicao = nh.subscribe("estrategia/barco/posicao", 1000, &posicaoMsgRecieved);
     ros::Subscriber subTemBloco = nh.subscribe("eletronica/garra/temBloco", 1000, &temBlocoMsgRecieved);
+    ros::Subscriber subIMU = nh.subscribe("estrategia/yawNormalizado", 1000, yawNormalizado);
   
 
     ros::Subscriber subR = nh.subscribe("eletronica/ultrassom/R", 1000, ultrassomR);
@@ -293,14 +302,14 @@ int main(int argc, char **argv){
 		    			if (!tem_bloco)
 		                	estado_atual = 11;
 
-		    			usleep(1000 * 1000 * 4);
+		    	//		usleep(1000 * 1000 * 4);
 		    			//usleep(TEMPO_GUARDA_BLOCO);
 		    			estado_atual = 16;
 
 		    	case 16: // estado CONTAR
 
 
-		    			if (abs(barco.getPosicao().theta) < 90.0) // se barco esta voltado para a plataforma
+		    			if (abs(yaw) < 90.0) // se barco esta voltado para a plataforma
 		    				lado_arena = 1; // ele esta na plataforma
 		    			else // porto
 		    				lado_arena = -1;
@@ -315,16 +324,17 @@ int main(int argc, char **argv){
 
 		    	// estado TRANSPORTE
 
-/*		    	case 20: // DESATRACAR
+	    	case 20: // DESATRACAR
 
 		    		if (lado_arena == -1) // barco esta no porto
 		    			angulo_saida = 0.0; // considerando o angulo da imu normalizado e o 0 paralelo a borda da piscina
 		    		else if (lado_arena == 1) // barco esta na plataforma
 		    			angulo_saida = 180.0;
 
-		    		if (abs(barco.getPosicao().theta - angulo_saida) <= ERRO_ANG_MORTO)
+		    		if (abs(yaw - angulo_saida) <= ERRO_ANG_MORTO)
 		    			estado_atual = 21;
 
+		    		printf("\nAngulo BARCO: %f\n", yaw);
 
 		    		//estado_atual = 21; // so pra teste
 		    		break;
@@ -354,7 +364,7 @@ int main(int argc, char **argv){
 
 		    		break;
 
-*/
+				*/
 //##################################################################################################################
 
 		    	// estado DEIXAR BLOCO
@@ -396,7 +406,7 @@ int main(int argc, char **argv){
 
 		    		
 
-		    			if (abs(barco.getPosicao().theta) < 90.0) // se barco esta voltado para a plataforma
+		    			if (abs(yaw) < 90.0) // se barco esta voltado para a plataforma
 		    				lado_arena = 1; // ele esta na plataforma
 		    			else // porto
 		    				lado_arena = -1;

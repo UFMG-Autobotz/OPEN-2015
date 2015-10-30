@@ -42,7 +42,7 @@ Código principal do pacote de controle
 #define VEL_P_DIST 1.4
 #define VEL_ANG_BRACO_KP 1.5
 #define VEL_ANG_BRACO 80
-#define VEL_LIN_BRACO 180
+#define VEL_LIN_BRACO 230
 #define VEL_GARRA 160.0
 
 #define DIST_P 5.8
@@ -398,8 +398,8 @@ int main(int argc, char **argv){
             
 
                     if (MODO == 1){ // por angulo
-                            //erro_ang = angulo_saida - yaw; 
-                            distanciaAngularIMU (angulo_saida, yaw);
+                            erro_ang = angulo_saida - yaw; 
+                            //erro_ang = distanciaAngularIMU (angulo_saida, yaw);
                             destino = yaw;
                         }
 
@@ -417,7 +417,10 @@ int main(int argc, char **argv){
                         msg_propulsorR.data += (destino - destino_anterior) * angular_kd;
                         msg_propulsorL.data -= (destino - destino_anterior) * angular_kd;
 
+
+
                     }
+
 
                     printf ("GANHO: %.2f\n", erro_ang *angular_kp);
 
@@ -429,8 +432,8 @@ int main(int argc, char **argv){
             case 22: // NAVEGA
                     
                     if (MODO == 1){
-                            erro_ang = angulo_saida - yaw; 
-                            distanciaAngularIMU (angulo_saida, yaw);
+                            //erro_ang = angulo_saida - yaw; 
+                            erro_ang = distanciaAngularIMU (angulo_saida, yaw);
                     }
                     else if (MODO = 2)
                             erro_ang = destino - tela_x/2; // calcula diferenca entre angulo desejado e real
@@ -647,6 +650,9 @@ int main(int argc, char **argv){
         else if (msg_garraMotor.data < VEL_MIN)
             msg_garraMotor.data = VEL_MIN;
 
+
+        msg_propulsorL.data *= (-1);
+        msg_propulsorR.data *= (-1);
 
         // ------------------------------------------------------
 

@@ -42,7 +42,7 @@ Código principal do pacote de controle
 #define VEL_P_DIST 1.4
 #define VEL_ANG_BRACO_KP 1.5
 #define VEL_ANG_BRACO 80
-#define VEL_LIN_BRACO 170
+#define VEL_LIN_BRACO 250
 #define VEL_GARRA 255.0
 
 #define DIST_P 5.0
@@ -52,7 +52,7 @@ Código principal do pacote de controle
 #define ERRO_ANG_MORTO 1
 #define ERRO_ANG_OK 15
 
-#define TEMPO_ALCANCA_BLOCO 1000 // ms
+#define TEMPO_ALCANCA_BLOCO 200 // ms
 #define TEMPO_AGARRA_BLOCO 3000 // ms
 #define TEMPO_ESTENDE_BLOCO 3000 // ms
 #define TEMPO_GUARDA_BRACO 5000 // ms
@@ -186,7 +186,7 @@ int main(int argc, char **argv){
     // parametros recebidos na chamada do nó
 //    float MODO = atof(argv[1]);
  //   float ANG_BARCO = atof(argv[2]);
-    float MODO = 2;
+    float MODO = 1;
 
     // carrega as cosntantes KP e KD, linear e angular, atraves de um arquivo (com nome armazenado em const_dir)
     leConstantesArquivo(const_dir, &linear_kp, &linear_kd, &angular_kp, &angular_kd);
@@ -286,10 +286,10 @@ int main(int argc, char **argv){
                 // se o sensor ainda não está lendo bloco dentro da garra, estende o braço com velocidade constante
                 
                 // o braco vai reto e faz ajuste angular ao mesmo tempo
-                vel_ang_braco = (bloco_objetivo_x - tela_x/2) * VEL_ANG_BRACO_KP;
+      //          vel_ang_braco = (bloco_objetivo_x - tela_x/2) * VEL_ANG_BRACO_KP;
                 vel_lin_braco = 0;
         
-                msg_baseStepper.data = vel_ang_braco;
+       //         msg_baseStepper.data = vel_ang_braco;
                 msg_bracoMotor.data = vel_lin_braco;
 
 
@@ -306,10 +306,10 @@ int main(int argc, char **argv){
                 // se o sensor ainda não está lendo bloco dentro da garra, estende o braço com velocidade constante
                 
                 // o braco vai reto e faz ajuste angular ao mesmo tempo
-                vel_ang_braco = (bloco_objetivo_x - tela_x/2) * VEL_ANG_BRACO_KP;
+        //        vel_ang_braco = (bloco_objetivo_x - tela_x/2) * VEL_ANG_BRACO_KP;
                 vel_lin_braco = VEL_LIN_BRACO;
         
-                msg_baseStepper.data = vel_ang_braco;
+        //        msg_baseStepper.data = vel_ang_braco;
                 msg_bracoMotor.data = vel_lin_braco;
 
 
@@ -346,7 +346,7 @@ int main(int argc, char **argv){
                 vel_lin_braco = (-1) * VEL_LIN_BRACO;
                 vel_garra = 0.0;
         
-                msg_baseStepper.data = vel_ang_braco;
+     //           msg_baseStepper.data = vel_ang_braco;
                 msg_bracoMotor.data = vel_lin_braco;
                 msg_garraMotor.data = vel_garra;
 
@@ -360,10 +360,10 @@ int main(int argc, char **argv){
                                     
                           
                 // o braco vai reto e faz ajuste angular ao mesmo tempo
-                vel_ang_braco = VEL_ANG_BRACO;
+       //         vel_ang_braco = VEL_ANG_BRACO;
                 vel_lin_braco = 0;
         
-                msg_baseStepper.data = vel_ang_braco;
+       //         msg_baseStepper.data = vel_ang_braco;
                 msg_bracoMotor.data = vel_lin_braco;
 
                 
@@ -374,12 +374,12 @@ int main(int argc, char **argv){
 
             case 16: // estado CONTAR
 
-                sleep(TEMPO_GUARDA_BRACO);
+               
                 // o braco vai reto e faz ajuste angular ao mesmo tempo
                 vel_ang_braco = 0;
         
                 msg_baseStepper.data = vel_ang_braco;
-           
+       //    
                 
                 // mantem o barco atracado
                 msg_propulsorR.data = VEL_MAX;
@@ -393,8 +393,12 @@ int main(int argc, char **argv){
             case 20:  // DESATRACAR
             
 
-                    if (MODO == 1)
-                            erro_ang = angulo_saida - yaw; 
+                    if (MODO == 1){ // por angulo
+                            //erro_ang = angulo_saida - yaw; 
+                            distanciaAngularIMU (angulo_saida, yaw);
+                            destino = yaw;
+                        }
+
                     else if (MODO = 2)
                             erro_ang = destino - tela_x/2; // calcula diferenca entre angulo desejado e real
 
@@ -405,7 +409,7 @@ int main(int argc, char **argv){
                         msg_propulsorR.data -= erro_ang * angular_kp;
                         msg_propulsorL.data += erro_ang * angular_kp;
 
-                        // derivativo para angulo
+                                                // derivativo para angulo
                         msg_propulsorR.data += (destino - destino_anterior) * angular_kd;
                         msg_propulsorL.data -= (destino - destino_anterior) * angular_kd;
 
@@ -420,8 +424,10 @@ int main(int argc, char **argv){
             case 21: // LOCALIZA OBJETIVO
             case 22: // NAVEGA
                     
-                    if (MODO == 1)
+                    if (MODO == 1){
                             erro_ang = angulo_saida - yaw; 
+                            distanciaAngularIMU (angulo_saida, yaw);
+                    }
                     else if (MODO = 2)
                             erro_ang = destino - tela_x/2; // calcula diferenca entre angulo desejado e real
 
@@ -452,7 +458,7 @@ int main(int argc, char **argv){
                     printf ("GANHO: %.2f\n", erro_ang *angular_kp);
 
                     
-                    // MANTEM LONGE DAS BORDAS
+               /*     // MANTEM LONGE DAS BORDAS
                     if (distL < DIST_MIN){ // distancia esquerda
                         // proporcional
                         msg_propulsorL.data += (DIST_MIN - distL) * DIST_P;
@@ -469,7 +475,7 @@ int main(int argc, char **argv){
                         // proporcional
                         msg_propulsorL.data -= (DIST_MIN - distF) * DIST_P;
                         msg_propulsorR.data -= (DIST_MIN - distB) * DIST_P;
-                    }
+                    }*/
 
                 /*    else if (distB < DIST_MIN){
                         // proporcional
@@ -651,6 +657,10 @@ int main(int argc, char **argv){
 
         // pega o valor anterior do angulo para uso do controle derivativo do angulo
         destino_anterior =  destino;
+        if (MODO == 1){
+
+            destino_anterior = yaw;
+        }
 
          // Wait until it's time for another iteration .
          rate.sleep();

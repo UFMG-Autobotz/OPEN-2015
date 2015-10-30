@@ -161,7 +161,7 @@ printf("\nTAM=%li\n", blocos_anteriores->size());
                 posição e "piscadas entre um frame e outro"
 
 ----------------------------------------------------------*/
-float trackBloco(estrategia::featureVec blocos)
+float trackBloco(estrategia::featureVec blocos, bool &procurando)
 {
 	static float POI_x = TELA_X/2; //current Point Of Interest for the boat
 	static float POI_y = TELA_Y/2;
@@ -171,6 +171,8 @@ float trackBloco(estrategia::featureVec blocos)
 	float r_min = 10;     // radius resets to r_min if a blob is found inside search region
 	float r_max = TELA_X; // 
 	float inc   = 3;      // each time the function is called and there is no blob inside radius, radius += inc;
+
+	procurando = false;
 
 	//search for blobs inside the radius around the cur POI
 	for(int i = 0; i < blocos.features.size(); i++)
@@ -187,6 +189,9 @@ float trackBloco(estrategia::featureVec blocos)
 			POI_y = y;
 
 			radius = r_min;
+
+			procurando = true;
+
 		}
 		else   //no blob, let's search wider
 		{
@@ -199,3 +204,5 @@ float trackBloco(estrategia::featureVec blocos)
 
 	return POI_x;
 }
+
+

@@ -22,4 +22,4 @@ estrategia::feature escolherBloco(estrategia::featureVec blocos);
     Finalidade: acompanhar o bloco a ser pego pela garra apesar de variações na 
                 posição e "piscadas" entre um frame e outro
 ----------------------------------------------------------*/
-float trackBloco(estrategia::featureVec blocos);
+float trackBloco(estrategia::featureVec blocos, bool &procurando);

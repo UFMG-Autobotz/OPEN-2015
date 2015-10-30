@@ -2,3 +2,6 @@
 #include <string>
 
 int leConstantesArquivo(std::string diretorio, float *linear_kp, float *linear_kd, float *angular_kp, float *angular_kd);
+
+
+float distanciaAngularIMU (float angulo1, float angulo2);

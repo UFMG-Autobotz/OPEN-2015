@@ -41,7 +41,7 @@ Código principal do pacote de estratéiga
 #define VEL_MAX 255
 #define VEL_MIN -255
 
-#define TEMPO_ALCANCA_BLOCO 1000 // ms
+#define TEMPO_ALCANCA_BLOCO 200 // ms
 #define TEMPO_AGARRA_BLOCO 3000 // ms
 #define TEMPO_ESTENDE_BRACO 3000 // ms
 #define TEMPO_SOLTAR_BLOCO 3000 // ms
@@ -53,7 +53,7 @@ Código principal do pacote de estratéiga
 #define DIST_ATRACAR 15 // em cm
 
 #define ERRO_ANG_MORTO 3
-#define ERRO_ANG_BASE_OK 5
+#define ERRO_ANG_BASE_OK 2
 
 // ----------------- VARIÁVEIS GLOBAIS ------------------
 
@@ -134,14 +134,14 @@ void ultrassomR (const std_msgs::Float32& msg){
 
     blocos = msg;
 
-  /*  int i;
+    int i;
     printf ("\n\n-------------- LENDO VISAO ---------------\n\n");
     printf ("Numero de blobs: %li\n", blocos.features.size());
     for (i=0; i<blocos.features.size(); i++)
     	printf ("#%i - pos: %lf ", i, blocos.features[i].centroid.x);
     printf ("\nDestino: %.2f\n", destino_x);
     printf ("\n\n------------------- FIM ------------------\n\n");
-*/
+
  }
 
  
@@ -159,6 +159,7 @@ int main(int argc, char **argv){
 	int lado_arena;
 	float angulo_saida;
 	bool atracado;
+	bool procurando;
 
 	std::vector<float> blocos_anteriores;
 	float bloco_objetivo_X;
@@ -217,6 +218,7 @@ int main(int argc, char **argv){
 	estado_atual = 0;
 	lado_arena = -1; // -1 indica porto e 1 indica plataforma
 	atracado = false;
+	procurando  = false;
 
 	// ------------------------------------------------------
 
@@ -244,23 +246,25 @@ int main(int argc, char **argv){
 
 		    	// estado PEGAR BLOCO
 		    	case 10: // estado ESCOLHER BLOCOS
-						//bloco_objetivo = escolherBloco(blocos);
-		    			//estado_atual = 11;
-		    			//break;
+						//bloco_objetivo_X = escolherBloco(blocos);
+		    			estado_atual = 11;
+		    			break;
 		    	case 11: // estado AJUSTAR BASE 
-		    			//bloco_objetivo_X = trackBloco(blocos);
-		    			//if (abs(bloco_objetivo_X - tela_x/2) < ERRO_ANG_BASE_OK)
-		    			//	estado_atual = 12;		  
-		    			//break;
+		    //			bloco_objetivo_X = trackBloco(blocos, &procurando);
+		    //			if ( (abs(bloco_objetivo_X - (tela_x/2))) < ERRO_ANG_BASE_OK)
+		    				estado_atual = 12;		  
+		    //			printf("\n### Tela: %f Bloco_objetivo: %f ###\n", tela_x, bloco_objetivo_X);
+
+		    			break;
 		    	case 12: // estado ESTENDER BRAÇO
 
-		/*   			bloco_objetivo_X = trackBloco(blocos);
-		*/
+		   	//			bloco_objetivo_X = trackBloco(blocos. &procurando);
+		
 		    			if (tem_bloco)
 		    				estado_atual = 13;
 
 
-		//    			msg_blocoObjetivoX.data = destino_x;
+			   			msg_blocoObjetivoX.data = bloco_objetivo_X;
 	
 		    			break;
 		
@@ -283,16 +287,13 @@ int main(int argc, char **argv){
 
 		    	case 16: // estado CONTAR
 
-		    		
-		    		//pegarBloco(estado_atual, array_de_blocos_visiveis, tem_bloco);
-		    		//if (pegarBloco(&estado_atual, &barco, tem_bloco, agarrado))		    		
-		    //			estado_atual = 20;
-
 
 		    			if (abs(barco.getPosicao().theta) < 90.0) // se barco esta voltado para a plataforma
 		    				lado_arena = 1; // ele esta na plataforma
 		    			else // porto
 		    				lado_arena = -1;
+
+		    		//	estado_atual = 20;
 
 		    		break;
 
@@ -325,14 +326,14 @@ int main(int argc, char **argv){
 
 		    	
 		    		if (atracado){
-		    			estado_atual = 22;
+		    	//		estado_atual = 22;
 		    	//		sleep(TEMPO_ATRACAR);
 		    		}
 
 		    		break;
 
 		    	case 22:
-
+		    		break;
 
 		    	/*	if (lado_arena == -1) // atracou na plataforma
 		    			estado_atual = 30; // nao pega bloco e volta pro porto
@@ -340,8 +341,8 @@ int main(int argc, char **argv){
 		    				estado_atual = 10; // pega novo bloco
 
 		    		break;
-*/
 
+*/
 //##################################################################################################################
 
 		    	// estado DEIXAR BLOCO
@@ -388,9 +389,7 @@ int main(int argc, char **argv){
 		    			else // porto
 		    				lado_arena = -1;
 
-		    		break;
 
-		    		
 		    		//colocarBloco(estado_atual);
 		    		if (barco.getBlocosVermelhos() >= TOTAL_BLOCOS_VERMELHOS &&
 		    		    barco.getBlocosAmarelos() >= TOTAL_BLOCOS_AMARELOS)

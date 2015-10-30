@@ -66,7 +66,7 @@ int main(int argc, char **argv){
 
     // ------------------------- PUBLISHERS -------------------------
   
-    ros::Publisher pubYawNormalizado = nh.advertise <std_msgs::Int32>("estrategia/yawNormalizado", 1000);
+    ros::Publisher pubYawNormalizado = nh.advertise <std_msgs::Float32>("estrategia/yawNormalizado", 1000);
 
 
     ros::Rate rate(2); // Hz

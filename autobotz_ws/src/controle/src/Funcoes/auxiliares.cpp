@@ -47,3 +47,48 @@ int leConstantesArquivo(std::string diretorio, float *linear_kp, float *linear_k
 
 
 }
+
+
+/* ------------------ FUNCAO DISTANCIAANGULARIMU -------------------
+
+    Entrada: 2 angulos dados em graus
+    Saida: menor distancia angular entre eles
+    Finalidade: consertar a descontinuidade da IMU
+----------------------------------------------------------*/
+
+float distanciaAngularIMU (float angulo1, float angulo2){
+
+	float dist1_0, dist1_180, dist2_0, dist2_180;
+	float dist0, dist180;
+
+	dist1_0 = angulo1 - 0;
+
+	dist1_180 = angulo1 - 180;
+
+	dist2_0 = angulo2 - 0;
+
+	dist2_180 = angulo2 - 180;
+
+	dist0 = abs(dist2_0) + abs(dist1_0);
+	dist180 = abs(dist1_180) + abs(dist2_180);
+
+
+
+	if (dist0 < dist180){
+
+		// angulo2: referencia, angulo1: YAW
+		if (angulo2 < angulo1)
+			dist0 *= -1;
+	
+		return dist0;
+	
+	}
+
+	// angulo2: referencia, angulo1: YAW
+	if (angulo2 < angulo1)
+		dist180 *= -1;
+	
+	return dist180;
+
+
+}

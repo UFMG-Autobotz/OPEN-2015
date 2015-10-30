@@ -45,7 +45,7 @@ add_executable(strategy src/robo.cpp src/Funcoes/auxiliares.cpp
 src/main.cpp) 
 target_link_libraries(strategy ${catkin_LIBRARIES}) 
 
-add_executable(normalizaYaw src/normalizaYaw) 
+add_executable(normalizaYaw src/normalizaYaw.cpp) 
 target_link_libraries(normalizaYaw ${catkin_LIBRARIES}) 
 
 

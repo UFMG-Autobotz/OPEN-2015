@@ -8,7 +8,7 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <termios.h>
-#define incr 5
+#define incr 30
 using namespace std;
 
 int main(int argc, char **argv){

@@ -78,7 +78,7 @@ int main(int argc, char **argv){
   ros::init(argc, argv, "IMUSerial"); 
   ros::NodeHandle n;
   ros::Publisher chatter_pub = n.advertise<std_msgs::Float32>("/eletronica/imu/yaw", 1000);
-  ros::Rate loop_rate(3);
+  ros::Rate loop_rate(5);
   float yaw;
 
   int tam = RS232_PollComport(serialPort,tx,size);

@@ -34,9 +34,9 @@ contador loops_codigo  = 0, presenca_bloquinho = 0;
 int BotaoPin = 2;
 
 //variaveis da ponte H
-int motor_garra[] = {10,11};
+//int motor_garra[] = {10,11};
 int motor_left[] = {3, 8, 9};
-int motor_right[] = {5, 6, 7 };
+int motor_right[] = {5, 10,11 };
 int velocidadeR, velocidadeL, velocidadeG;
 int direcaoR,  direcaoG;
 int direcaoR1, direcaoR2;
@@ -62,20 +62,6 @@ void messageR( const std_msgs::Int32& msg){
      
 }
 
-////Envia PWM e direcao ao motor da GARRA
-void messageGarra( const std_msgs::Int32& msg){
- auxiliarG = msg.data;
- 
- if(auxiliarG == 0)
-    velocidadeG = 0;
- else
-    velocidadeG = 255;
-    
-  if (auxiliarG < 0)
-    direcaoG = TRAS;
-  else
-    direcaoG = FRENTE;
-}
 
 std_msgs::Bool bool_msg;
 std_msgs::Bool botao_msg;
@@ -83,12 +69,11 @@ std_msgs::Bool botao_msg;
 ros::Publisher chatter_botao("/eletronica/start", &botao_msg);
 
 //ros::Publisher chatter("/eletronica/garra/temBloco", &bool_msg );
-ros::Subscriber<std_msgs::Int32> subR("/controle/braco/motor/R", &messageR );
+ros::Subscriber<std_msgs::Int32> subR("/controle/braco/motor", &messageR );
 //ros::Subscriber<std_msgs::Int32> subL("/controle/braco/motor/L", &messageL );
-ros::Subscriber<std_msgs::Int32> subGarra("/controle/garra/motor", &messageGarra );
+//ros::Subscriber<std_msgs::Int32> subGarra("/controle/garra/motor", &messageGarra );
 
-std_msgs::Int32 msg_teste;
-ros::Publisher teste("/teste", &msg_teste );
+
 
 void setup()
 {
@@ -96,8 +81,8 @@ void setup()
   nh.initNode();
   nh.subscribe(subR);
   //nh.subscribe(subL);
-  nh.subscribe(subGarra);
-  nh.advertise(teste);
+  //nh.subscribe(subGarra);
+  //nh.advertise(teste);
   nh.advertise(chatter_botao);
 
   pinMode(BotaoPin, INPUT); 
@@ -110,14 +95,10 @@ void setup()
     pinMode(motor_right[i], OUTPUT);
     analogWrite(motor_right[i], 0);
   }
-  pinMode(motor_garra[0], OUTPUT);
-  analogWrite(motor_garra[0], 0);
-  pinMode(motor_garra[1], OUTPUT);
-  analogWrite(motor_garra[1], 0);
+
 
   //Pinos de entrada e saída dos sensores da GARRA
-  pinMode(emissor, OUTPUT);
-  pinMode(receptor, INPUT);
+  
 }
 
 void loop()
@@ -165,24 +146,12 @@ if(direcaoR == FRENTE){
 } 
   //delay(2000);
   
-//  //Envia os comandos para o motor da GARRA
-  if(direcaoG == TRAS){
-  digitalWrite(motor_garra[1], 0);
-  analogWrite(motor_garra[0], velocidadeG);
-  //digitalWrite(motor_garra[0],1);
-  }
-  
-  if(direcaoG == FRENTE){
-  //digitalWrite(motor_garra[1], 1);
-  analogWrite(motor_garra[1], velocidadeG);
-  digitalWrite(motor_garra[0],0);
-  }
 
   botao_msg.data= digitalRead(BotaoPin);
   chatter_botao.publish( &botao_msg );
   
-//  msg_teste.data = velocidadeR;
-//  teste.publish( &msg_teste );
+/*  msg_teste.data = velocidadeR;
+  teste.publish( &msg_teste );*/
  
   nh.spinOnce();
   delay(200);

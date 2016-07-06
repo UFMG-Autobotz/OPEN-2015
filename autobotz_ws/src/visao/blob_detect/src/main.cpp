@@ -220,7 +220,8 @@ void visionCode3()
  	params.thresholdStep = 50;
  	params.maxThreshold = 1000;
 
-	cv::SimpleBlobDetector detector(params);
+	cv::SimpleBlobDetector detector;
+	detector.create(params);
 
 	//convert image to BGR
 	//cv::cvtColor(img, img, CV_HSV2BGR);

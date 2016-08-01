@@ -178,7 +178,6 @@ vector< feature > getFeaturesInfo(const cv::Mat& img, const vector< vector<cv::P
   		out[i].boundingBox = roi;
   		out[i].area = std::fabs(cv::contourArea(contours[i]));
 	}
-
 	return out;
 }
 
@@ -193,7 +192,7 @@ inline float distBetweenPoints(const cv::Point p1, const cv::Point p2)
 enum status {IN_NEW, IN_TRACKED, IN_WAS_MISSING, TRACKED_FOUND, TRACKED_NOT_FOUND, MISSING_FOUND, MISSING_NOT_FOUND};
 
 
-
+	
 void filterFeatures(vector< feature > in, vector< feature >& out,
 	                const palette& pal)
 {
@@ -202,9 +201,10 @@ void filterFeatures(vector< feature > in, vector< feature >& out,
 	//Each point in a vector corresponds to the position of a feature in
 	//the last frame
 	vector <cv::Point> last_positions;
-
+	const float r_max = 15;  //raio maximo para a feature ser associada ao ponto
 	///////////   filter features by color  //////
 	vector< feature > color_filtered;
+
 	//find closest color and only put it in color_filtered if it is within a distance
 	for(int i = 0; i < in.size(); i++)
 	{
@@ -224,113 +224,101 @@ void filterFeatures(vector< feature > in, vector< feature >& out,
 	}
 
 	out = color_filtered;
+}
 
-	// ///////////////   apply persistence filtering    ////////////////
+void Estabiliza(vector< feature > color_filtered, vector< feature >& f)
+{
+	int r_max;  
+	static int primeira_vez = 1;
+	static std::vector<int> frames;
+	std::vector<int> posi_enc, posi_muda;
+	std::vector<feature> areas;
 
-	// // consider 3 vecs of feature: input, tracked, missing
-	// vector <feature> tracked;
-	// vector <feature> missing;
+	if (primeira_vez == 1){
+		frames.clear();
+		primeira_vez = 0;
+	}
 
-	// vector <int> missing_cnt;  //counts how many frames each element in missing is gone
-	// const int remove_at = 4;  //number of frames before removing
+	int min;
+	float dist;
+	posi_muda.clear();
 
-	// const float r_max = 15;  //raio maximo para a feature ser associada ao ponto
-
-	// // 3 status vectors for in, tracked and missing
-	// //enum status {IN_NEW, IN_TRACKED, IN_WAS_MISSING, TRACKED_FOUND, TRACKED_NOT_FOUND, MISSING_FOUND, MISSING_NOT_FOUND};
-	// vector <status> in_status (color_filtered.size(), IN_NEW);
-	// vector <status> tracked_status (tracked.size(), TRACKED_NOT_FOUND);
-	// vector <status> missing_status (missing.size(), MISSING_NOT_FOUND);
-
-	// /////////////////   assign a status to each element  //////////////////////
-	// for(int i = 0; i < tracked.size(); i++)
-	// {
-	// 	bool found_any = false;
-
-	// 	//check if there is a feature near this point
-	// 	for(int j = 0; j < color_filtered.size() && false == found_any; j++)
-	// 	{
-	// 		float dist = distBetweenPoints(tracked[i].centroid, color_filtered[j].centroid);
-
-	// 		if(dist < r_max)  //feature is near point
-	// 		{
-	// 			in_status[j]      = IN_TRACKED;
-	// 			tracked_status[i] = TRACKED_FOUND;
-
-	// 			found_any = true;
-	// 		}
-	// 	}
-	// }
-	// //check missing list to try to find them on the input list
-	// for(int i = 0; i < missing.size(); i++)
-	// {
-	// 	bool found_any = false;
-
-	// 	//check if there is a feature near this point
-	// 	for(int j = 0; j < color_filtered.size() && false == found_any; j++)
-	// 	{
-	// 		float dist = distBetweenPoints(missing[i].centroid, color_filtered[j].centroid);
-
-	// 		if(dist < r_max)  //feature is near point
-	// 		{
-	// 			in_status[j] = IN_WAS_MISSING;
-	// 			missing_status[i] = MISSING_FOUND;
-
-	// 			found_any = true;
-	// 		}
-	// 	}
-	// }
-
-	// /////////////////   apply actions based on status  //////////////////////
-	// for(int i = 0; i < in_status.size(); i++) //input vector
-	// {
-	// 	if(in_status[i] == IN_NEW)                    //track newly found features
-	// 		tracked.push_back(color_filtered[i]);
-	// }
+	for(int i = 0; i < f.size(); i++)	
+	{	
+		areas.clear();
+		posi_enc.clear();
+		bool found_any = false;
 	
-	// for(int i = 0; i < tracked_status.size(); i++) //tracked
-	// {
-	// 	if(tracked_status[i] == TRACKED_NOT_FOUND)  //move from tracked to missing
-	// 	{
-	// 		// ROS_INFO("ahsuadasda:  %i ", missing.size());
-	// 		// ROS_INFO("addr: %p", &missing);
-	// 		// missing.push_back(tracked[i]);
-	// 		// delete tmp;
-	// 		// teste.push_back(1);
-	// 		// ROS_INFO("size:  %i ", int(missing.size()));
+	 	for(int j = 0; j < color_filtered.size(); j++)
+	 	{	
+	 		dist = distBetweenPoints(f[i].centroid, color_filtered[j].centroid);
+			r_max = sqrt(f[i].area);
+			//ROS_INFO("%d %d %d %d", (int) f.size(), (int) color_filtered.size(), (int) dist, (int)  r_max);
+			//ROS_INFO("teste1: %d %d %d", (int) f.size(), (int) color_filtered.size(), (int)  frames.size()); 		
+			if(dist < r_max && color_filtered[j].area > 0.6*f[i].area && color_filtered[j].area < 1.4*f[i].area)//feature is near point
+	 		{
+				areas.push_back(color_filtered[j]);
+				posi_enc.push_back(j);
+				found_any = true;
+			}
+		}
+		
+		int min_k = 0;
 
-	// 		//missing.push_back(tracked[i]);
-	// 		//missing_cnt.push_back();
+		if (found_any)
+			min = abs(areas[0].area-f[i].area);
+	
+		for(int k = 1; k < areas.size(); k++)
+	 	{			
+			if(abs(areas[k].area-f[i].area) < min) 
+	 		{
+				min = abs(areas[k].area-f[i].area);
+				min_k = k;	 		
+	 		}
+	 	}
 
-	// 		tracked.erase(tracked.begin() + i);
-	// 	}
-	// }
+		if (found_any)
+		{
+			posi_muda.push_back(posi_enc[min_k]);
+			f[i] = areas[min_k];	 		
+			frames[i] = 0;	
+			found_any = false; 		
+		}
+		else
+			frames[i] += 1;
+	
+		//ROS_INFO("teste1: %d %d %d", (int) areas.size(), (int) posi_enc.size(), (int)  posi_muda.size()); 
+	}
+	
+	for(int i = 0; i < color_filtered.size(); i++)	
+	{
+	 	bool new_bloc = true;
 
-	// for(int i = 0; i < missing_status.size(); i++)  //move from missing to tracked
-	// {
-	// 	if(missing_status[i] == MISSING_FOUND)
-	// 	{
-	// 		tracked.push_back(missing[i]);
+	 	for(int j = 0; j < posi_muda.size(); j++)
+	 	{	
+	 		if(posi_muda[j] == i)
+			{
+	 			new_bloc = false;
+				break;
+			}
+	 	}
 
-	// 		missing.erase(missing.begin() + i);
-	// 		missing_cnt.erase(missing_cnt.begin() + i);
-	// 	}
-	// }
+		if (new_bloc)
+		{
+			f.push_back(color_filtered[i]);
+			frames.push_back(0);
+		}
+	}
 
-	// for(int i = 0; i < missing_cnt.size(); i++)  //remove blobs missing for too long
-	// {
-	// 	if(missing_cnt[i] >= remove_at)
-	// 	{
-	// 		missing.erase(missing.begin() + i);
-	// 		missing_cnt.erase(missing_cnt.begin() + i);
-	// 	}
-	// 	else
-	// 		missing_cnt[i]++;
-	// }
-
-	// ///////////////////  build output from tracked and missing (but not deleted) blobs ///////////////////
-	// out = tracked;
-	// out.insert(tracked.end(), missing.begin(), missing.end());
+	for (int i = 0; i < frames.size(); i++)
+	{
+		if (frames[i] > 6)
+		{
+			f.erase(f.begin() + i);
+			frames.erase(frames.begin() + i);
+		}
+	}
+	//ROS_INFO("%d %d %d %d", (int) f.size(), (int) color_filtered.size(), (int) dist, (int)  r_max);
 }
 
 //find the closest color to 'color' in a palette

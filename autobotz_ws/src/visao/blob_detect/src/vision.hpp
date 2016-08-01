@@ -106,6 +106,8 @@ void filterFeatures(vector< feature > in, vector< feature >& out,
 //Uniting close features and rejecting feature loss during one or two
 //frames should futurely be implemented in this function as well
 
+void Estabiliza(vector< feature > color_filtered, vector< feature >& f);
+
 int getClosestColorInPalette(cv::Vec3b color, const palette& pal);
 //Using colorDistance() as metric, this function finds the closest
 //color to 'color' in the palette and returns the index to that color

@@ -116,7 +116,7 @@ void visionCode1()
 	pal.addColor(cv::Scalar(0,   0,   0  ), max_distance);
 	pal.addColor(cv::Scalar(255, 255, 255), max_distance);  //white
 	pal.addColor(cv::Scalar(200, 200, 255), max_distance);  //white (bluish)
-    pal.addColor(cv::Scalar(200, 0,   0  ), max_distance);  //red
+    	pal.addColor(cv::Scalar(200, 0,   0  ), max_distance);  //red
 	pal.addColor(cv::Scalar(0,   255, 0  ), max_distance);  //green
 	pal.addColor(cv::Scalar(0,   0,   255), max_distance);  //blue
 	pal.addColor(cv::Scalar(200, 200, 50 ), max_distance);  //yellow1
@@ -304,6 +304,8 @@ void visionCode5(Mat& img, vector< feature >& features)
 	//possible improvements: adjust brightness or quantize colors before first canny
 
 	Mat edges_img;         //black and white edge map
+	static int primeira_vez = 1;
+	static vector <feature> f;
 
 	// get color image from callback
 	Mat tmp(img.size(), img.type());  //this matrix is for debugging
@@ -345,30 +347,39 @@ void visionCode5(Mat& img, vector< feature >& features)
 		//cv::namedWindow("contours"); cv::imshow("contours", tmp);
 
 	//extract features information
-	features = getFeaturesInfo(img, contours);
-
-		tmp = cv::Scalar(0, 0, 0);
-		for(int i = 0; i < features.size(); i++)
-		{
-			vector< vector< cv::Point > > tmpCont;
-			tmpCont.push_back(features[i].contour);
-			drawContours(tmp, tmpCont, -1, cv::Scalar(features[i].avgColor), CV_FILLED);
-		}
-		cv::namedWindow("features - pre filter"); cv::imshow("features - pre filter", tmp);	
-
+	features = getFeaturesInfo(img, contours);	
+	
 	//filter only relevant features
 	filterFeatures(features, features, settingsServer.targetPalette);
 
-		tmp = cv::Scalar(0, 0, 0);
-		for(int i = 0; i < features.size(); i++)
-		{
-			vector< vector< cv::Point > > tmpCont;
-			tmpCont.push_back(features[i].contour);
-			drawContours(tmp, tmpCont, -1, cv::Scalar(features[i].avgColor), CV_FILLED);
-		}
-		cv::namedWindow("features - post filter"); cv::imshow("features - post filter", tmp);	
+	tmp = cv::Scalar(0, 0, 0);
+	for(int i = 0; i < features.size(); i++)
+	{
+		vector< vector< cv::Point > > tmpCont;
+		tmpCont.push_back(features[i].contour);
+		drawContours(tmp, tmpCont, -1, cv::Scalar(features[i].avgColor), CV_FILLED);
+	}
+	cv::namedWindow("features - pre filter"); cv::imshow("features - pre filter", tmp);	
+	
+	ROS_INFO("features: %d", (int) features.size());
+	if (primeira_vez == 1){
+		f = features;
+		primeira_vez = 0;
+	}
 
-		cv::waitKey(1); //needed to make imshow work
+	Estabiliza(features, f);
+	ROS_INFO("f: %d", (int) f.size());
+	
+	tmp = cv::Scalar(0, 0, 0);
+	for(int i = 0; i < f.size(); i++)
+	{
+		vector< vector< cv::Point > > tmpCont;
+		tmpCont.push_back(f[i].contour);
+		drawContours(tmp, tmpCont, -1, cv::Scalar(f[i].avgColor), CV_FILLED);
+	}
+	cv::namedWindow("features - post filter"); cv::imshow("features - post filter", tmp);	
+
+	cv::waitKey(1); //needed to make imshow work
 }
 
 //idea: apply std deviation filter to HSV image before trying 

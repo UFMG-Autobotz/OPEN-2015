@@ -84,6 +84,9 @@ void loop()
 		digitalWrite(PWM_R, RXBuff[3]);
 	}
 
+	//Activate anchoring system
+	//TODO: colocar código do ancorador aqui
+
 	//read from ultrassounds
 	for(int i = 0; i < 4; i++)
 	{
